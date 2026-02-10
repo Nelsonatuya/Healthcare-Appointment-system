@@ -14,7 +14,8 @@
   "gender",
   "email",
   "mobile",
-  "insurance_id"
+  "insurance_id",
+  "insurance_card"
  ],
  "fields": [
   {
@@ -40,7 +41,7 @@
   {
    "fieldname": "id_attachment",
    "fieldtype": "Attach",
-   "label": "ID Attachment"
+   "label": "ID Card"
   },
   {
    "fieldname": "column_break_kasu",
@@ -66,13 +67,19 @@
   {
    "fieldname": "insurance_id",
    "fieldtype": "Data",
-   "label": "Insurance ID "
+   "label": "Insurance ID ",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "insurance_card",
+   "fieldtype": "Attach Image",
+   "label": "Insurance Card "
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-10 10:54:25.497094",
+ "modified": "2026-02-10 14:29:26.420423",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Healthcare Patient",

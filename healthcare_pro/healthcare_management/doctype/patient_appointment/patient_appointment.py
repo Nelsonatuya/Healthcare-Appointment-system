@@ -30,7 +30,6 @@ class PatientAppointment(Document):
             "name": ["!=", self.name], # Don't conflict with itself when editing
             "status": ["not in", ["Cancelled"]]
         })
-
         if conflict:
             frappe.throw(_("Conflict: Practitioner {0} is already booked at {1} on {2}")
                 .format(self.practitioner, self.time, self.date))
@@ -43,7 +42,6 @@ class PatientAppointment(Document):
             "name": ["!=", self.name],
             "status": ["not in", ["Cancelled"]]
         })
-
         if patient_conflict:
             frappe.throw(_("Patient {0} already has another appointment at this time.")
                 .format(self.patient))

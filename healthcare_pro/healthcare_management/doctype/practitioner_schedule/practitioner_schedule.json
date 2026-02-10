@@ -1,56 +1,42 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "DOC-.#####",
- "creation": "2026-02-10 10:16:00.364941",
+ "creation": "2026-02-10 10:31:39.830999",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "practitioner_name",
-  "specialization",
-  "column_break_witn",
-  "user_id",
-  "department"
+  "schedule_name",
+  "practitioner",
+  "time_slots"
  ],
  "fields": [
   {
-   "fieldname": "practitioner_name",
+   "fieldname": "schedule_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Practitioner Name",
-   "reqd": 1
+   "label": "Schedule Name"
   },
   {
-   "fieldname": "specialization",
+   "fieldname": "practitioner",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Specialization",
-   "options": "Medical Specialty",
-   "reqd": 1
+   "label": "Practitioner",
+   "options": "Healthcare Practitioner"
   },
   {
-   "fieldname": "column_break_witn",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "user_id",
-   "fieldtype": "Link",
-   "label": "User ID",
-   "options": "User"
-  },
-  {
-   "fieldname": "department",
-   "fieldtype": "Data",
-   "label": "Department"
+   "fieldname": "time_slots",
+   "fieldtype": "Table",
+   "label": "Time Slots",
+   "options": "Schedule Slot"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-10 10:55:38.647339",
+ "modified": "2026-02-10 11:07:10.015833",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
- "name": "Healthcare Practitioner",
+ "name": "Practitioner Schedule",
  "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
@@ -72,5 +58,5 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "practitioner_name"
+ "title_field": "practitioner"
 }

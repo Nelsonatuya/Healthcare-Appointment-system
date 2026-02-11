@@ -23,7 +23,7 @@ class MedicalRecord(Document):
 
     def check_appointment_date(self):
         if self.appointment and self.date:
-            # Fetch the date from the linked Patient Appointment
+            #Fetch the date from the linked Patient Appointment
             appointment_date = frappe.db.get_value("Patient Appointment", self.appointment, "date")
             
             # Compare dates using getdate to ensure they are the same format

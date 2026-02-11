@@ -14,7 +14,7 @@ class PatientAppointment(Document):
     def validate_datetime(self):
         # 1. Prevent Past Dates
         if getdate(self.date) < getdate(nowdate()):
-            frappe.throw(_("You cannot schedule an appointment for a past date."), Title=_("Invalid Date"))
+            frappe.throw(_("You cannot schedule an appointment for a past date."), title=_("Invalid Date"))
 
         # 2. Prevent Past Times (if the date is today)
         if getdate(self.date) == getdate(nowdate()):

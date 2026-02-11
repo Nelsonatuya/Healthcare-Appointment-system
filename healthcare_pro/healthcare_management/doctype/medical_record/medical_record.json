@@ -14,7 +14,8 @@
   "column_break_mivv",
   "date",
   "practitioner",
-  "diagnosis"
+  "diagnosis",
+  "amended_from"
  ],
  "fields": [
   {
@@ -51,7 +52,7 @@
   },
   {
    "fieldname": "date",
-   "fieldtype": "Link",
+   "fieldtype": "Date",
    "label": "Date",
    "options": "Patient Appointment"
   },
@@ -64,13 +65,25 @@
   {
    "fieldname": "diagnosis",
    "fieldtype": "Text Editor",
-   "label": "Diagnosis"
+   "label": "Diagnosis",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Medical Record",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2026-02-10 15:11:42.518958",
+ "modified": "2026-02-11 11:19:23.103025",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Medical Record",

@@ -6,11 +6,11 @@
         if (frm.doc.appointment) {
             
             frappe.db.get_value('Patient Appointment', frm.doc.appointment, 
-                ['patient', 'practitioner', 'date'], (r) => {
+                ['patient', 'practitioner'], (r) => {
                     if (r) {
                         frm.set_value('patient', r.patient);
                         frm.set_value('practitioner', r.practitioner);
-                        frm.set_value('date', r.date)
+                       
                     }
                 }
             );

@@ -1,0 +1,50 @@
+{
+ "app": "healthcare_pro",
+ "charts": [
+  {
+   "chart_name": "Monthly Appointments"
+  }
+ ],
+ "content": "[{\"type\": \"header\", \"data\": {\"text\": \"Doctor Dashboard\", \"level\": 2}}]",
+ "creation": "2026-02-11 14:51:19.125747",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "health",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Doctor Workspace",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-02-11 14:59:49.467380",
+ "modified_by": "Administrator",
+ "module": "Healthcare Management",
+ "name": "Doctor Workspace",
+ "number_cards": [
+  {
+   "label": "Appointments",
+   "number_card_name": "Todays Appointments"
+  },
+  {
+   "label": "Registered Patients",
+   "number_card_name": "Total Registered Patients"
+  }
+ ],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 0.0,
+ "shortcuts": [
+  {
+   "doc_view": "Dashboard",
+   "label": "View Weekly Schedule",
+   "link_to": "Patient Appointment",
+   "type": "DocType"
+  }
+ ],
+ "title": "Doctor Workspace",
+ "type": "Workspace"
+}

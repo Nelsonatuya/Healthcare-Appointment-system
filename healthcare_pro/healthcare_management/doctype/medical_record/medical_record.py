@@ -18,14 +18,12 @@ class MedicalRecord(Document):
     def validate(self):
         if self.appointment and not self.patient:
             self.set_appointment_details()
-
         self.check_appointment_date()
 
     def check_appointment_date(self):
         if self.appointment and self.date:
             #Fetch the date from the linked Patient Appointment
             appointment_date = frappe.db.get_value("Patient Appointment", self.appointment, "date")
-            
             # Compare dates using getdate to ensure they are the same format
             if getdate(self.date) < getdate(appointment_date):
                 frappe.throw(("Medical Record date ({0}) cannot be earlier than the Appointment date ({1})")

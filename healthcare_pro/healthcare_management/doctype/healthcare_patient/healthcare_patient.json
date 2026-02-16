@@ -51,24 +51,28 @@
    "fieldname": "gender",
    "fieldtype": "Select",
    "label": "Gender",
-   "options": "Male\nFemale\nOther"
+   "options": "Male\nFemale\nOther",
+   "reqd": 1
   },
   {
    "fieldname": "email",
    "fieldtype": "Data",
    "label": "Email",
-   "options": "Email"
+   "options": "Email",
+   "reqd": 1
   },
   {
    "fieldname": "mobile",
    "fieldtype": "Phone",
-   "label": "Mobile "
+   "label": "Mobile ",
+   "reqd": 1
   },
   {
    "fieldname": "insurance_id",
    "fieldtype": "Data",
    "label": "Insurance ID ",
-   "print_hide": 1
+   "print_hide": 1,
+   "reqd": 1
   },
   {
    "fieldname": "insurance_card",
@@ -79,7 +83,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-10 14:29:26.420423",
+ "modified": "2026-02-16 08:08:15.493772",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Healthcare Patient",

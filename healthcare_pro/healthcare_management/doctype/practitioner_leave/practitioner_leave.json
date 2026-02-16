@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "LV.####",
  "creation": "2026-02-11 14:06:43.062055",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -8,7 +9,9 @@
   "practitioner",
   "from_date",
   "to_date",
-  "reason"
+  "reason",
+  "status",
+  "amended_from"
  ],
  "fields": [
   {
@@ -31,15 +34,33 @@
    "fieldname": "reason",
    "fieldtype": "Small Text",
    "label": "Reason"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Approved\nPending\nAccepted"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Practitioner Leave",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2026-02-11 14:08:42.158337",
+ "modified": "2026-02-16 09:45:38.333409",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Practitioner Leave",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -59,5 +80,6 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "practitioner"
 }

@@ -50,7 +50,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-10 10:39:57.093582",
+ "modified": "2026-02-11 14:40:02.898026",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Patient Appointment",
@@ -72,7 +72,9 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "search_fields": "practitioner",
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "patient"
 }

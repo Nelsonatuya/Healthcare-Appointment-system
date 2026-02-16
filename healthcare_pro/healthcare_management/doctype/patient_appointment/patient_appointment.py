@@ -10,31 +10,33 @@ class PatientAppointment(Document):
     def validate(self):
         self.validate_double_booking()
         self.validate_datetime()
+        self.check_practitioner_leave()
+
+    def on_submit(self):
+        self.check_practitioner_leave()
 
     def validate_datetime(self):
-        # 1. Prevent Past Dates
         if getdate(self.date) < getdate(nowdate()):
             frappe.throw(_("You cannot schedule an appointment for a past date."), title=_("Invalid Date"))
-
         # 2. Prevent Past Times (if the date is today)
         if getdate(self.date) == getdate(nowdate()):
             if get_time(self.time) < get_time(nowtime()):
                 frappe.throw(_("The appointment time has already passed for today."))
 
-    # 1. Check if the Doctor is busy
+    #check if doctor has a scheduled appointment at the same time
     def validate_double_booking(self): 
         conflict = frappe.db.exists("Patient Appointment", {
             "practitioner": self.practitioner,
             "date": self.date,
             "time": self.time,
-            "name": ["!=", self.name], # Don't conflict with itself when editing
+            "name": ["!=", self.name], 
             "status": ["not in", ["Cancelled"]]
         })
         if conflict:
             frappe.throw(_("Conflict: Practitioner {0} is already booked at {1} on {2}")
                 .format(self.practitioner, self.time, self.date))
 
-        # 2. Check if the Patient already has an appointment then too
+        #check for preexiting patient-appointment
         patient_conflict = frappe.db.exists("Patient Appointment", {
             "patient": self.patient,
             "date": self.date,
@@ -45,3 +47,21 @@ class PatientAppointment(Document):
         if patient_conflict:
             frappe.throw(_("Patient {0} already has another appointment at this time.")
                 .format(self.patient))
+            
+        #check if practitioner is on leave
+    def check_practitioner_leave(self):
+        # Fetch the leave record name if it exists
+        leave_name = frappe.db.exists("Practitioner Leave", {
+            "practitioner": self.practitioner,
+            "from_date": ["<=", self.date],
+            "to_date": [">=", self.date],
+            "docstatus": 1 #if submitted
+        })
+        
+        if leave_name:
+            reason = frappe.db.get_value("Practitioner Leave", leave_name, "reason")
+            msg = _("Practitioner {0} is on leave on {1}.").format(self.practitioner, self.date)
+            if reason:
+                msg += _(" Reason: {0}").format(reason)
+                
+            frappe.throw(msg, title=_("Practitioner Unavailable"))

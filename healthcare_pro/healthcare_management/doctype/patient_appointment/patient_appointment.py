@@ -57,7 +57,6 @@ class PatientAppointment(Document):
             "to_date": [">=", self.date],
             "docstatus": 1 #if submitted
         })
-        
         if leave_name:
             reason = frappe.db.get_value("Practitioner Leave", leave_name, "reason")
             msg = _("Practitioner {0} is on leave on {1}.").format(self.practitioner, self.date)

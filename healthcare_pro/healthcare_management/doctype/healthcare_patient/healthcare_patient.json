@@ -22,7 +22,8 @@
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Naming Series",
-   "options": "PAT-.YYYY.-.#####"
+   "options": "PAT-.YYYY.-.#####",
+   "read_only": 1
   },
   {
    "fieldname": "full_name",
@@ -83,7 +84,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-16 08:08:15.493772",
+ "modified": "2026-02-16 11:13:58.276594",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Healthcare Patient",

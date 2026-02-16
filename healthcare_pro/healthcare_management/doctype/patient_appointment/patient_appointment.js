@@ -11,7 +11,7 @@ frappe.ui.form.on('Patient Appointment', {
                     "practitioner": frm.doc.practitioner
                 };
                 frappe.set_route("Form", "Medical Record", "new-medical-record-1");
-            }, __("Actions"));
+            }, __("Create Medical Record"));
         }
     }
 });

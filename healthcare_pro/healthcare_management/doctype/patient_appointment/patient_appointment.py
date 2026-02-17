@@ -67,6 +67,6 @@ class PatientAppointment(Document):
             frappe.throw(msg, title=_("Practitioner Unavailable"))
 
     def update_status_to_scheduled(self):
-        """Automatically update status to 'Scheduled' if it's currently 'Open' and all validations pass."""
+        """Set status to scheduled after save"""
         if self.status == "Open":
             self.status = "Scheduled"

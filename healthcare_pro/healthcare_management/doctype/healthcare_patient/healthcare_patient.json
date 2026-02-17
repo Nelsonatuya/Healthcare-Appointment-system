@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_guest_to_view": 1,
  "allow_rename": 1,
  "autoname": "naming_series:",
  "creation": "2026-02-10 10:06:36.778045",
@@ -10,12 +11,14 @@
   "full_name",
   "date_of_birth",
   "id_attachment",
+  "is_published",
   "column_break_kasu",
   "gender",
   "email",
   "mobile",
   "insurance_id",
-  "insurance_card"
+  "insurance_card",
+  "route"
  ],
  "fields": [
   {
@@ -23,6 +26,7 @@
    "fieldtype": "Select",
    "label": "Naming Series",
    "options": "PAT-.YYYY.-.#####",
+   "permlevel": 1,
    "read_only": 1
   },
   {
@@ -79,12 +83,25 @@
    "fieldname": "insurance_card",
    "fieldtype": "Attach Image",
    "label": "Insurance Card "
+  },
+  {
+   "default": "0",
+   "fieldname": "is_published",
+   "fieldtype": "Check",
+   "label": "Is published"
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Data",
+   "label": "Route"
   }
  ],
  "grid_page_length": 50,
+ "has_web_view": 1,
  "index_web_pages_for_search": 1,
+ "is_published_field": "is_published",
  "links": [],
- "modified": "2026-02-16 11:13:58.276594",
+ "modified": "2026-02-17 09:39:35.901866",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Healthcare Patient",
@@ -99,11 +116,33 @@
    "print": 1,
    "read": 1,
    "report": 1,
+   "role": "Healthcare Receptionist",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Healthcare Doctor",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
    "role": "System Manager",
    "share": 1,
    "write": 1
   }
  ],
+ "route": "patient",
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",

@@ -2,10 +2,10 @@
 # For license information, please see license.txt
 
 import frappe
-from frappe.model.document import Document
+from frappe.website.website_generator import WebsiteGenerator
 
 
-class HealthcarePatient(Document):
+class HealthcarePatient(WebsiteGenerator):
     def validate(self):
         """Check for duplicate patient records before save."""
         self.check_duplicate_patient()

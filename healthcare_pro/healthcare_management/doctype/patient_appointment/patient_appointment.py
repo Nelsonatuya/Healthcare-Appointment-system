@@ -11,6 +11,7 @@ class PatientAppointment(Document):
         self.validate_double_booking()
         self.validate_datetime()
         self.check_practitioner_leave()
+        self.update_status_to_scheduled()
 
     def on_submit(self):
         self.check_practitioner_leave()
@@ -64,3 +65,8 @@ class PatientAppointment(Document):
                 msg += _(" Reason: {0}").format(reason)
                 
             frappe.throw(msg, title=_("Practitioner Unavailable"))
+
+    def update_status_to_scheduled(self):
+        """Automatically update status to 'Scheduled' if it's currently 'Open' and all validations pass."""
+        if self.status == "Open":
+            self.status = "Scheduled"

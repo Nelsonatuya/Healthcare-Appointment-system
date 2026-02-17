@@ -12,10 +12,10 @@
  "event": "Save",
  "idx": 0,
  "is_standard": 1,
- "message": "Add your message here",
+ "message": "This is to inform you that you appointment with {{doc.practitioner}} has been successfully booked.",
  "message_type": "Markdown",
  "minutes_offset": 0,
- "modified": "2026-02-17 08:31:59.151464",
+ "modified": "2026-02-17 10:09:39.031960",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Appointment confirmation",
@@ -27,5 +27,5 @@
  ],
  "send_system_notification": 1,
  "send_to_all_assignees": 0,
- "subject": "{{doc.patient}}your appointment has been booked successfully"
+ "subject": "Successfully booked appointment for patient {{doc.patient}}."
 }

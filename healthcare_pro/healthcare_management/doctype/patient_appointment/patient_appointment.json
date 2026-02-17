@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_auto_repeat": 1,
  "allow_rename": 1,
  "autoname": "APP-.YYYY.###",
  "creation": "2026-02-10 10:35:03.843095",
@@ -41,6 +42,7 @@
    "label": "Time"
   },
   {
+   "default": "Open",
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
@@ -50,7 +52,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-11 14:40:02.898026",
+ "modified": "2026-02-17 10:42:05.183546",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Patient Appointment",
@@ -76,5 +78,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "patient"
+ "title_field": "patient",
+ "track_changes": 1
 }

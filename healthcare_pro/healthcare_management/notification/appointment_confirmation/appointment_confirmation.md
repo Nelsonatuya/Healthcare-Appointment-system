@@ -1,1 +1,1 @@
-Add your message here
+This is to inform you that you appointment with {{doc.practitioner}} has been successfully booked.

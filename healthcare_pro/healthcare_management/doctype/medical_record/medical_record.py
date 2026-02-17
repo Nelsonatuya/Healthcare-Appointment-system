@@ -28,6 +28,8 @@ class MedicalRecord(Document):
             if getdate(self.date) < getdate(appointment_date):
                 frappe.throw(("Medical Record date ({0}) cannot be earlier than the Appointment date ({1})")
                              .format(self.date, appointment_date), title=("Invalid Date" ))
+            else:
+                self.date = appointment_date
 
     def on_submit(self):
         if self.appointment:

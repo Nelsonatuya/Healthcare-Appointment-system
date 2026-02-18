@@ -6,8 +6,10 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "working_time_column",
   "practitioner_name",
   "specialization",
+  "table_locw",
   "column_break_witn",
   "user_id",
   "department"
@@ -40,14 +42,25 @@
   },
   {
    "fieldname": "department",
-   "fieldtype": "Data",
-   "label": "Department"
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department"
+  },
+  {
+   "fieldname": "table_locw",
+   "fieldtype": "Table",
+   "label": "Working Time ",
+   "options": "Schedule Slot"
+  },
+  {
+   "fieldname": "working_time_column",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-10 10:55:38.647339",
+ "modified": "2026-02-18 11:39:29.044783",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Healthcare Practitioner",

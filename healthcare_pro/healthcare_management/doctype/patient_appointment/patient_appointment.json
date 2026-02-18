@@ -46,13 +46,14 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Open\nScheduled\nCompleted\nCancelled"
+   "options": "Open\nScheduled\nCompleted\nCancelled",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-17 12:02:48.486741",
+ "modified": "2026-02-18 10:31:16.265881",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Patient Appointment",

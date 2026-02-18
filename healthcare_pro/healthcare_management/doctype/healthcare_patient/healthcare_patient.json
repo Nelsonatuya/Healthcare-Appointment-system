@@ -12,6 +12,7 @@
   "date_of_birth",
   "id_attachment",
   "is_published",
+  "give_consent",
   "column_break_kasu",
   "gender",
   "email",
@@ -94,6 +95,12 @@
    "fieldname": "route",
    "fieldtype": "Data",
    "label": "Route"
+  },
+  {
+   "default": "1",
+   "fieldname": "give_consent",
+   "fieldtype": "Check",
+   "label": "Give Consent"
   }
  ],
  "grid_page_length": 50,
@@ -101,7 +108,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "is_published",
  "links": [],
- "modified": "2026-02-17 09:39:35.901866",
+ "modified": "2026-02-18 08:12:14.745540",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Healthcare Patient",

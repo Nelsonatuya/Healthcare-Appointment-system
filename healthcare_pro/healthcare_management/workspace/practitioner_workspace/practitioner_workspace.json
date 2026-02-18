@@ -1,0 +1,50 @@
+{
+ "app": "healthcare_pro",
+ "charts": [
+  {
+   "chart_name": "Monthly Appointments",
+   "label": "Appointments"
+  }
+ ],
+ "content": "[{\"id\":\"46WmTGcUIN\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Practitioner workspace</span>\",\"col\":12}},{\"id\":\"fAy2VKqvhM\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Registered patients\",\"col\":4}},{\"id\":\"yCEng9SBYK\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Appointments\",\"col\":4}},{\"id\":\"0QPOgn2LcA\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Appointments\",\"col\":12}}]",
+ "creation": "2026-02-17 09:32:03.434248",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "hospital",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Practitioner workspace",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-02-17 15:44:17.723154",
+ "modified_by": "Administrator",
+ "module": "Healthcare Management",
+ "name": "Practitioner workspace",
+ "number_cards": [
+  {
+   "label": "Total Appointments",
+   "number_card_name": "Todays Appointments"
+  },
+  {
+   "label": "Registered patients",
+   "number_card_name": "Total Registered Patients"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "Users",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Healthcare Doctor"
+  }
+ ],
+ "sequence_id": 23.0,
+ "shortcuts": [],
+ "title": "Practitioner workspace",
+ "type": "Workspace"
+}

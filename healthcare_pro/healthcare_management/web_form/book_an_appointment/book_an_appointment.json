@@ -7,6 +7,7 @@
  "allow_print": 0,
  "anonymous": 0,
  "apply_document_permissions": 0,
+ "banner_image": "/private/files/Professional healthc.png",
  "button_label": "Book Appointment",
  "condition_json": "[]",
  "creation": "2026-02-16 14:37:18.550488",
@@ -20,7 +21,7 @@
  "list_columns": [],
  "login_required": 0,
  "max_attachment_size": 0,
- "modified": "2026-02-16 14:37:20.598416",
+ "modified": "2026-02-17 15:34:23.901671",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "book-an-appointment",
@@ -31,6 +32,7 @@
  "show_list": 0,
  "show_sidebar": 0,
  "success_message": "Appointment has been successfully booked.",
+ "success_title": "Appointment Made",
  "title": "Book an Appointment",
  "web_form_fields": [
   {

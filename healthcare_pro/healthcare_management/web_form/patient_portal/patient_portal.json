@@ -9,6 +9,7 @@
  "apply_document_permissions": 0,
  "banner_image": "/private/files/Professional healthc.png",
  "button_label": "confirm",
+ "client_script": "frappe.web_form.on('after_save', () => {\r\n    // 1. Target the success message container\r\n    const success_wrapper = $(\".success-state\");\r\n\r\n    if (success_wrapper.length) {\r\n        // 2. Clear the default \"Submit another response\" link\r\n        success_wrapper.find('.new-btn').remove();\r\n\r\n        // 3. Insert your custom \"Book Appointment\" button\r\n        success_wrapper.append(`\r\n            <div style=\"margin-top: 20px;\">\r\n                <p>Your registration is complete! You can now schedule your first visit.</p>\r\n                <button class=\"btn btn-primary btn-lg\" \r\n                        onclick=\"window.location.href='/book-appointment'\" \r\n                        style=\"width: 100%; font-weight: bold;\">\r\n                    \ud83d\udcc5 Book Your Appointment Now\r\n                </button>\r\n            </div>\r\n        `);\r\n    }\r\n});",
  "condition_json": "[]",
  "creation": "2026-02-16 11:10:06.720674",
  "doc_type": "Healthcare Patient",
@@ -22,7 +23,7 @@
  "list_columns": [],
  "login_required": 0,
  "max_attachment_size": 0,
- "modified": "2026-02-17 10:13:30.285303",
+ "modified": "2026-02-18 08:25:00.539387",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "patient-portal",
@@ -33,6 +34,7 @@
  "show_list": 0,
  "show_sidebar": 0,
  "success_message": "Registration is successful",
+ "success_title": "Registration Successful",
  "title": "Patient Portal",
  "web_form_fields": [
   {
@@ -166,6 +168,36 @@
    "precision": "",
    "read_only": 0,
    "reqd": 0,
+   "show_in_filter": 0
+  },
+  {
+   "allow_read_on_all_link_options": 0,
+   "fieldname": "",
+   "fieldtype": "Column Break",
+   "hidden": 0,
+   "label": "",
+   "max_length": 0,
+   "max_value": 0,
+   "options": "",
+   "precision": "",
+   "read_only": 0,
+   "reqd": 0,
+   "show_in_filter": 0
+  },
+  {
+   "allow_read_on_all_link_options": 0,
+   "default": "1",
+   "fieldname": "give_consent",
+   "fieldtype": "Check",
+   "hidden": 0,
+   "label": "Give Consent",
+   "mandatory_depends_on": "",
+   "max_length": 0,
+   "max_value": 0,
+   "placeholder": "",
+   "precision": "",
+   "read_only": 0,
+   "reqd": 1,
    "show_in_filter": 0
   }
  ]

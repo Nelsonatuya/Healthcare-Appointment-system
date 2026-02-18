@@ -11,6 +11,7 @@ class PatientAppointment(Document):
         self.validate_double_booking()
         self.validate_datetime()
         self.check_practitioner_leave()
+        self.check_practitioner_schedule()
         self.update_status_to_scheduled()
 
     def on_submit(self):
@@ -65,6 +66,41 @@ class PatientAppointment(Document):
                 msg += _(" Reason: {0}").format(reason)
                 
             frappe.throw(msg, title=_("Practitioner Unavailable"))
+    
+    def check_practitioner_schedule(self):
+        # Get the day of the week from the appointment date
+        appointment_day = getdate(self.date).strftime("%A")
+        # Get practitioner's schedule slots for this day
+        schedule_slots = frappe.get_all("Schedule Slot", 
+            filters={
+                "parent": self.practitioner,
+                "parenttype": "Healthcare Practitioner",
+                "parentfield": "table_locw",
+                "day": appointment_day
+            },
+            fields=["from_time", "to_time"]
+        )
+        
+        if not schedule_slots:
+            frappe.throw(_("Practitioner {0} does not have scheduled working hours on {1}.")
+                .format(self.practitioner, appointment_day))
+        
+        # Check if appointment time falls within any scheduled slot
+        appointment_time = get_time(self.time)
+        is_within_schedule = False
+        
+        for slot in schedule_slots:
+            from_time = get_time(slot.from_time)
+            to_time = get_time(slot.to_time)
+            
+            if from_time <= appointment_time <= to_time:
+                is_within_schedule = True
+                break
+        
+        if not is_within_schedule:
+            frappe.throw(_("Appointment time {0} is outside practitioner's scheduled working hours on {1}.")
+                .format(self.time, appointment_day))
+
 
     def update_status_to_scheduled(self):
         """Set status to scheduled after save"""

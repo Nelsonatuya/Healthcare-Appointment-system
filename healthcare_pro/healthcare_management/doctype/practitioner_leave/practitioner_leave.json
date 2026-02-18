@@ -23,11 +23,13 @@
   {
    "fieldname": "from_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "From Date"
   },
   {
    "fieldname": "to_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "To Date"
   },
   {
@@ -38,6 +40,7 @@
   {
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Status",
    "options": "Approved\nPending\nAccepted"
   },
@@ -56,7 +59,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-16 09:45:38.333409",
+ "modified": "2026-02-18 11:09:45.030868",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Practitioner Leave",

@@ -9,7 +9,8 @@
   "section_break_xjqs",
   "amended_from",
   "practitioner",
-  "rate_practitioner"
+  "rate_practitioner",
+  "comment"
  ],
  "fields": [
   {
@@ -37,13 +38,18 @@
    "fieldname": "rate_practitioner",
    "fieldtype": "Rating",
    "label": "Rate Practitioner"
+  },
+  {
+   "fieldname": "comment",
+   "fieldtype": "Small Text",
+   "label": "Comment"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-17 10:22:42.957035",
+ "modified": "2026-02-17 16:34:49.143877",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Patient Feedback",

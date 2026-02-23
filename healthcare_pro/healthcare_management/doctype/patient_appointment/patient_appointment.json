@@ -9,9 +9,10 @@
  "field_order": [
   "patient",
   "practitioner",
+  "time",
   "column_break_grun",
   "date",
-  "time",
+  "shift",
   "status"
  ],
  "fields": [
@@ -48,12 +49,18 @@
    "label": "Status",
    "options": "Open\nScheduled\nCompleted\nCancelled",
    "read_only": 1
+  },
+  {
+   "fieldname": "shift",
+   "fieldtype": "Link",
+   "label": "Shift ",
+   "options": "Practitioner Schedule"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-18 10:31:16.265881",
+ "modified": "2026-02-18 15:28:42.047523",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Patient Appointment",

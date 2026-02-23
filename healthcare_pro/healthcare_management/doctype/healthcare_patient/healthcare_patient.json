@@ -7,19 +7,19 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "naming_series",
   "full_name",
+  "naming_series",
   "date_of_birth",
+  "insurance_id",
   "id_attachment",
-  "is_published",
   "give_consent",
   "column_break_kasu",
+  "route",
   "gender",
   "email",
   "mobile",
-  "insurance_id",
   "insurance_card",
-  "route"
+  "published"
  ],
  "fields": [
   {
@@ -27,8 +27,7 @@
    "fieldtype": "Select",
    "label": "Naming Series",
    "options": "PAT-.YYYY.-.#####",
-   "permlevel": 1,
-   "read_only": 1
+   "permlevel": 1
   },
   {
    "fieldname": "full_name",
@@ -86,29 +85,31 @@
    "label": "Insurance Card "
   },
   {
-   "default": "0",
-   "fieldname": "is_published",
-   "fieldtype": "Check",
-   "label": "Is published"
-  },
-  {
    "fieldname": "route",
    "fieldtype": "Data",
-   "label": "Route"
+   "in_list_view": 1,
+   "label": "Route",
+   "options": "Name"
   },
   {
    "default": "1",
    "fieldname": "give_consent",
    "fieldtype": "Check",
    "label": "Give Consent"
+  },
+  {
+   "default": "0",
+   "fieldname": "published",
+   "fieldtype": "Check",
+   "label": "Published"
   }
  ],
  "grid_page_length": 50,
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
- "is_published_field": "is_published",
+ "is_published_field": "published",
  "links": [],
- "modified": "2026-02-18 08:12:14.745540",
+ "modified": "2026-02-23 10:52:02.442170",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Healthcare Patient",
@@ -149,9 +150,10 @@
    "write": 1
   }
  ],
- "route": "patient",
+ "route": "route",
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],

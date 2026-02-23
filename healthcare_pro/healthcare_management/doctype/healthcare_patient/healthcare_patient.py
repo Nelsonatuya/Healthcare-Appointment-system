@@ -22,3 +22,9 @@ class HealthcarePatient(WebsiteGenerator):
         })
         if patient_conflict:
             frappe.throw("Patient already exists", title=("Duplicate patient"))
+
+        if self.route == " ":
+            self.route = "patient-{0}".format(self.full_name)
+
+    
+        

@@ -16,7 +16,9 @@ class PractitionerLeave(Document):
 			})
 			if conflict:
 				frappe.throw(("Cannot approve leave: Practitioner {0} has scheduled appointments during this period.")
-					.format(self.practitioner), title=("Leave Approval Error"))
+					.format(self.practitioner), title=("Leave Time conflict Error"))
 			else:
 				if self.status=="pending":
 					self.status = "Approved"
+
+	

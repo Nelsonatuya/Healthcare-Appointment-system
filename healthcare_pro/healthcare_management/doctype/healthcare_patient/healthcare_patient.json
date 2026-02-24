@@ -2,7 +2,7 @@
  "actions": [],
  "allow_guest_to_view": 1,
  "allow_rename": 1,
- "autoname": "naming_series:",
+ "autoname": "PAT-.YYYY.-.#####",
  "creation": "2026-02-10 10:06:36.778045",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -13,6 +13,7 @@
   "insurance_id",
   "id_attachment",
   "give_consent",
+  "age",
   "column_break_kasu",
   "route",
   "gender",
@@ -102,6 +103,12 @@
    "fieldname": "published",
    "fieldtype": "Check",
    "label": "Published"
+  },
+  {
+   "fieldname": "age",
+   "fieldtype": "Data",
+   "label": "Age",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
@@ -109,11 +116,11 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2026-02-23 10:52:02.442170",
+ "modified": "2026-02-24 09:04:12.532636",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Healthcare Patient",
- "naming_rule": "By \"Naming Series\" field",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -153,7 +160,6 @@
  "route": "route",
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
- "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],

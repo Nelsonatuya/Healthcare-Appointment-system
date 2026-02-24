@@ -7,11 +7,10 @@ from frappe.website.website_generator import WebsiteGenerator
 
 class HealthcarePatient(WebsiteGenerator):
     def validate(self):
-        """Check for duplicate patient records before save."""
         self.check_duplicate_patient()
+        self.calculate_age()
 
     def check_duplicate_patient(self):
-        """Prevent registration of duplicate patients based on identifying fields."""
         patient_conflict = frappe.db.exists("Healthcare Patient", {
             "full_name": self.full_name,
             "date_of_birth": self.date_of_birth,
@@ -26,5 +25,11 @@ class HealthcarePatient(WebsiteGenerator):
         if self.route == " ":
             self.route = "patient-{0}".format(self.full_name)
 
+    def calculate_age(self):
+        """Calculate age from date of birth and set it on the age field"""
+        if self.date_of_birth:
+            today = frappe.utils.today()
+            age = frappe.utils.getdate(today).year - frappe.utils.getdate(self.date_of_birth).year
+            self.age = age
     
         

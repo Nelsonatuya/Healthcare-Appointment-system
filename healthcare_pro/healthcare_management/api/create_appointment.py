@@ -67,3 +67,24 @@ def book_appointment():
         "status": "scheduled",
         "appointment_id": appointment.name
     }
+
+#Get appointment details
+@frappe.whitelist()
+def get_appointments(patient=None, practitioner=None, date=None, time=None, status=None):
+	filters = {}
+	if patient:
+		filters["patient"] = patient
+	if practitioner:
+		filters["practitioner"] = practitioner
+	if date:
+		filters["date"] = date
+	if time:
+		filters["time"] = time
+	if status:
+		filters["status"] = status
+	appointments = frappe.get_all(
+		"Patient Appointment",
+		fields=["name", "patient", "practitioner", "date", "time", "status"],
+		filters=filters
+	)
+	return appointments

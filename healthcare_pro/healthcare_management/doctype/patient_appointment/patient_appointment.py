@@ -161,11 +161,11 @@ class PatientAppointment(Document):
             },
             fields=["from_time", "to_time"],
         )
-
+        
         if not schedule_slots:
             frappe.throw(
-                _("Practitioner {0} does not have scheduled working hours on {1}.")
-                .format(self.practitioner, appointment_day)
+                _("Practitioner {0} does not have a scheduled working day on {1}.Working days are: {2}")
+                .format(self.practitioner, appointment_day, self.get_working_days())
             )
 
         appointment_time = get_time(self.time)
@@ -181,10 +181,21 @@ class PatientAppointment(Document):
 
         if not is_within_schedule:
             frappe.throw(
-                _("Appointment time {0} is outside practitioner's scheduled working hours on {1}.")
-                .format(self.time, appointment_day)
+                _("Appointment time {0} is outside practitioner's scheduled working hours on {1}. [Working hours: {2} - {3}].")
+                .format(self.time, appointment_day, schedule_slots[0].from_time, schedule_slots[0].to_time)
             )
-
+    def get_working_days(self):
+        working_days = frappe.get_all(
+            "Schedule Slot",
+            filters={
+                "parent": self.practitioner,
+                "parenttype": "Healthcare Practitioner",
+                "parentfield": "table_locw",
+            },
+            fields=["day"],
+            distinct=True
+        )
+        return ", ".join([day.day for day in working_days])
     # ==========================
     # STATUS MANAGEMENT
     # ==========================

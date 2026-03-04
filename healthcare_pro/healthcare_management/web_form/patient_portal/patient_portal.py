@@ -17,11 +17,10 @@ def get_context(context):
 
 
     context.on_submit = on_submit
-    # Show a button on the success message to redirect users to the booking page
-    # This will be rendered after the web form submission completes
+    # Button href is upgraded with ?patient=<name> by client script after save.
     context.success_message = (
-        "<div class=\"alert alert-success\">Your have been successfully registered. Do you wish to book an a appointment</div>"
-        "<a class=\"btn btn-primary\" href=\"/book-an-appointment?\">Book an Appointment</a>"
+        "<div class=\"alert alert-success\">You have been successfully registered. Do you wish to book an appointment?</div>"
+        "<a class=\"btn btn-primary book-appointment-btn\" href=\"/book-an-appointment\">Book an Appointment</a>"
     )
 
     return context

@@ -12,7 +12,8 @@
   "table_locw",
   "column_break_witn",
   "user_id",
-  "department"
+  "department",
+  "mobile"
  ],
  "fields": [
   {
@@ -55,12 +56,17 @@
   {
    "fieldname": "working_time_column",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mobile",
+   "fieldtype": "Phone",
+   "label": "Mobile"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-18 11:39:29.044783",
+ "modified": "2026-03-03 15:24:23.426891",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Healthcare Practitioner",

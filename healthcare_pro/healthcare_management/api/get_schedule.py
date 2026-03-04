@@ -1,25 +1,26 @@
 import frappe
 
 @frappe.whitelist(allow_guest=True)
-def get_appointment_details(appointment_id=None):
-    if not appointment_id:
-        appointment_id = frappe.form_dict.get("appointment_id")
-    if not appointment_id:
-        frappe.throw("Missing appointment_id")
-
-    if not frappe.db.exists("Patient Appointment", appointment_id):
-        frappe.throw("Appointment not found")
-
-    appointment = frappe.get_doc("Patient Appointment", appointment_id)
-
-    return {
-        "name": appointment.name,
-        "patient": appointment.patient,
-        "practitioner": appointment.practitioner,
-        "date": appointment.date,
-        "time": appointment.time,
-        "status": appointment.status
-    }
+def get_appointment_details(name=None, patient=None, practitioner=None, date=None, time=None, status=None):
+    filters = {}
+    if name:
+        filters["name"] = name
+    if patient:
+        filters["patient"] = patient
+    if practitioner:
+        filters["practitioner"] = practitioner
+    if date:
+        filters["date"] = date
+        if time:
+            filters["time"] = time
+        if status:
+            filters["status"] = status
+        appointments = frappe.get_all(
+            "Patient Appointment",
+            fields=["name", "patient", "practitioner", "date", "time", "status"],
+            filters=filters
+        )
+        return appointments
 
 
 

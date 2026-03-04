@@ -1,19 +1,29 @@
 frappe.ready(function() {
     if (frappe.web_form) {
         frappe.web_form.after_save = function(data) {
-            if (data && data.patient) {
-                // Try to find an <a> tag first
-                var btn = document.querySelector('.alert-success + a.btn-primary');
+            var patient = (data && (data.patient || data.name))
+                || (frappe.web_form.doc && frappe.web_form.doc.name);
+
+            if (patient) {
+                try {
+                    localStorage.setItem('book_appointment_patient', patient);
+                } catch (e) {
+                    // Ignore storage errors and continue with URL-based flow.
+                }
+
+                var targetUrl = '/book-an-appointment/new?patient=' + encodeURIComponent(patient);
+                var btn = document.querySelector('.book-appointment-btn')
+                    || document.querySelector('.success-state a.btn-primary');
+
                 if (btn) {
-                    btn.href = '/book-an-appointment?patient=' + encodeURIComponent(data.patient);
-                } else {
-                    // Try to find a <button> element
-                    var button = document.querySelector('.success-state .btn-primary');
-                    if (button) {
-                        button.onclick = function() {
-                            window.location.href = '/book-an-appointment?patient=' + encodeURIComponent(data.patient);
-                        };
-                    }
+                    btn.href = targetUrl;
+                }
+
+                var button = document.querySelector('.success-state .btn-primary');
+                if (button && button.tagName === 'BUTTON') {
+                    button.onclick = function() {
+                        window.location.href = targetUrl;
+                    };
                 }
             }
         };

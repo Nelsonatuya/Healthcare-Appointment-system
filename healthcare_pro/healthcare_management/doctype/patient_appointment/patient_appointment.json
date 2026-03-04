@@ -12,8 +12,11 @@
   "time",
   "column_break_grun",
   "date",
-  "shift",
-  "status"
+  "status",
+  "google_event_id",
+  "synced_to_google",
+  "start_datetime",
+  "end_datetime"
  ],
  "fields": [
   {
@@ -51,16 +54,31 @@
    "read_only": 1
   },
   {
-   "fieldname": "shift",
-   "fieldtype": "Link",
-   "label": "Shift ",
-   "options": "Practitioner Schedule"
+   "fieldname": "google_event_id",
+   "fieldtype": "Data",
+   "label": "Google Event Id"
+  },
+  {
+   "default": "0",
+   "fieldname": "synced_to_google",
+   "fieldtype": "Check",
+   "label": "Synced To Google"
+  },
+  {
+   "fieldname": "start_datetime",
+   "fieldtype": "Datetime",
+   "label": "Start DateTime"
+  },
+  {
+   "fieldname": "end_datetime",
+   "fieldtype": "Datetime",
+   "label": "End DateTime"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-18 15:28:42.047523",
+ "modified": "2026-03-04 15:00:26.707580",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Patient Appointment",

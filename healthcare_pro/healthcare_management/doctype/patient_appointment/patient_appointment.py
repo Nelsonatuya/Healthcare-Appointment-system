@@ -210,13 +210,13 @@ class PatientAppointment(Document):
                 "parentfield": "table_locw",
                 "day": appointment_day,
             },
-            fields=["from_time", "to_time"],
+            fields=["from_time", "to_time", "day"],
         )
 
         if not schedule_slots:
             frappe.throw(
-                _("Practitioner {0} does not have a scheduled working day on {1}.")
-                .format(self.practitioner, appointment_day)
+                _("Practitioner {0} does not have a scheduled working day on {1}. Working days are: {2}.")
+                .format(self.practitioner, appointment_day,)
             )
 
         appointment_time = get_time(self.time)
@@ -232,7 +232,7 @@ class PatientAppointment(Document):
 
         if not is_within_schedule:
             frappe.throw(
-                _("Appointment time {0} is outside practitioner's scheduled working hours. working hours on {1} are from {2} to {3}.")
+                _("Appointment time {0} is outside practitioner's scheduled working hours. working hours are on {1} are from {2} to {3}.")
                 .format(self.time, appointment_day, schedule_slots[0].from_time, schedule_slots[0].to_time)
             )
 

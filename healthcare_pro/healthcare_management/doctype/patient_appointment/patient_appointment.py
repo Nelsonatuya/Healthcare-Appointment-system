@@ -7,9 +7,6 @@ from frappe.model.document import Document
 from frappe.utils import getdate, get_time, nowdate, nowtime
 from datetime import datetime, timedelta
 
-# Google Calendar Integration
-import requests
-
 
 class PatientAppointment(Document):
 
@@ -18,40 +15,22 @@ class PatientAppointment(Document):
     # ==========================
 
     def validate(self):
-        self.set_datetime_fields()
         self.validate_datetime()
         self.validate_double_booking()
-        self.check_global_holiday()
+        self.check_global_holiday()  
         self.check_practitioner_leave()
         self.check_practitioner_schedule()
         self.update_status_to_scheduled()
 
     def on_submit(self):
         self.check_practitioner_leave()
-        self.create_google_event()
 
     def on_update(self):
         if self.has_value_changed("status") and self.status == "Cancelled":
-            self.delete_google_event()
             self.promote_waitlist()
-        else:
-            self.update_google_event()
 
     # ==========================
-    # DATETIME AUTO GENERATION
-    # ==========================
-
-    def set_datetime_fields(self):
-        appointment_datetime = datetime.combine(
-            getdate(self.date),
-            get_time(self.time)
-        )
-
-        self.start_datetime = appointment_datetime
-        self.end_datetime = appointment_datetime + timedelta(hours=1)
-
-    # ==========================
-    # DATE VALIDATION
+    # DATE & TIME VALIDATION
     # ==========================
 
     def validate_datetime(self):
@@ -66,7 +45,7 @@ class PatientAppointment(Document):
                 frappe.throw(_("The appointment time has already passed for today."))
 
     # ==========================
-    # DOUBLE BOOKING VALIDATION
+    # 1-HOUR OVERLAP VALIDATION
     # ==========================
 
     def validate_double_booking(self):
@@ -98,6 +77,7 @@ class PatientAppointment(Document):
 
             if one_hour_before < existing_datetime < one_hour_after:
 
+                # Add to waitlist if not already added
                 existing_wait = frappe.db.exists(
                     "Appointment Waitlist",
                     {
@@ -122,9 +102,13 @@ class PatientAppointment(Document):
                     frappe.db.commit()
 
                 frappe.throw(
-                    _("This practitioner already has an appointment within this time. You have been added to the waitlist."),
+                    _("This practitioner already has an appointment within  this time. You have been added to the waitlist."),
                     title=_("Time Slot Conflict"),
                 )
+
+        # ==========================
+        # Patient self-conflict check
+        # ==========================
 
         patient_conflict = frappe.db.exists(
             "Patient Appointment",
@@ -138,7 +122,9 @@ class PatientAppointment(Document):
         )
 
         if patient_conflict:
-            frappe.throw(_("Patient already has another appointment at this exact time."))
+            frappe.throw(
+                _("Patient already has another appointment at this exact time.")
+            )
 
     # ==========================
     # PRACTITIONER LEAVE CHECK
@@ -168,10 +154,10 @@ class PatientAppointment(Document):
 
             frappe.throw(msg, title=_("Practitioner Unavailable"))
 
+
     # ==========================
     # HOLIDAY CHECK
-    # ==========================
-
+    # ==========================        
     def check_global_holiday(self):
 
         holiday = frappe.db.exists(
@@ -195,7 +181,7 @@ class PatientAppointment(Document):
             )
 
     # ==========================
-    # PRACTITIONER SCHEDULE CHECK
+    # PRACTITIONER WORKING HOURS
     # ==========================
 
     def check_practitioner_schedule(self):
@@ -210,13 +196,13 @@ class PatientAppointment(Document):
                 "parentfield": "table_locw",
                 "day": appointment_day,
             },
-            fields=["from_time", "to_time", "day"],
+            fields=["from_time", "to_time"],
         )
 
         if not schedule_slots:
             frappe.throw(
-                _("Practitioner {0} does not have a scheduled working day on {1}. Working days are: {2}.")
-                .format(self.practitioner, appointment_day,)
+                _("Practitioner {0} does not have a scheduled working day on {1}. Working days are: {2}")
+                .format(self.practitioner, appointment_day, self.get_working_days())
             )
 
         appointment_time = get_time(self.time)
@@ -232,9 +218,22 @@ class PatientAppointment(Document):
 
         if not is_within_schedule:
             frappe.throw(
-                _("Appointment time {0} is outside practitioner's scheduled working hours. working hours are on {1} are from {2} to {3}.")
-                .format(self.time, appointment_day, schedule_slots[0].from_time, schedule_slots[0].to_time)
+                _("Appointment time {0} is outside practitioner's scheduled working hours.")
+                .format(self.time)
             )
+
+    def get_working_days(self):
+        working_days = frappe.get_all(
+            "Schedule Slot",
+            filters={
+                "parent": self.practitioner,
+                "parenttype": "Healthcare Practitioner",
+                "parentfield": "table_locw",
+            },
+            fields=["day"],
+            distinct=True
+        )
+        return ", ".join([day.day for day in working_days])
 
     # ==========================
     # STATUS MANAGEMENT
@@ -245,102 +244,82 @@ class PatientAppointment(Document):
             self.status = "Scheduled"
 
     # ==========================
-    # GOOGLE CALENDAR INTEGRATION
+    # WAITLIST PROMOTION
     # ==========================
 
-    def create_google_event(self):
-        try:
-            if self.google_event_id:
-                return
+    def promote_waitlist(self):
 
-            access_token = frappe.db.get_single_value("Google Settings", "access_token")
-
-            if not access_token:
-                frappe.log_error("Google not authenticated", "Google Sync")
-                return
-
-            url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
-
-            headers = {
-                "Authorization": f"Bearer {access_token}",
-                "Content-Type": "application/json",
-            }
-
-            event = {
-                "summary": f"Appointment: {self.patient}",
-                "description": f"Practitioner: {self.practitioner}",
-                "start": {
-                    "dateTime": self.start_datetime.isoformat(),
-                    "timeZone": "Africa/Nairobi"
-                },
-                "end": {
-                    "dateTime": self.end_datetime.isoformat(),
-                    "timeZone": "Africa/Nairobi"
-                }
-            }
-
-            response = requests.post(url, json=event, headers=headers)
-
-            if response.status_code == 200:
-                event_data = response.json()
-                self.db_set("google_event_id", event_data.get("id"))
-                self.db_set("synced_to_google", 1)
-            else:
-                frappe.log_error(response.text, "Google Event Creation Failed")
-
-        except Exception:
-            frappe.log_error(frappe.get_traceback(), "Google Sync Failed")
-
-    def update_google_event(self):
-        if not self.google_event_id:
+        if frappe.flags.in_waitlist_promotion:
             return
 
+        frappe.flags.in_waitlist_promotion = True
+
         try:
-            access_token = frappe.db.get_single_value("Google Settings", "access_token")
-
-            url = f"https://www.googleapis.com/calendar/v3/calendars/primary/events/{self.google_event_id}"
-
-            headers = {
-                "Authorization": f"Bearer {access_token}",
-                "Content-Type": "application/json",
-            }
-
-            event = {
-                "summary": f"Appointment: {self.patient}",
-                "description": f"Practitioner: {self.practitioner}",
-                "start": {
-                    "dateTime": self.start_datetime.isoformat(),
-                    "timeZone": "Africa/Nairobi"
+            waitlisted = frappe.get_all(
+                "Appointment Waitlist",
+                filters={
+                    "practitioner": self.practitioner,
+                    "date": self.date,
+                    "status": "Waiting",
                 },
-                "end": {
-                    "dateTime": self.end_datetime.isoformat(),
-                    "timeZone": "Africa/Nairobi"
-                }
-            }
+                order_by="creation asc",
+                limit=1,
+            )
 
-            requests.put(url, json=event, headers=headers)
+            if not waitlisted:
+                return
 
-        except Exception:
-            frappe.log_error(frappe.get_traceback(), "Google Update Failed")
+            wait_doc = frappe.get_doc("Appointment Waitlist", waitlisted[0].name)
 
-    def delete_google_event(self):
-        if not self.google_event_id:
-            return
+            # Check 1-hour conflict before promoting
+            temp_doc = frappe.get_doc({
+                "doctype": "Patient Appointment",
+                "patient": wait_doc.patient,
+                "practitioner": self.practitioner,
+                "date": self.date,
+                "time": wait_doc.time,
+                "status": "Scheduled",
+            })
 
-        try:
-            access_token = frappe.db.get_single_value("Google Settings", "access_token")
+            temp_doc.validate_double_booking()
 
-            url = f"https://www.googleapis.com/calendar/v3/calendars/primary/events/{self.google_event_id}"
+            temp_doc.insert(ignore_permissions=True)
 
-            headers = {
-                "Authorization": f"Bearer {access_token}",
-            }
+            wait_doc.status = "Converted"
+            wait_doc.save(ignore_permissions=True)
 
-            requests.delete(url, headers=headers)
-            self.db_set("synced_to_google", 0)
+            self.notify_waitlisted_patient(wait_doc.patient, temp_doc.name)
 
-        except Exception:
-            frappe.log_error(frappe.get_traceback(), "Google Delete Failed")
+            frappe.db.commit()
+
+        finally:
+            frappe.flags.in_waitlist_promotion = False
+
+    # ==========================
+    # NOTIFICATION
+    # ==========================
+
+    def notify_waitlisted_patient(self, patient, appointment_name):
+
+        patient_doc = frappe.get_doc("Healthcare Patient", patient)
+
+        if patient_doc.email:
+            frappe.sendmail(
+                recipients=[patient_doc.email],
+                subject="Appointment Scheduled from Waitlist",
+                message=f"""
+                Good news!
+
+                A slot became available and your appointment has been scheduled.
+
+                Appointment ID: {appointment_name}
+                Date: {self.date}
+                Time: {self.time}
+
+                Please contact the clinic if you need to reschedule.
+                """,
+            )
+
 
 @frappe.whitelist()
 def cancel_appointment(appointment):

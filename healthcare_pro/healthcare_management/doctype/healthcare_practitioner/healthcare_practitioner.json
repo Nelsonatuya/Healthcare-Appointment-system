@@ -13,7 +13,8 @@
   "column_break_witn",
   "user_id",
   "department",
-  "mobile"
+  "mobile",
+  "email"
  ],
  "fields": [
   {
@@ -61,12 +62,17 @@
    "fieldname": "mobile",
    "fieldtype": "Phone",
    "label": "Mobile"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-03 15:24:23.426891",
+ "modified": "2026-03-09 14:57:09.331729",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Healthcare Practitioner",

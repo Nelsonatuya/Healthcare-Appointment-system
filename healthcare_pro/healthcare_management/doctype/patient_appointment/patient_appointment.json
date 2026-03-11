@@ -14,9 +14,7 @@
   "date",
   "status",
   "google_event_id",
-  "synced_to_google",
-  "start_datetime",
-  "end_datetime"
+  "synced_to_google"
  ],
  "fields": [
   {
@@ -56,29 +54,20 @@
   {
    "fieldname": "google_event_id",
    "fieldtype": "Data",
-   "label": "Google Event Id"
+   "label": "Google Event Id",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "synced_to_google",
    "fieldtype": "Check",
    "label": "Synced To Google"
-  },
-  {
-   "fieldname": "start_datetime",
-   "fieldtype": "Datetime",
-   "label": "Start DateTime"
-  },
-  {
-   "fieldname": "end_datetime",
-   "fieldtype": "Datetime",
-   "label": "End DateTime"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-04 15:00:26.707580",
+ "modified": "2026-03-10 10:59:24.583358",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Patient Appointment",

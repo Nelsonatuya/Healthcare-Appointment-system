@@ -32,3 +32,16 @@ def register_new_patient():
 	
 	new_patient.insert()
 	return {"patient_name": new_patient.name}
+
+
+@frappe.whitelist()
+def get_patients():
+    patient = frappe.db.get_value(
+        "Healthcare Patient",
+        {"email": frappe.session.user},
+        ["name", "full_name", "date_of_birth", "gender", "email", "mobile", "insurance_id", "age"],
+        as_dict=True
+    )
+    if not patient:
+        return []
+    return [patient]

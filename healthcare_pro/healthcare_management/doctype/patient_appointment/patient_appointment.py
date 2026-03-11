@@ -6,6 +6,9 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import getdate, get_time, nowdate, nowtime
 from datetime import datetime, timedelta
+from healthcare_pro.healthcare_management.api.google_calendar import (
+    create_calendar_event, delete_calendar_event
+)
 
 
 class PatientAppointment(Document):
@@ -24,9 +27,17 @@ class PatientAppointment(Document):
 
     def on_submit(self):
         self.check_practitioner_leave()
+        create_calendar_event(self)
 
     def on_update(self):
         if self.has_value_changed("status") and self.status == "Cancelled":
+            # Delete from Google Calendar when cancelled
+            google_event_id = frappe.db.get_value(
+                "Patient Appointment", self.name, "google_event_id"
+            )
+            if google_event_id:
+                delete_calendar_event(google_event_id)
+            
             self.promote_waitlist()
 
     # ==========================

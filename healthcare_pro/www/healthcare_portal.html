@@ -640,7 +640,7 @@ function loadDashboard() {
 // Fields: practitioner_id, practitioner_name, day, from_time, to_time
 //
 // Submit to: book_appointment()
-// Your fields: patient_name, practitioner_name, date, time
+// fields: patient_name, practitioner_name, date, time
 // Returns: { status: "scheduled", appointment_id } OR { status: "waitlisted", waitlist_id }
 // ════════════════════════════════
 function loadPractitioners() {
@@ -675,7 +675,7 @@ function loadSlots() {
     return;
   }
 
-  // Day name to match schedule "day" field e.g. "Monday"
+  // Day name to match schedule "day" field 
   var dayName = new Date(date + 'T00:00:00').toLocaleString('en', { weekday: 'long' });
 
   var daySlots = schedule.filter(function(s) {
@@ -733,11 +733,8 @@ function submitBook() {
   btn.textContent = 'Booking…';
   btn.disabled = true;
 
-  // Your book_appointment() reads from frappe.form_dict:
-  // patient_name → the patient doc name (e.g. PAT-2026-00009)
-  // practitioner_name → the practitioner doc name (e.g. PRAC-00001)
-  // date → "2026-03-15"
-  // time → "09:00:00"
+  //book_appointment() reads from frappe.form_dict:
+ 
   apiPost('healthcare_pro.healthcare_management.api.create_appointment.book_appointment', {
     patient_name: currentPatient.name,
     practitioner_name: pracId,
@@ -818,7 +815,7 @@ function loadAppointments() {
 
 function cancelAppt(name) {
   if (!confirm('Cancel appointment ' + name + '?')) return;
-  // Your cancel_appointment(appointment=...) in patient_appointment.py
+  //cancel_appointment in patient_appointment.py
   apiPost('healthcare_pro.healthcare_management.doctype.patient_appointment.patient_appointment.cancel_appointment',
     { appointment: name }
   ).then(function() {
@@ -832,9 +829,6 @@ function cancelAppt(name) {
 
 // ════════════════════════════════
 // MEDICAL RECORDS
-// Uses: get_medical_records() — uses frappe.session.user internally, no params
-// Fields returned: name, date, practitioner, diagnosis, appointment
-// Full record also has: symptoms (from your create_medical_record fields)
 // ════════════════════════════════
 function loadMedicalRecords() {
   var tbody = document.getElementById('rec-tbody');

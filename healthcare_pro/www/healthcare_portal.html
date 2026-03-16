@@ -398,18 +398,49 @@
   </div>
 </div>
 
+<!-- RESCHEDULE MODAL -->
+<div class="modal-overlay" id="reschedule-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">Reschedule Appointment</div>
+      <button class="modal-close" onclick="closeReschedule()">✕</button>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="font-size:13px;color:var(--slate);background:var(--off-white);border-radius:10px;padding:12px 16px;">
+        Rescheduling: <span id="rs-appt-id" style="font-weight:600;color:var(--teal);"></span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>New Date</label>
+      <input type="date" id="rs-date" onchange="loadRescheduleSlots()">
+    </div>
+    <div class="form-group">
+      <label>New Time Slot</label>
+      <div class="time-slots" id="rs-slots">
+        <div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a date to see available slots.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;">
+      <button class="btn-secondary" onclick="closeReschedule()">Cancel</button>
+      <button class="btn-teal" id="rs-btn" onclick="confirmReschedule()">Confirm Reschedule</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 // ════════════════════════════════
 // STATE
 // ════════════════════════════════
-var currentPatient = null;   // Healthcare Patient doc (full_name, date_of_birth, gender, email, mobile, insurance_id, age, name)
-var allAppointments = [];    // from get_appointments()
-var allRecords = [];         // from get_medical_records()
-var schedule = [];           // from get_practitioner_schedule()
+var currentPatient = null;
+var allAppointments = [];
+var allRecords = [];
+var schedule = [];
 var selectedTime = null;
 var toastTimer = null;
+var rescheduleAppt = null;   // appointment being rescheduled { name, practitioner_id }
+var rsSelectedTime = null;   // selected time in reschedule modal
 
 // ════════════════════════════════
 // API HELPERS
@@ -517,7 +548,7 @@ function doLogout() {
 // ════════════════════════════════
 // INIT APP after login
 // Uses: get_patients() → fields: name, full_name, date_of_birth, gender, email, mobile
-// (from  register_patient.py → get_patients function)
+// (from your register_patient.py get_patients function)
 // ════════════════════════════════
 function initApp(email) {
   var hour = new Date().getHours();
@@ -551,7 +582,7 @@ function initApp(email) {
 // ════════════════════════════════
 // RENDER PROFILE
 // Fields from HealthcarePatient: full_name, date_of_birth, gender, age, email, mobile, insurance_id, name
-// age is calculated by  calculate_age() method in healthcare_patient.py
+// age is calculated by your calculate_age() method in healthcare_patient.py
 // ════════════════════════════════
 function renderProfile(p) {
   // Dashboard summary
@@ -640,7 +671,7 @@ function loadDashboard() {
 // Fields: practitioner_id, practitioner_name, day, from_time, to_time
 //
 // Submit to: book_appointment()
-// fields: patient_name, practitioner_name, date, time
+// Your fields: patient_name, practitioner_name, date, time
 // Returns: { status: "scheduled", appointment_id } OR { status: "waitlisted", waitlist_id }
 // ════════════════════════════════
 function loadPractitioners() {
@@ -675,7 +706,7 @@ function loadSlots() {
     return;
   }
 
-  // Day name to match schedule "day" field 
+  // Day name to match schedule "day" field e.g. "Monday"
   var dayName = new Date(date + 'T00:00:00').toLocaleString('en', { weekday: 'long' });
 
   var daySlots = schedule.filter(function(s) {
@@ -733,8 +764,11 @@ function submitBook() {
   btn.textContent = 'Booking…';
   btn.disabled = true;
 
-  //book_appointment() reads from frappe.form_dict:
- 
+  // Your book_appointment() reads from frappe.form_dict:
+  // patient_name → the patient doc name (e.g. PAT-2026-00009)
+  // practitioner_name → the practitioner doc name (e.g. PRAC-00001)
+  // date → "2026-03-15"
+  // time → "09:00:00"
   apiPost('healthcare_pro.healthcare_management.api.create_appointment.book_appointment', {
     patient_name: currentPatient.name,
     practitioner_name: pracId,
@@ -798,8 +832,9 @@ function loadAppointments() {
           '<td>' + (a.time || '—') + '</td>' +
           '<td>' + (a.practitioner || '—') + '</td>' +
           '<td><span class="badge ' + sc + '">' + (a.status || '—') + '</span></td>' +
-          '<td>' +
+          '<td style="display:flex;gap:8px;align-items:center;">' +
             (canCancel ? '<button class="tbl-action red" onclick="cancelAppt(\'' + a.name + '\')">Cancel</button>' : '') +
+            (canCancel ? '<button class="tbl-action" onclick="openReschedule(\'' + a.name + '\',\'' + (a.practitioner || '') + '\')">Reschedule</button>' : '') +
             (isDone ? '<button class="tbl-action" onclick="openRecByAppt(\'' + a.name + '\')">View Record</button>' : '') +
             (!canCancel && !isDone ? '—' : '') +
           '</td></tr>';
@@ -815,7 +850,7 @@ function loadAppointments() {
 
 function cancelAppt(name) {
   if (!confirm('Cancel appointment ' + name + '?')) return;
-  //cancel_appointment in patient_appointment.py
+  // Your cancel_appointment(appointment=...) in patient_appointment.py
   apiPost('healthcare_pro.healthcare_management.doctype.patient_appointment.patient_appointment.cancel_appointment',
     { appointment: name }
   ).then(function() {
@@ -829,6 +864,9 @@ function cancelAppt(name) {
 
 // ════════════════════════════════
 // MEDICAL RECORDS
+// Uses: get_medical_records() — uses frappe.session.user internally, no params
+// Fields returned: name, date, practitioner, diagnosis, appointment
+// Full record also has: symptoms (from your create_medical_record fields)
 // ════════════════════════════════
 function loadMedicalRecords() {
   var tbody = document.getElementById('rec-tbody');
@@ -898,6 +936,147 @@ function openRecByAppt(apptName) {
 function closeModal() {
   document.getElementById('rec-modal').classList.remove('open');
 }
+
+// ════════════════════════════════
+// RESCHEDULE APPOINTMENT
+// Cancels the old appointment and creates a new one
+// Uses same book_appointment() API: patient_name, practitioner_name, date, time
+// ════════════════════════════════
+function openReschedule(apptName, practitionerId) {
+  // Store which appointment we're rescheduling
+  rescheduleAppt = { name: apptName, practitioner_id: practitionerId };
+  rsSelectedTime = null;
+
+  // Set minimum date to today
+  var rs = document.getElementById('rs-date');
+  rs.min = new Date().toISOString().split('T')[0];
+  rs.value = '';
+
+  // Show appointment ID in modal
+  setText('rs-appt-id', apptName);
+
+  // Reset slots
+  document.getElementById('rs-slots').innerHTML =
+    '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a date to see available slots.</div>';
+
+  document.getElementById('reschedule-modal').classList.add('open');
+}
+
+function closeReschedule() {
+  document.getElementById('reschedule-modal').classList.remove('open');
+  rescheduleAppt = null;
+  rsSelectedTime = null;
+}
+
+function loadRescheduleSlots() {
+  var date = document.getElementById('rs-date').value;
+  var container = document.getElementById('rs-slots');
+  rsSelectedTime = null;
+
+  if (!date || !rescheduleAppt) {
+    container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a date to see available slots.</div>';
+    return;
+  }
+
+  // Get day name e.g. "Monday"
+  var dayName = new Date(date + 'T00:00:00').toLocaleString('en', { weekday: 'long' });
+
+  // Filter schedule for this practitioner and day
+  var daySlots = schedule.filter(function(s) {
+    return s.practitioner_id === rescheduleAppt.practitioner_id && s.day === dayName;
+  });
+
+  if (daySlots.length === 0) {
+    container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">No available slots on ' + dayName + '. Try another day.</div>';
+    return;
+  }
+
+  // Generate hourly slots — same logic as booking
+  var times = [];
+  daySlots.forEach(function(slot) {
+    var fp = slot.from_time.split(':').map(Number);
+    var tp = slot.to_time.split(':').map(Number);
+    var cur = fp[0] * 60 + fp[1];
+    var end = tp[0] * 60 + tp[1];
+    while (cur < end) {
+      var h = Math.floor(cur / 60);
+      var m = cur % 60;
+      var ampm = h >= 12 ? 'PM' : 'AM';
+      var dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+      times.push({
+        display: dh + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm,
+        value: (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':00'
+      });
+      cur += 60;
+    }
+  });
+
+  container.innerHTML = times.map(function(t) {
+    return '<div class="time-slot" data-value="' + t.value + '" onclick="selectRsSlot(this)">' + t.display + '</div>';
+  }).join('');
+}
+
+function selectRsSlot(el) {
+  if (el.classList.contains('unavailable')) return;
+  document.querySelectorAll('#rs-slots .time-slot').forEach(function(s) { s.classList.remove('selected'); });
+  el.classList.add('selected');
+  rsSelectedTime = el.dataset.value;
+}
+
+function confirmReschedule() {
+  if (!rescheduleAppt) return;
+  if (!document.getElementById('rs-date').value) { showToast('⚠️ Please select a new date'); return; }
+  if (!rsSelectedTime) { showToast('⚠️ Please select a new time slot'); return; }
+
+  var btn = document.getElementById('rs-btn');
+  var newDate = document.getElementById('rs-date').value;
+  btn.textContent = 'Rescheduling…';
+  btn.disabled = true;
+
+  // Step 1: Cancel the existing appointment
+  apiPost(
+    'healthcare_pro.healthcare_management.doctype.patient_appointment.patient_appointment.cancel_appointment',
+    { appointment: rescheduleAppt.name }
+  ).then(function() {
+
+    // Step 2: Book a new appointment with the new date/time
+    return apiPost(
+      'healthcare_pro.healthcare_management.api.create_appointment.book_appointment',
+      {
+        patient_name: currentPatient.name,
+        practitioner_name: rescheduleAppt.practitioner_id,
+        date: newDate,
+        time: rsSelectedTime
+      }
+    );
+
+  }).then(function(result) {
+    closeReschedule();
+
+    if (result && result.status === 'waitlisted') {
+      showToast('⏳ Slot taken — added to waitlist. ID: ' + (result.waitlist_id || ''));
+    } else {
+      showToast('✅ Appointment rescheduled! New ID: ' + (result && result.appointment_id ? result.appointment_id : ''));
+    }
+
+    // Refresh appointments and dashboard
+    loadAppointments();
+    loadDashboard();
+
+  }).catch(function(e) {
+    showToast('❌ Reschedule failed: ' + e.message);
+  }).finally(function() {
+    btn.textContent = 'Confirm Reschedule';
+    btn.disabled = false;
+  });
+}
+
+// Close reschedule modal when clicking outside
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('reschedule-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeReschedule();
+  });
+});
 
 // ════════════════════════════════
 // TOAST

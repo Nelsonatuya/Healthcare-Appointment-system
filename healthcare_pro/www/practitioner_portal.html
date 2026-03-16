@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>better.care — Practitioner Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --teal: #0d9488;
+    --teal-light: #14b8a6;
+    --teal-pale: #ccfbf1;
+    --teal-dark: #0f766e;
+    --slate: #64748b;
+    --slate-light: #94a3b8;
+    --white: #ffffff;
+    --off-white: #f8fafc;
+    --border: #e2e8f0;
+    --success: #059669;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --amber: #f59e0b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* ══ LOGIN ══ */
+  #login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .login-left {
+    flex: 1;
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .login-left::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(13,148,136,0.25) 0%, transparent 65%);
+    border-radius: 50%;
+  }
+
+  .login-left::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: -60px;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(13,148,136,0.12) 0%, transparent 65%);
+    border-radius: 50%;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 56px;
+    position: relative; z-index: 1;
+  }
+
+  .brand-icon {
+    width: 44px; height: 44px;
+    background: var(--teal);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+
+  .brand-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: var(--white);
+  }
+
+  .brand-name span { color: var(--teal-light); }
+
+  .login-hero { position: relative; z-index: 1; }
+
+  .login-hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 44px;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+
+  .login-hero h1 em { font-style: italic; color: var(--teal-light); }
+
+  .login-hero p {
+    color: var(--slate-light);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 360px;
+  }
+
+  .practitioner-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(13,148,136,0.2);
+    border: 1px solid rgba(13,148,136,0.4);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--teal-light);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .login-right {
+    width: 460px;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 48px;
+  }
+
+  .login-right h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .login-right > p { color: var(--slate); font-size: 14px; margin-bottom: 32px; }
+
+  .form-group { margin-bottom: 18px; }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--slate);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--navy);
+    background: var(--off-white);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+  .form-group input:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(13,148,136,0.1);
+    background: var(--white);
+  }
+
+  .btn-login {
+    width: 100%;
+    padding: 13px;
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 4px;
+  }
+
+  .btn-login:hover { background: var(--navy-mid); }
+  .btn-login:disabled { background: var(--slate-light); cursor: not-allowed; }
+
+  .login-error {
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 13px;
+    color: var(--danger);
+    margin-bottom: 18px;
+    display: none;
+  }
+
+  .back-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--slate);
+  }
+
+  .back-link a { color: var(--teal); text-decoration: none; font-weight: 500; }
+
+  /* ══ APP ══ */
+  #app { display: none; min-height: 100vh; flex-direction: column; }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--navy);
+    padding: 0 28px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+
+  .topbar-brand {
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .t-icon {
+    width: 34px; height: 34px;
+    background: var(--teal);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+
+  .topbar-brand span {
+    font-family: 'DM Serif Display', serif;
+    font-size: 19px;
+    color: var(--white);
+  }
+
+  .topbar-brand span em { font-style: normal; color: var(--teal-light); }
+
+  .role-pill {
+    background: rgba(13,148,136,0.25);
+    border: 1px solid rgba(13,148,136,0.4);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--teal-light);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .topbar-right { display: flex; align-items: center; gap: 14px; }
+
+  .doc-chip {
+    display: flex; align-items: center; gap: 9px;
+    padding: 5px 12px 5px 5px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 24px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .doc-chip:hover { border-color: var(--teal); }
+
+  .doc-avatar {
+    width: 30px; height: 30px;
+    background: var(--teal);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .doc-name { font-size: 13px; font-weight: 500; color: var(--white); }
+
+  .btn-logout {
+    padding: 7px 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--slate-light);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-logout:hover { background: rgba(255,255,255,0.14); color: var(--white); }
+
+  /* BODY LAYOUT */
+  .app-body { display: flex; flex: 1; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px;
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    padding: 20px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+  }
+
+  .nav-section { font-size: 10px; font-weight: 600; color: var(--slate-light); text-transform: uppercase; letter-spacing: 1.5px; padding: 10px 10px 5px; }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 10px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--slate);
+    transition: all 0.15s;
+    border: none; background: none; width: 100%; text-align: left;
+  }
+
+  .nav-item:hover { background: var(--off-white); color: var(--navy); }
+  .nav-item.active { background: var(--teal-pale); color: var(--teal); font-weight: 600; }
+  .nav-icon { font-size: 16px; width: 22px; text-align: center; }
+  .nav-badge { margin-left: auto; background: var(--teal); color: white; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 20px; }
+  .sidebar-footer { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--border); }
+
+  /* MAIN */
+  .main { flex: 1; padding: 28px; overflow-y: auto; }
+  .page { display: none; animation: fadeIn 0.2s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  .page-header { margin-bottom: 24px; display: flex; align-items: flex-start; justify-content: space-between; }
+  .page-header-left h2 { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--navy); letter-spacing: -0.3px; }
+  .page-header-left p { color: var(--slate); font-size: 13px; margin-top: 3px; }
+
+  /* CARDS */
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 13px; padding: 22px; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 14px; }
+
+  /* DASHBOARD STATS */
+  .dash-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 18px 20px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+
+  .stat-icon { width: 40px; height: 40px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .stat-icon.teal { background: var(--teal-pale); }
+  .stat-icon.navy { background: #e8edf5; }
+  .stat-icon.amber { background: #fef3c7; }
+  .stat-icon.green { background: #d1fae5; }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--navy); line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--slate); margin-top: 3px; }
+
+  /* TODAY'S APPOINTMENTS LIST */
+  .today-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .today-appt {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--white);
+    transition: border-color 0.15s;
+  }
+
+  .today-appt:hover { border-color: var(--teal); }
+
+  .time-pill {
+    background: var(--navy);
+    color: var(--teal-light);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .appt-patient { flex: 1; }
+  .appt-patient .pname { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .appt-patient .pid { font-size: 11px; color: var(--slate); margin-top: 2px; }
+
+  /* BADGES */
+  .badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
+  .badge.scheduled, .badge.open { background: #dbeafe; color: #1d4ed8; }
+  .badge.completed { background: #d1fae5; color: var(--success); }
+  .badge.cancelled { background: #fee2e2; color: var(--danger); }
+  .badge.waiting { background: #fef3c7; color: var(--warning); }
+
+  /* ══ CALENDAR ══ */
+  .cal-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 16px;
+  }
+
+  .cal-nav { display: flex; align-items: center; gap: 8px; }
+
+  .cal-nav-btn {
+    width: 34px; height: 34px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    background: var(--white);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    color: var(--navy);
+  }
+
+  .cal-nav-btn:hover { border-color: var(--teal); color: var(--teal); }
+
+  .cal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--navy);
+    min-width: 200px;
+    text-align: center;
+  }
+
+  .cal-today-btn {
+    padding: 7px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    background: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--slate);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .cal-today-btn:hover { border-color: var(--teal); color: var(--teal); }
+
+  .view-toggle {
+    display: flex;
+    background: var(--off-white);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 3px;
+    gap: 2px;
+  }
+
+  .view-btn {
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--slate);
+    transition: all 0.15s;
+  }
+
+  .view-btn.active {
+    background: var(--white);
+    color: var(--navy);
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  /* MONTHLY CALENDAR */
+  .month-cal { background: var(--white); border: 1px solid var(--border); border-radius: 13px; overflow: hidden; }
+
+  .month-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .month-header-cell {
+    padding: 10px 0;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--slate);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .month-cell {
+    min-height: 100px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 8px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+
+  .month-cell:nth-child(7n) { border-right: none; }
+  .month-cell:hover { background: #fafbfc; }
+
+  .month-cell.other-month { background: var(--off-white); }
+  .month-cell.other-month .cell-day { color: var(--slate-light); }
+
+  .month-cell.today { background: #f0fdfa; }
+  .month-cell.today .cell-day {
+    background: var(--teal);
+    color: white;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600;
+  }
+
+  .cell-day { font-size: 13px; font-weight: 500; color: var(--navy); margin-bottom: 5px; }
+
+  .cell-appts { display: flex; flex-direction: column; gap: 2px; }
+
+  .cell-appt-chip {
+    background: var(--teal);
+    color: white;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+
+  .cell-appt-chip:hover { background: var(--teal-dark); }
+  .cell-appt-chip.completed { background: #6ee7b7; color: #065f46; }
+  .cell-appt-chip.cancelled { background: #fca5a5; color: #7f1d1d; }
+  .cell-appt-chip.waiting { background: #fcd34d; color: #78350f; }
+
+  .cell-more {
+    font-size: 10px;
+    color: var(--slate);
+    font-weight: 500;
+    padding: 1px 4px;
+    cursor: pointer;
+  }
+
+  .cell-more:hover { color: var(--teal); }
+
+  /* WEEKLY CALENDAR */
+  .week-cal { background: var(--white); border: 1px solid var(--border); border-radius: 13px; overflow: hidden; }
+
+  .week-header {
+    display: grid;
+    grid-template-columns: 60px repeat(7, 1fr);
+    border-bottom: 2px solid var(--border);
+    background: var(--off-white);
+  }
+
+  .week-header-time { border-right: 1px solid var(--border); }
+
+  .week-header-day {
+    padding: 12px 8px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+
+  .week-header-day:last-child { border-right: none; }
+
+  .week-day-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--slate);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .week-day-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--navy);
+    line-height: 1.1;
+    margin-top: 2px;
+  }
+
+  .week-header-day.today .week-day-num {
+    background: var(--teal);
+    color: white;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 2px auto 0;
+    font-size: 18px;
+  }
+
+  .week-body {
+    display: grid;
+    grid-template-columns: 60px repeat(7, 1fr);
+    max-height: 560px;
+    overflow-y: auto;
+  }
+
+  .week-time-col { display: flex; flex-direction: column; }
+
+  .week-time-slot {
+    height: 56px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    padding: 4px 8px 0;
+    font-size: 10px;
+    color: var(--slate-light);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .week-day-col {
+    border-right: 1px solid var(--border);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .week-day-col:last-child { border-right: none; }
+
+  .week-hour-cell {
+    height: 56px;
+    border-bottom: 1px solid #f1f5f9;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .week-appt-block {
+    position: absolute;
+    left: 2px; right: 2px;
+    background: var(--teal);
+    border-radius: 6px;
+    padding: 4px 6px;
+    font-size: 10px;
+    font-weight: 500;
+    color: white;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.15s;
+    z-index: 2;
+    border-left: 3px solid var(--teal-dark);
+  }
+
+  .week-appt-block:hover { background: var(--teal-dark); }
+  .week-appt-block.completed { background: #6ee7b7; color: #065f46; border-left-color: #059669; }
+  .week-appt-block.cancelled { background: #fca5a5; color: #7f1d1d; border-left-color: #dc2626; }
+  .week-appt-block.waiting { background: #fcd34d; color: #78350f; border-left-color: #d97706; }
+
+  .week-appt-time { font-size: 9px; opacity: 0.8; }
+  .week-appt-name { font-size: 10px; font-weight: 600; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* APPOINTMENT DETAIL POPOVER */
+  .appt-popover {
+    position: fixed;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    width: 240px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    z-index: 500;
+    display: none;
+    animation: popIn 0.15s ease;
+  }
+
+  @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+  .popover-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .popover-title { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .popover-close { background: none; border: none; cursor: pointer; color: var(--slate); font-size: 16px; line-height: 1; }
+  .popover-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; font-size: 12px; }
+  .popover-label { color: var(--slate); width: 70px; flex-shrink: 0; }
+  .popover-val { color: var(--navy); font-weight: 500; }
+
+  /* APPOINTMENTS LIST PAGE */
+  .tbl { width: 100%; border-collapse: collapse; }
+  .tbl th { text-align: left; font-size: 11px; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: 1px; padding: 10px 14px; background: var(--off-white); border-bottom: 1px solid var(--border); }
+  .tbl td { padding: 13px 14px; font-size: 13px; color: var(--navy); border-bottom: 1px solid var(--border); }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:hover td { background: #fafbfc; }
+  .empty-row td { text-align: center; color: var(--slate); padding: 32px !important; }
+  .spinner { display: inline-block; width: 17px; height: 17px; border: 2px solid var(--border); border-top-color: var(--teal); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* PROFILE PAGE */
+  .profile-banner {
+    background: var(--navy);
+    border-radius: 13px;
+    padding: 28px;
+    display: flex; align-items: center; gap: 20px;
+    margin-bottom: 18px;
+    position: relative; overflow: hidden;
+  }
+
+  .profile-banner::after { content: ''; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(13,148,136,0.25) 0%, transparent 70%); border-radius: 50%; }
+
+  .p-avatar { width: 64px; height: 64px; background: var(--teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 24px; color: white; flex-shrink: 0; position: relative; z-index: 1; }
+  .p-info { position: relative; z-index: 1; }
+  .p-info h3 { font-family: 'DM Serif Display', serif; font-size: 20px; color: white; }
+  .p-info p { font-size: 12px; color: var(--slate-light); margin-top: 3px; }
+  .p-id { font-size: 11px; color: var(--teal-light); margin-top: 5px; font-weight: 500; }
+
+  .p-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .p-field { margin-bottom: 14px; }
+  .p-field label { font-size: 10px; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px; }
+  .p-field .val { font-size: 13px; color: var(--navy); font-weight: 500; }
+  .divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,22,40,0.6); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+  .modal-overlay.open { display: flex; }
+  .modal { background: white; border-radius: 14px; padding: 28px; width: 460px; max-width: 90vw; max-height: 85vh; overflow-y: auto; animation: mIn 0.2s ease; }
+  @keyframes mIn { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .modal-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .modal-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--navy); }
+  .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--slate); }
+  .m-field { margin-bottom: 14px; }
+  .m-field label { font-size: 10px; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px; }
+  .m-field .val { font-size: 13px; color: var(--navy); line-height: 1.6; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 22px; right: 22px; background: var(--navy); color: white; padding: 12px 18px; border-radius: 10px; font-size: 13px; font-weight: 500; z-index: 300; transform: translateY(70px); opacity: 0; transition: all 0.3s; box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  @media (max-width: 900px) { .login-left { display: none; } .login-right { width: 100%; } .dash-grid { grid-template-columns: 1fr 1fr; } .p-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .sidebar { display: none; } .dash-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="login-screen">
+  <div class="login-left">
+    <div class="brand">
+      <div class="brand-icon">🩺</div>
+      <div class="brand-name">better<span>.care</span></div>
+    </div>
+    <div class="login-hero">
+      <div class="practitioner-badge">🩺 Practitioner Portal</div>
+      <h1>Your schedule,<br><em>at a glance.</em></h1>
+      <p>View your appointments, manage your calendar, and stay on top of your patients — all in one place.</p>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <h2>Practitioner Sign In</h2>
+    <p>Sign in with your better.care account</p>
+    <div class="login-error" id="login-error"></div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="text" id="login-usr" placeholder="doctor@better.care">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-pwd" placeholder="••••••••">
+    </div>
+    <button class="btn-login" id="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="back-link">Patient? <a href="/patient-portal">Go to patient portal →</a></div>
+  </div>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-brand">
+        <div class="t-icon">🩺</div>
+        <span>better<em>.care</em></span>
+      </div>
+      <div class="role-pill">Practitioner</div>
+    </div>
+    <div class="topbar-right">
+      <div class="doc-chip">
+        <div class="doc-avatar" id="tb-avatar">?</div>
+        <span class="doc-name" id="tb-name">Loading…</span>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="app-body">
+    <nav class="sidebar">
+      <div class="nav-section">Main</div>
+      <button class="nav-item active" onclick="navigate('dashboard')" id="nav-dashboard"><span class="nav-icon">🏠</span>Dashboard</button>
+      <button class="nav-item" onclick="navigate('calendar')" id="nav-calendar"><span class="nav-icon">📆</span>My Calendar<span class="nav-badge" id="cal-badge">0</span></button>
+      <button class="nav-item" onclick="navigate('appointments')" id="nav-appointments"><span class="nav-icon">🗓️</span>All Appointments</button>
+      <div class="nav-section">Account</div>
+      <button class="nav-item" onclick="navigate('profile')" id="nav-profile"><span class="nav-icon">👤</span>My Profile</button>
+      <div class="sidebar-footer">
+        <button class="nav-item" onclick="doLogout()"><span class="nav-icon">🚪</span>Sign Out</button>
+      </div>
+    </nav>
+
+    <main class="main">
+
+      <!-- ── DASHBOARD ── -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 id="dash-greeting">Good morning 👋</h2>
+            <p>Here's your schedule overview</p>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="stat-card">
+            <div class="stat-icon teal">📅</div>
+            <div><div class="stat-num" id="d-today">—</div><div class="stat-label">Today's Appointments</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon navy">🗓️</div>
+            <div><div class="stat-num" id="d-week">—</div><div class="stat-label">This Week</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green">✅</div>
+            <div><div class="stat-num" id="d-completed">—</div><div class="stat-label">Completed</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon amber">⏳</div>
+            <div><div class="stat-num" id="d-waiting">—</div><div class="stat-label">Waitlisted</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📅 Today's Appointments</div>
+          <div id="today-list"><div style="color:var(--slate);font-size:13px;"><span class="spinner"></span>Loading…</div></div>
+        </div>
+      </div>
+
+      <!-- ── CALENDAR ── -->
+      <div class="page" id="page-calendar">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>My Calendar</h2>
+            <p>View and navigate your appointments</p>
+          </div>
+        </div>
+
+        <div class="cal-toolbar">
+          <div class="cal-nav">
+            <button class="cal-nav-btn" onclick="calPrev()">‹</button>
+            <div class="cal-title" id="cal-title">March 2026</div>
+            <button class="cal-nav-btn" onclick="calNext()">›</button>
+            <button class="cal-today-btn" onclick="calGoToday()">Today</button>
+          </div>
+          <div class="view-toggle">
+            <button class="view-btn active" id="btn-month" onclick="switchView('month')">Month</button>
+            <button class="view-btn" id="btn-week" onclick="switchView('week')">Week</button>
+          </div>
+        </div>
+
+        <!-- MONTH VIEW -->
+        <div id="view-month">
+          <div class="month-cal">
+            <div class="month-header">
+              <div class="month-header-cell">Sun</div>
+              <div class="month-header-cell">Mon</div>
+              <div class="month-header-cell">Tue</div>
+              <div class="month-header-cell">Wed</div>
+              <div class="month-header-cell">Thu</div>
+              <div class="month-header-cell">Fri</div>
+              <div class="month-header-cell">Sat</div>
+            </div>
+            <div class="month-grid" id="month-grid"></div>
+          </div>
+        </div>
+
+        <!-- WEEK VIEW -->
+        <div id="view-week" style="display:none;">
+          <div class="week-cal">
+            <div class="week-header">
+              <div class="week-header-time"></div>
+              <div class="week-header-day" id="wh-0"><div class="week-day-name">Sun</div><div class="week-day-num">—</div></div>
+              <div class="week-header-day" id="wh-1"><div class="week-day-name">Mon</div><div class="week-day-num">—</div></div>
+              <div class="week-header-day" id="wh-2"><div class="week-day-name">Tue</div><div class="week-day-num">—</div></div>
+              <div class="week-header-day" id="wh-3"><div class="week-day-name">Wed</div><div class="week-day-num">—</div></div>
+              <div class="week-header-day" id="wh-4"><div class="week-day-name">Thu</div><div class="week-day-num">—</div></div>
+              <div class="week-header-day" id="wh-5"><div class="week-day-name">Fri</div><div class="week-day-num">—</div></div>
+              <div class="week-header-day" id="wh-6"><div class="week-day-name">Sat</div><div class="week-day-num">—</div></div>
+            </div>
+            <div class="week-body" id="week-body"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ALL APPOINTMENTS ── -->
+      <div class="page" id="page-appointments">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>All Appointments</h2>
+            <p>Complete list of your scheduled appointments</p>
+          </div>
+        </div>
+        <div class="card">
+          <!-- Uses get_appointments(practitioner=...) fields: name, patient, practitioner, date, time, status -->
+          <table class="tbl">
+            <thead><tr><th>ID</th><th>Patient</th><th>Date</th><th>Time</th><th>Status</th><th></th></tr></thead>
+            <tbody id="appt-tbody"><tr class="empty-row"><td colspan="6"><span class="spinner"></span>Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── PROFILE ── -->
+      <div class="page" id="page-profile">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>My Profile</h2>
+            <p>Your practitioner details</p>
+          </div>
+        </div>
+        <div class="profile-banner">
+          <div class="p-avatar" id="p-avatar">?</div>
+          <div class="p-info">
+            <h3 id="p-name">—</h3>
+            <p id="p-sub">Healthcare Practitioner</p>
+            <div class="p-id" id="p-id">—</div>
+          </div>
+        </div>
+        <div class="p-grid">
+          <div class="card">
+            <div class="card-title">👤 Practitioner Details</div>
+            <!-- Fields from Healthcare Practitioner doctype -->
+            <div class="p-field"><label>Practitioner Name</label><div class="val" id="pf-name">—</div></div>
+            <div class="divider"></div>
+            <div class="p-field"><label>Practitioner ID</label><div class="val" id="pf-id">—</div></div>
+            <div class="divider"></div>
+            <div class="p-field"><label>Email</label><div class="val" id="pf-email">—</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">📅 Working Schedule</div>
+            <div id="schedule-list"><div style="color:var(--slate);font-size:13px;">Loading…</div></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- APPOINTMENT DETAIL MODAL -->
+<div class="modal-overlay" id="appt-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">Appointment Details</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- POPOVER -->
+<div class="appt-popover" id="appt-popover">
+  <div class="popover-header">
+    <div class="popover-title" id="pop-title">Appointment</div>
+    <button class="popover-close" onclick="closePopover()">✕</button>
+  </div>
+  <div id="pop-body"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+var currentPractitioner = null;  // Healthcare Practitioner doc
+var allAppointments = [];        // from get_appointments(practitioner=...)
+var practSchedule = [];          // from get_practitioner_schedule(practitioner_id=...)
+var calView = 'month';           // 'month' or 'week'
+var calDate = new Date();        // currently viewed date
+var toastTimer = null;
+
+// ════════════════════════════════════════
+// API HELPERS
+// ════════════════════════════════════════
+function getCsrf() {
+  if (typeof frappe !== 'undefined' && frappe.csrf_token) return frappe.csrf_token;
+  var m = document.cookie.match(/X-Frappe-CSRF-Token=([^;]+)/);
+  return m ? m[1] : '';
+}
+
+function apiPost(method, body) {
+  return fetch('/api/method/' + method, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrf() },
+    credentials: 'include',
+    body: JSON.stringify(body)
+  }).then(function(r) {
+    var ct = r.headers.get('content-type') || '';
+    if (!ct.includes('application/json')) throw new Error('Unexpected server response. Check bench status.');
+    return r.json();
+  }).then(function(d) {
+    if (d.exc_type) throw new Error(d.message || d.exception || 'Error');
+    return d.message;
+  });
+}
+
+function apiGet(method, params) {
+  var qs = params ? '?' + new URLSearchParams(params).toString() : '';
+  return fetch('/api/method/' + method + qs, {
+    credentials: 'include',
+    headers: { 'X-Frappe-CSRF-Token': getCsrf() }
+  }).then(function(r) {
+    var ct = r.headers.get('content-type') || '';
+    if (!ct.includes('application/json')) throw new Error('Unexpected server response. Check bench status.');
+    return r.json();
+  }).then(function(d) {
+    if (d.exc_type) throw new Error(d.message || 'Error');
+    return d.message;
+  });
+}
+
+function setText(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = val || '—';
+}
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('login-pwd').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  document.getElementById('appt-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  document.addEventListener('click', function(e) {
+    var pop = document.getElementById('appt-popover');
+    if (pop.style.display === 'block' && !pop.contains(e.target)) closePopover();
+  });
+});
+
+// ════════════════════════════════════════
+// LOGIN
+// ════════════════════════════════════════
+function doLogin() {
+  var usr = document.getElementById('login-usr').value.trim();
+  var pwd = document.getElementById('login-pwd').value.trim();
+  var errEl = document.getElementById('login-error');
+  var btn = document.getElementById('login-btn');
+
+  errEl.style.display = 'none';
+  if (!usr || !pwd) { errEl.textContent = 'Please enter your email and password.'; errEl.style.display = 'block'; return; }
+
+  btn.textContent = 'Signing in…';
+  btn.disabled = true;
+
+  fetch('/api/method/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ usr: usr, pwd: pwd })
+  })
+  .then(function(r) {
+    var ct = r.headers.get('content-type') || '';
+    if (!ct.includes('application/json')) throw new Error('Server returned unexpected response. Is bench running?');
+    return r.json();
+  })
+  .then(function(data) {
+    if (data.message === 'Logged In') {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'flex';
+      initApp();
+    } else {
+      errEl.textContent = 'Invalid credentials. Please try again.';
+      errEl.style.display = 'block';
+    }
+  })
+  .catch(function(e) {
+    errEl.textContent = e.message;
+    errEl.style.display = 'block';
+  })
+  .finally(function() {
+    btn.textContent = 'Sign In';
+    btn.disabled = false;
+  });
+}
+
+function doLogout() {
+  fetch('/api/method/logout', { method: 'POST', credentials: 'include' }).catch(function(){});
+  currentPractitioner = null; allAppointments = [];
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-usr').value = '';
+  document.getElementById('login-pwd').value = '';
+}
+
+// ════════════════════════════════════════
+// INIT APP
+// Uses frappe.auth.get_logged_user then matches to Healthcare Practitioner by email
+// get_practitioner_schedule(practitioner_id=...) fields: practitioner_id, practitioner_name, day, from_time, to_time
+// ════════════════════════════════════════
+function initApp() {
+  var hour = new Date().getHours();
+  var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
+  // Step 1: get logged-in user email from Frappe
+  fetch('/api/method/frappe.auth.get_logged_user', { credentials: 'include' })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var email = d.message;
+
+      // Step 2: get practitioner record matching this email
+      // Uses frappe.client.get_list to find Healthcare Practitioner by email
+      return apiGet('frappe.client.get_list', {
+        doctype: 'Healthcare Practitioner',
+        filters: JSON.stringify([['email', '=', email]]),
+        fields: JSON.stringify(['name', 'practitioner_name', 'email']),
+        limit: 1
+      }).then(function(results) {
+        if (!results || results.length === 0) {
+          // Not a practitioner — show error
+          document.getElementById('app').style.display = 'none';
+          document.getElementById('login-screen').style.display = 'flex';
+          var errEl = document.getElementById('login-error');
+          errEl.textContent = 'No practitioner record found for this account. Please contact admin.';
+          errEl.style.display = 'block';
+          return;
+        }
+
+        currentPractitioner = results[0];
+
+        var words = (currentPractitioner.practitioner_name || '?').split(' ');
+        var initials = words.slice(0, 2).map(function(w) { return w[0]; }).join('').toUpperCase();
+        var firstName = words[0] || 'Doctor';
+
+        setText('dash-greeting', greeting + ', ' + firstName + ' 👋');
+        setText('tb-avatar', initials);
+        setText('tb-name', currentPractitioner.practitioner_name);
+        setText('p-avatar', initials);
+        renderProfile(currentPractitioner);
+
+        // Load schedule and appointments
+        loadPractSchedule();
+        loadDashboard();
+      });
+    })
+    .catch(function(e) {
+      console.warn('Init failed:', e.message);
+      showToast('⚠️ Could not load your profile: ' + e.message);
+    });
+}
+
+// ════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  document.getElementById('page-' + page).classList.add('active');
+  var nav = document.getElementById('nav-' + page);
+  if (nav) nav.classList.add('active');
+
+  if (page === 'dashboard') loadDashboard();
+  if (page === 'calendar') renderCalendar();
+  if (page === 'appointments') loadAppointments();
+}
+
+// ════════════════════════════════════════
+// LOAD PRACTITIONER SCHEDULE
+// Uses get_practitioner_schedule(practitioner_id=...)
+// Fields: practitioner_id, practitioner_name, day, from_time, to_time, working_time
+// ════════════════════════════════════════
+function loadPractSchedule() {
+  if (!currentPractitioner) return;
+
+  apiGet('healthcare_pro.healthcare_management.api.get_schedule.get_practitioner_schedule',
+    { practitioner_id: currentPractitioner.name }
+  ).then(function(data) {
+    practSchedule = data || [];
+    renderScheduleList();
+  }).catch(function(e) {
+    console.warn('Schedule load failed:', e.message);
+  });
+}
+
+function renderScheduleList() {
+  var container = document.getElementById('schedule-list');
+  if (!practSchedule.length) {
+    container.innerHTML = '<p style="color:var(--slate);font-size:13px;">No schedule configured.</p>';
+    return;
+  }
+  container.innerHTML = practSchedule.map(function(s) {
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;">' +
+      '<span style="font-weight:600;color:var(--navy);">' + s.day + '</span>' +
+      '<span style="color:var(--slate);">' + s.working_time + '</span>' +
+      '</div>';
+  }).join('');
+}
+
+// ════════════════════════════════════════
+// RENDER PROFILE
+// Fields from Healthcare Practitioner: name, practitioner_name, email
+// ════════════════════════════════════════
+function renderProfile(p) {
+  setText('p-name', p.practitioner_name);
+  setText('p-sub', 'Healthcare Practitioner');
+  setText('p-id', p.name);
+  setText('pf-name', p.practitioner_name);
+  setText('pf-id', p.name);
+  setText('pf-email', p.email);
+
+  var words = (p.practitioner_name || '?').split(' ');
+  var initials = words.slice(0, 2).map(function(w) { return w[0]; }).join('').toUpperCase();
+  setText('p-avatar', initials);
+}
+
+// ════════════════════════════════════════
+// DASHBOARD
+// Uses get_appointments(practitioner=...)
+// Fields: name, patient, practitioner, date, time, status
+// ════════════════════════════════════════
+function loadDashboard() {
+  if (!currentPractitioner) return;
+
+  apiGet('healthcare_pro.healthcare_management.api.get_appointments.get_appointments',
+    { practitioner: currentPractitioner.name }
+  ).then(function(appts) {
+    allAppointments = appts || [];
+
+    var todayStr = new Date().toISOString().split('T')[0];
+
+    var todayAppts = allAppointments.filter(function(a) { return a.date === todayStr; });
+    var weekAppts = getThisWeekAppts();
+    var completed = allAppointments.filter(function(a) { return a.status === 'Completed'; });
+    var waiting = allAppointments.filter(function(a) { return a.status === 'Waiting'; });
+
+    setText('d-today', todayAppts.length);
+    setText('d-week', weekAppts.length);
+    setText('d-completed', completed.length);
+    setText('d-waiting', waiting.length);
+    setText('cal-badge', allAppointments.filter(function(a) { return a.status === 'Scheduled' || a.status === 'Open'; }).length);
+
+    renderTodayList(todayAppts);
+  }).catch(function(e) {
+    document.getElementById('today-list').innerHTML =
+      '<p style="color:var(--danger);font-size:13px;">Failed to load: ' + e.message + '</p>';
+  });
+}
+
+function getThisWeekAppts() {
+  var now = new Date();
+  var startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay());
+  var endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+  return allAppointments.filter(function(a) {
+    var d = new Date(a.date);
+    return d >= startOfWeek && d <= endOfWeek;
+  });
+}
+
+function renderTodayList(appts) {
+  var container = document.getElementById('today-list');
+  if (appts.length === 0) {
+    container.innerHTML = '<p style="color:var(--slate);font-size:13px;padding:8px 0;">No appointments scheduled for today.</p>';
+    return;
+  }
+
+  // Sort by time
+  appts.sort(function(a, b) { return (a.time || '').localeCompare(b.time || ''); });
+
+  container.innerHTML = '<div class="today-list">' +
+    appts.map(function(a) {
+      var sc = (a.status || '').toLowerCase();
+      var timeDisplay = formatTime(a.time);
+      return '<div class="today-appt" onclick="openApptModal(\'' + a.name + '\')">' +
+        '<div class="time-pill">' + timeDisplay + '</div>' +
+        '<div class="appt-patient">' +
+          '<div class="pname">' + (a.patient || '—') + '</div>' +
+          '<div class="pid">' + a.name + '</div>' +
+        '</div>' +
+        '<span class="badge ' + sc + '">' + (a.status || '—') + '</span>' +
+      '</div>';
+    }).join('') +
+  '</div>';
+}
+
+// ════════════════════════════════════════
+// ALL APPOINTMENTS LIST
+// ════════════════════════════════════════
+function loadAppointments() {
+  var tbody = document.getElementById('appt-tbody');
+  tbody.innerHTML = '<tr class="empty-row"><td colspan="6"><span class="spinner"></span>Loading…</td></tr>';
+
+  if (allAppointments.length > 0) {
+    renderApptTable();
+    return;
+  }
+
+  apiGet('healthcare_pro.healthcare_management.api.get_appointments.get_appointments',
+    { practitioner: currentPractitioner ? currentPractitioner.name : '' }
+  ).then(function(appts) {
+    allAppointments = appts || [];
+    renderApptTable();
+  }).catch(function(e) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="color:var(--danger);">Failed: ' + e.message + '</td></tr>';
+  });
+}
+
+function renderApptTable() {
+  var tbody = document.getElementById('appt-tbody');
+  if (allAppointments.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No appointments found.</td></tr>';
+    return;
+  }
+
+  // Sort newest first
+  var sorted = allAppointments.slice().sort(function(a, b) {
+    return (b.date + b.time).localeCompare(a.date + a.time);
+  });
+
+  tbody.innerHTML = sorted.map(function(a) {
+    var sc = (a.status || '').toLowerCase();
+    return '<tr>' +
+      '<td style="font-weight:600;color:var(--teal);">' + a.name + '</td>' +
+      '<td>' + (a.patient || '—') + '</td>' +
+      '<td>' + (a.date || '—') + '</td>' +
+      '<td>' + formatTime(a.time) + '</td>' +
+      '<td><span class="badge ' + sc + '">' + (a.status || '—') + '</span></td>' +
+      '<td><button class="tbl-action" onclick="openApptModal(\'' + a.name + '\')" style="color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;background:none;border:none;font-family:\'DM Sans\',sans-serif;">View</button></td>' +
+      '</tr>';
+  }).join('');
+}
+
+// ════════════════════════════════════════
+// CALENDAR
+// ════════════════════════════════════════
+function switchView(view) {
+  calView = view;
+  document.getElementById('btn-month').classList.toggle('active', view === 'month');
+  document.getElementById('btn-week').classList.toggle('active', view === 'week');
+  document.getElementById('view-month').style.display = view === 'month' ? 'block' : 'none';
+  document.getElementById('view-week').style.display = view === 'week' ? 'block' : 'none';
+  renderCalendar();
+}
+
+function calPrev() {
+  if (calView === 'month') {
+    calDate.setMonth(calDate.getMonth() - 1);
+  } else {
+    calDate.setDate(calDate.getDate() - 7);
+  }
+  renderCalendar();
+}
+
+function calNext() {
+  if (calView === 'month') {
+    calDate.setMonth(calDate.getMonth() + 1);
+  } else {
+    calDate.setDate(calDate.getDate() + 7);
+  }
+  renderCalendar();
+}
+
+function calGoToday() {
+  calDate = new Date();
+  renderCalendar();
+}
+
+function renderCalendar() {
+  if (calView === 'month') {
+    renderMonthView();
+  } else {
+    renderWeekView();
+  }
+}
+
+// ── MONTH VIEW ──
+function renderMonthView() {
+  var year = calDate.getFullYear();
+  var month = calDate.getMonth();
+
+  var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  setText('cal-title', monthNames[month] + ' ' + year);
+
+  var today = new Date();
+  var todayStr = today.toISOString().split('T')[0];
+
+  // First day of month, pad to start on Sunday
+  var firstDay = new Date(year, month, 1);
+  var startPad = firstDay.getDay(); // 0=Sun
+
+  // Last day of month
+  var lastDay = new Date(year, month + 1, 0).getDate();
+
+  // Build appointment lookup by date
+  var apptsByDate = {};
+  allAppointments.forEach(function(a) {
+    if (!apptsByDate[a.date]) apptsByDate[a.date] = [];
+    apptsByDate[a.date].push(a);
+  });
+
+  var grid = document.getElementById('month-grid');
+  var cells = '';
+
+  // Previous month padding
+  var prevMonthLast = new Date(year, month, 0).getDate();
+  for (var i = startPad - 1; i >= 0; i--) {
+    cells += '<div class="month-cell other-month"><div class="cell-day">' + (prevMonthLast - i) + '</div></div>';
+  }
+
+  // Current month days
+  for (var d = 1; d <= lastDay; d++) {
+    var dateStr = year + '-' + pad(month + 1) + '-' + pad(d);
+    var isToday = dateStr === todayStr;
+    var dayAppts = apptsByDate[dateStr] || [];
+
+    // Sort by time
+    dayAppts.sort(function(a, b) { return (a.time || '').localeCompare(b.time || ''); });
+
+    var apptChips = '';
+    var maxShow = 2;
+    dayAppts.slice(0, maxShow).forEach(function(a) {
+      var sc = (a.status || '').toLowerCase();
+      var t = formatTime(a.time);
+      apptChips += '<div class="cell-appt-chip ' + sc + '" onclick="event.stopPropagation();openApptModal(\'' + a.name + '\')" title="' + (a.patient || '') + '">' + t + ' · ' + (a.patient || a.name) + '</div>';
+    });
+
+    if (dayAppts.length > maxShow) {
+      apptChips += '<div class="cell-more" onclick="event.stopPropagation();">+' + (dayAppts.length - maxShow) + ' more</div>';
+    }
+
+    cells += '<div class="month-cell' + (isToday ? ' today' : '') + '">' +
+      '<div class="cell-day">' + d + '</div>' +
+      '<div class="cell-appts">' + apptChips + '</div>' +
+    '</div>';
+  }
+
+  // Next month padding
+  var totalCells = startPad + lastDay;
+  var remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+  for (var n = 1; n <= remaining; n++) {
+    cells += '<div class="month-cell other-month"><div class="cell-day">' + n + '</div></div>';
+  }
+
+  grid.innerHTML = cells;
+}
+
+// ── WEEK VIEW ──
+function renderWeekView() {
+  // Get start of week (Sunday)
+  var startOfWeek = new Date(calDate);
+  startOfWeek.setDate(calDate.getDate() - calDate.getDay());
+
+  var today = new Date();
+  var todayStr = today.toISOString().split('T')[0];
+
+  var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // Update title
+  var endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+  setText('cal-title',
+    monthNames[startOfWeek.getMonth()] + ' ' + startOfWeek.getDate() + ' – ' +
+    monthNames[endOfWeek.getMonth()] + ' ' + endOfWeek.getDate() + ', ' + endOfWeek.getFullYear()
+  );
+
+  // Update day headers
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(startOfWeek);
+    d.setDate(startOfWeek.getDate() + i);
+    var dStr = d.toISOString().split('T')[0];
+    var hdr = document.getElementById('wh-' + i);
+    hdr.querySelector('.week-day-name').textContent = dayNames[i];
+    hdr.querySelector('.week-day-num').textContent = d.getDate();
+    if (dStr === todayStr) {
+      hdr.classList.add('today');
+    } else {
+      hdr.classList.remove('today');
+    }
+  }
+
+  // Build week body — hours 7am to 8pm
+  var startHour = 7;
+  var endHour = 20;
+  var hoursCount = endHour - startHour;
+
+  // Build appointment lookup
+  var apptsByDate = {};
+  allAppointments.forEach(function(a) {
+    if (!apptsByDate[a.date]) apptsByDate[a.date] = [];
+    apptsByDate[a.date].push(a);
+  });
+
+  var body = document.getElementById('week-body');
+  var html = '';
+
+  // Time column
+  html += '<div class="week-time-col">';
+  for (var h = startHour; h < endHour; h++) {
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    var dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+    html += '<div class="week-time-slot">' + dh + ':00 ' + ampm + '</div>';
+  }
+  html += '</div>';
+
+  // Day columns
+  for (var col = 0; col < 7; col++) {
+    var colDate = new Date(startOfWeek);
+    colDate.setDate(startOfWeek.getDate() + col);
+    var colStr = colDate.toISOString().split('T')[0];
+    var dayAppts = apptsByDate[colStr] || [];
+
+    html += '<div class="week-day-col">';
+
+    // Hour cells (background grid)
+    for (var hr = startHour; hr < endHour; hr++) {
+      html += '<div class="week-hour-cell"></div>';
+    }
+
+    // Appointment blocks
+    dayAppts.forEach(function(a) {
+      if (!a.time) return;
+      var parts = a.time.split(':').map(Number);
+      var apptHour = parts[0];
+      var apptMin = parts[1] || 0;
+
+      if (apptHour < startHour || apptHour >= endHour) return;
+
+      var topOffset = ((apptHour - startHour) * 56) + (apptMin / 60 * 56);
+      var sc = (a.status || '').toLowerCase();
+      var timeDisplay = formatTime(a.time);
+
+      html += '<div class="week-appt-block ' + sc + '" style="top:' + topOffset + 'px;height:52px;" onclick="openApptModal(\'' + a.name + '\')">' +
+        '<div class="week-appt-time">' + timeDisplay + '</div>' +
+        '<div class="week-appt-name">' + (a.patient || a.name) + '</div>' +
+      '</div>';
+    });
+
+    html += '</div>';
+  }
+
+  body.innerHTML = html;
+
+  // Scroll to 8am
+  body.scrollTop = (8 - startHour) * 56;
+}
+
+// ════════════════════════════════════════
+// APPOINTMENT MODAL
+// ════════════════════════════════════════
+function openApptModal(apptName) {
+  var a = allAppointments.find(function(x) { return x.name === apptName; });
+  if (!a) { showToast('Appointment not found'); return; }
+
+  var sc = (a.status || '').toLowerCase();
+  document.getElementById('modal-body').innerHTML =
+    '<div class="m-field"><label>Appointment ID</label><div class="val" style="color:var(--teal);font-weight:600;">' + a.name + '</div></div>' +
+    '<div class="m-field"><label>Patient</label><div class="val">' + (a.patient || '—') + '</div></div>' +
+    '<div class="m-field"><label>Date</label><div class="val">' + (a.date || '—') + '</div></div>' +
+    '<div class="m-field"><label>Time</label><div class="val">' + formatTime(a.time) + '</div></div>' +
+    '<div style="height:1px;background:var(--border);margin:14px 0;"></div>' +
+    '<div class="m-field"><label>Status</label><div class="val"><span class="badge ' + sc + '">' + (a.status || '—') + '</span></div></div>';
+
+  document.getElementById('appt-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('appt-modal').classList.remove('open');
+}
+
+function closePopover() {
+  document.getElementById('appt-popover').style.display = 'none';
+}
+
+// ════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════
+function formatTime(timeStr) {
+  if (!timeStr) return '—';
+  var parts = timeStr.split(':').map(Number);
+  var h = parts[0]; var m = parts[1] || 0;
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  var dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+  return dh + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm;
+}
+
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+// ════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 3500);
+}
+</script>
+</body>
+</html>

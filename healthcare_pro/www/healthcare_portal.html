@@ -31,19 +31,57 @@
   .stat { border-left:2px solid var(--teal); padding-left:16px; }
   .stat-num { font-family:'DM Serif Display',serif; font-size:28px; color:var(--white); }
   .stat-label { font-size:12px; color:var(--slate-light); text-transform:uppercase; letter-spacing:1px; }
-  .login-right { width:480px; background:var(--white); display:flex; flex-direction:column; justify-content:center; padding:60px 50px; }
+  .login-right { width:480px; background:var(--white); display:flex; flex-direction:column; justify-content:center; padding:60px 50px; overflow-y:auto; }
   .login-right h2 { font-family:'DM Serif Display',serif; font-size:30px; color:var(--navy); margin-bottom:8px; }
   .login-right > p { color:var(--slate); font-size:14px; margin-bottom:36px; }
   .login-error { background:#fee2e2; border:1px solid #fca5a5; border-radius:10px; padding:12px 16px; font-size:13px; color:var(--danger); margin-bottom:20px; display:none; }
   .login-footer { text-align:center; margin-top:24px; font-size:13px; color:var(--slate); }
   .login-footer a { color:var(--teal); text-decoration:none; font-weight:500; }
 
+  /* REGISTER PANEL */
+  #register-panel { display:none; width:100%; }
+  #register-panel.active { display:block; }
+  #login-panel { display:block; width:100%; }
+  #login-panel.hidden { display:none; }
+
+  .reg-header { margin-bottom:28px; }
+  .reg-header h2 { font-family:'DM Serif Display',serif; font-size:26px; color:var(--navy); margin-bottom:6px; }
+  .reg-header p { color:var(--slate); font-size:13px; }
+
+  .reg-steps { display:flex; align-items:center; gap:0; margin-bottom:28px; }
+  .reg-step { display:flex; align-items:center; gap:8px; flex:1; }
+  .reg-step:last-child { flex:none; }
+  .step-circle { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; border:2px solid var(--border); background:white; color:var(--slate-light); transition:all .25s; }
+  .step-circle.active { border-color:var(--teal); background:var(--teal); color:white; }
+  .step-circle.done { border-color:var(--teal); background:var(--teal-pale); color:var(--teal); }
+  .step-label { font-size:11px; font-weight:600; color:var(--slate-light); transition:color .25s; white-space:nowrap; }
+  .step-label.active { color:var(--teal); }
+  .step-line { flex:1; height:2px; background:var(--border); margin:0 8px; transition:background .25s; }
+  .step-line.done { background:var(--teal); }
+
+  .reg-section { display:none; }
+  .reg-section.active { display:block; animation:fadeIn .2s ease; }
+
+  .reg-success { background:linear-gradient(135deg,#d1fae5,#a7f3d0); border:1px solid #6ee7b7; border-radius:14px; padding:28px 24px; text-align:center; }
+  .reg-success .check { font-size:40px; margin-bottom:12px; }
+  .reg-success h3 { font-family:'DM Serif Display',serif; font-size:22px; color:#065f46; margin-bottom:8px; }
+  .reg-success p { font-size:13px; color:#047857; line-height:1.6; }
+  .reg-success .pat-id { display:inline-block; margin-top:14px; background:white; border:1px solid #6ee7b7; border-radius:8px; padding:8px 16px; font-weight:700; font-size:15px; color:var(--teal); }
+
+  .back-link { display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--slate); cursor:pointer; margin-bottom:24px; text-decoration:none; background:none; border:none; font-family:'DM Sans',sans-serif; }
+  .back-link:hover { color:var(--teal); }
+
   /* FORMS */
-  .form-group { margin-bottom:20px; }
-  .form-group label { display:block; font-size:13px; font-weight:500; color:var(--navy); margin-bottom:8px; }
+  .form-group { margin-bottom:18px; }
+  .form-group label { display:block; font-size:13px; font-weight:500; color:var(--navy); margin-bottom:7px; }
+  .form-group label .req { color:var(--danger); margin-left:2px; }
   .form-group input,.form-group select,.form-group textarea { width:100%; padding:12px 16px; border:1.5px solid var(--border); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--navy); background:var(--off-white); transition:border-color .2s,box-shadow .2s; outline:none; }
   .form-group input:focus,.form-group select:focus,.form-group textarea:focus { border-color:var(--teal); box-shadow:0 0 0 3px rgba(13,148,136,.1); background:var(--white); }
-  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-group input.error,.form-group select.error { border-color:var(--danger); }
+  .field-hint { font-size:11px; color:var(--slate-light); margin-top:5px; }
+  .field-err { font-size:11px; color:var(--danger); margin-top:5px; display:none; }
+  .field-err.show { display:block; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 
   /* BUTTONS */
   .btn-primary { width:100%; padding:13px; background:var(--teal); color:white; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:600; cursor:pointer; transition:background .2s,transform .1s; }
@@ -54,6 +92,20 @@
   .btn-teal:disabled { background:var(--slate-light); cursor:not-allowed; }
   .btn-secondary { padding:12px 24px; background:none; border:1.5px solid var(--border); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; color:var(--slate); cursor:pointer; transition:all .2s; }
   .btn-secondary:hover { border-color:var(--teal); color:var(--teal); }
+  .btn-outline-teal { width:100%; padding:13px; background:none; border:1.5px solid var(--teal); color:var(--teal); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:all .2s; }
+  .btn-outline-teal:hover { background:var(--teal-pale); }
+
+  .reg-nav { display:flex; gap:10px; margin-top:20px; }
+  .reg-nav .btn-teal { flex:1; }
+  .reg-nav .btn-secondary { flex:0 0 auto; }
+
+  /* Step review */
+  .review-section { margin-bottom:16px; }
+  .review-section-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--teal); margin-bottom:10px; }
+  .review-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .review-row:last-child { border-bottom:none; }
+  .review-label { color:var(--slate); }
+  .review-value { font-weight:500; color:var(--navy); text-align:right; max-width:55%; word-break:break-word; }
 
   /* APP SHELL */
   #app { display:none; flex-direction:column; min-height:100vh; }
@@ -173,12 +225,12 @@
   .toast.show { transform:translateY(0); opacity:1; }
 
   @media(max-width:900px){.login-left{display:none}.login-right{width:100%}.dash-grid{grid-template-columns:1fr 1fr}.dash-two-col,.p-grid{grid-template-columns:1fr}}
-  @media(max-width:640px){.sidebar{display:none}.dash-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.time-slots{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:640px){.sidebar{display:none}.dash-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.time-slots{grid-template-columns:repeat(3,1fr)}.reg-steps{gap:4px}.step-label{display:none}}
 </style>
 </head>
 <body>
 
-<!-- ══════════ LOGIN ══════════ -->
+<!-- ══════════ LOGIN / REGISTER ══════════ -->
 <div id="login-screen">
   <div class="login-left">
     <div class="brand">
@@ -195,20 +247,147 @@
       <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Portal access</div></div>
     </div>
   </div>
+
   <div class="login-right">
-    <h2>Welcome back</h2>
-    <p>Sign in to your patient portal to continue</p>
-    <div class="login-error" id="login-error"></div>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="text" id="login-usr" placeholder="your@email.com">
+
+    <!-- LOGIN PANEL -->
+    <div id="login-panel">
+      <h2>Welcome back</h2>
+      <p>Sign in to your patient portal to continue</p>
+      <div class="login-error" id="login-error"></div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="text" id="login-usr" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-pwd" placeholder="••••••••">
+      </div>
+      <button class="btn-primary" id="login-btn" onclick="doLogin()">Sign In to Portal</button>
+      <div class="login-footer">New patient? <a href="#" onclick="showRegister()">Register here →</a></div>
     </div>
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="login-pwd" placeholder="••••••••">
-    </div>
-    <button class="btn-primary" id="login-btn" onclick="doLogin()">Sign In to Portal</button>
-    <div class="login-footer">New patient? <a href="#" onclick="showToast('Registration coming soon')">Register here</a></div>
+
+    <!-- REGISTER PANEL -->
+    <div id="register-panel">
+      <button class="back-link" onclick="showLogin()">← Back to sign in</button>
+
+      <div class="reg-header">
+        <h2>New Patient Registration</h2>
+        <p>Complete all steps to create your patient account</p>
+      </div>
+
+      <!-- Step progress -->
+      <div class="reg-steps">
+        <div class="reg-step">
+          <div class="step-circle active" id="sc-1">1</div>
+          <span class="step-label active" id="sl-1">Personal</span>
+        </div>
+        <div class="step-line" id="sl-line-1"></div>
+        <div class="reg-step">
+          <div class="step-circle" id="sc-2">2</div>
+          <span class="step-label" id="sl-2">Contact</span>
+        </div>
+        <div class="step-line" id="sl-line-2"></div>
+        <div class="reg-step">
+          <div class="step-circle" id="sc-3">3</div>
+          <span class="step-label" id="sl-3">Review</span>
+        </div>
+      </div>
+
+      <!-- ── Step 1: Personal Info ── -->
+      <div class="reg-section active" id="reg-step-1">
+        <div class="form-group">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" id="r-full-name" placeholder="Jane Doe">
+          <div class="field-err" id="err-full-name">Full name is required</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date of Birth <span class="req">*</span></label>
+            <input type="date" id="r-dob">
+            <div class="field-err" id="err-dob">Date of birth is required</div>
+          </div>
+          <div class="form-group">
+            <label>Gender <span class="req">*</span></label>
+            <select id="r-gender">
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+            <div class="field-err" id="err-gender">Please select a gender</div>
+          </div>
+        </div>
+        <div class="reg-nav">
+          <button class="btn-teal" onclick="regNext(1)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ── Step 2: Contact Info ── -->
+      <div class="reg-section" id="reg-step-2">
+        <div class="form-group">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="r-email" placeholder="jane.doe@example.com">
+          <div class="field-err" id="err-email">A valid email address is required</div>
+        </div>
+        <div class="form-group">
+          <label>Mobile Number <span class="req">*</span></label>
+          <input type="tel" id="r-mobile" placeholder="+254 700 000 000">
+          <div class="field-err" id="err-mobile">Mobile number is required</div>
+        </div>
+        <div class="form-group">
+          <label>Insurance ID <span class="req">*</span></label>
+          <input type="text" id="r-insurance" placeholder="e.g. INS-0012345">
+          <div class="field-hint">Your health insurance membership or policy number</div>
+          <div class="field-err" id="err-insurance">Insurance ID is required</div>
+        </div>
+        <div class="reg-nav">
+          <button class="btn-secondary" onclick="regBack(2)">← Back</button>
+          <button class="btn-teal" onclick="regNext(2)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ── Step 3: Review & Submit ── -->
+      <div class="reg-section" id="reg-step-3">
+        <div style="margin-bottom:16px;">
+          <div class="review-section">
+            <div class="review-section-title">👤 Personal Information</div>
+            <div class="review-row"><span class="review-label">Full Name</span><span class="review-value" id="rv-name">—</span></div>
+            <div class="review-row"><span class="review-label">Date of Birth</span><span class="review-value" id="rv-dob">—</span></div>
+            <div class="review-row"><span class="review-label">Gender</span><span class="review-value" id="rv-gender">—</span></div>
+          </div>
+          <div class="review-section" style="margin-top:16px;">
+            <div class="review-section-title">📞 Contact & Insurance</div>
+            <div class="review-row"><span class="review-label">Email</span><span class="review-value" id="rv-email">—</span></div>
+            <div class="review-row"><span class="review-label">Mobile</span><span class="review-value" id="rv-mobile">—</span></div>
+            <div class="review-row"><span class="review-label">Insurance ID</span><span class="review-value" id="rv-insurance">—</span></div>
+          </div>
+        </div>
+        <div style="background:var(--teal-pale);border-radius:10px;padding:12px 14px;font-size:12px;color:#0f766e;margin-bottom:16px;line-height:1.6;">
+          🔒 By registering, you consent to better.care storing and processing your health information securely in accordance with applicable data protection regulations.
+        </div>
+        <div class="login-error" id="reg-error" style="margin-bottom:12px;"></div>
+        <div class="reg-nav">
+          <button class="btn-secondary" onclick="regBack(3)">← Edit</button>
+          <button class="btn-teal" id="reg-submit-btn" onclick="submitRegistration()">✓ Create My Account</button>
+        </div>
+      </div>
+
+      <!-- ── Step 4: Success ── -->
+      <div class="reg-section" id="reg-step-4">
+        <div class="reg-success">
+          <div class="check">🎉</div>
+          <h3>Welcome to better.care!</h3>
+          <p>Your patient account has been created successfully. You can now sign in with your email and password.</p>
+          <div class="pat-id" id="reg-pat-id">—</div>
+        </div>
+        <div style="margin-top:20px;">
+          <button class="btn-outline-teal" onclick="showLoginAfterReg()">Sign In to Your Account →</button>
+        </div>
+      </div>
+
+    </div><!-- /register-panel -->
   </div>
 </div>
 
@@ -240,7 +419,6 @@
     </nav>
 
     <main class="main">
-
       <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
         <div class="page-header">
@@ -259,7 +437,6 @@
           </div>
           <div class="card">
             <div class="card-title">👤 My Details</div>
-            <!-- Fields from your HealthcarePatient: full_name, date_of_birth, gender, email, mobile, insurance_id -->
             <div class="health-item"><span class="health-label">Full Name</span><span class="health-value" id="d-name">—</span></div>
             <div class="health-item"><span class="health-label">Date of Birth</span><span class="health-value" id="d-dob">—</span></div>
             <div class="health-item"><span class="health-label">Gender</span><span class="health-value" id="d-gender">—</span></div>
@@ -282,7 +459,6 @@
           <div class="form-row">
             <div class="form-group">
               <label>Practitioner</label>
-              <!-- Populated from get_practitioner_schedule() → practitioner_name field -->
               <select id="book-prac" onchange="loadSlots()">
                 <option value="">Loading practitioners…</option>
               </select>
@@ -316,7 +492,6 @@
             <div class="card-title" style="margin:0">All Appointments</div>
             <button class="btn-teal" onclick="navigate('book')" style="padding:8px 16px;font-size:13px;">+ Book New</button>
           </div>
-          <!-- Fields from get_appointments(): name, patient, practitioner, date, time, status -->
           <table class="tbl">
             <thead><tr><th>ID</th><th>Date</th><th>Time</th><th>Practitioner</th><th>Status</th><th></th></tr></thead>
             <tbody id="appt-tbody"><tr class="empty-row"><td colspan="6"><span class="spinner"></span>Loading…</td></tr></tbody>
@@ -331,7 +506,6 @@
           <p>Your full health history — securely stored</p>
         </div>
         <div class="card">
-          <!-- Fields from get_medical_records(): name, date, practitioner, diagnosis, appointment -->
           <table class="tbl">
             <thead><tr><th>Record ID</th><th>Date</th><th>Practitioner</th><th>Diagnosis</th><th>Appointment</th><th></th></tr></thead>
             <tbody id="rec-tbody"><tr class="empty-row"><td colspan="6"><span class="spinner"></span>Loading…</td></tr></tbody>
@@ -348,10 +522,8 @@
         <div class="profile-header">
           <div class="p-avatar" id="p-avatar">?</div>
           <div class="p-info">
-            <!-- full_name from HealthcarePatient -->
             <h3 id="p-fullname">—</h3>
             <p id="p-sub">Patient</p>
-            <!-- name (doc ID) from HealthcarePatient -->
             <div class="p-id" id="p-docid">—</div>
           </div>
         </div>
@@ -360,29 +532,22 @@
             <div class="card-title">👤 Personal Information</div>
             <div class="p-field"><label>Full Name</label><div class="val" id="pf-name">—</div></div>
             <div class="divider"></div>
-            <!-- date_of_birth from register_new_patient / HealthcarePatient -->
             <div class="p-field"><label>Date of Birth</label><div class="val" id="pf-dob">—</div></div>
             <div class="divider"></div>
-            <!-- gender from HealthcarePatient -->
             <div class="p-field"><label>Gender</label><div class="val" id="pf-gender">—</div></div>
             <div class="divider"></div>
-            <!-- age — calculated by your calculate_age() method -->
             <div class="p-field"><label>Age</label><div class="val" id="pf-age">—</div></div>
           </div>
           <div class="card">
             <div class="card-title">📞 Contact Information</div>
-            <!-- email from HealthcarePatient -->
             <div class="p-field"><label>Email Address</label><div class="val" id="pf-email">—</div></div>
             <div class="divider"></div>
-            <!-- mobile from HealthcarePatient -->
             <div class="p-field"><label>Mobile Number</label><div class="val" id="pf-mobile">—</div></div>
             <div class="divider"></div>
-            <!-- insurance_id from register_new_patient -->
             <div class="p-field"><label>Insurance ID</label><div class="val" id="pf-insurance">—</div></div>
           </div>
         </div>
       </div>
-
     </main>
   </div>
 </div>
@@ -430,28 +595,27 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════
+// ════════════════════════════════════
 // STATE
-// ════════════════════════════════
+// ════════════════════════════════════
 var currentPatient = null;
 var allAppointments = [];
 var allRecords = [];
 var schedule = [];
 var selectedTime = null;
 var toastTimer = null;
-var rescheduleAppt = null;   // appointment being rescheduled { name, practitioner_id }
-var rsSelectedTime = null;   // selected time in reschedule modal
+var rescheduleAppt = null;
+var rsSelectedTime = null;
+var currentRegStep = 1;
 
-// ════════════════════════════════
+// ════════════════════════════════════
 // API HELPERS
-// ════════════════════════════════
+// ════════════════════════════════════
 function getCsrf() {
   if (typeof frappe !== 'undefined' && frappe.csrf_token) return frappe.csrf_token;
   var m = document.cookie.match(/X-Frappe-CSRF-Token=([^;]+)/);
   return m ? m[1] : '';
 }
-
-// POST to Frappe API
 function apiPost(method, body) {
   return fetch('/api/method/' + method, {
     method: 'POST',
@@ -463,8 +627,6 @@ function apiPost(method, body) {
     return d.message;
   });
 }
-
-// GET from Frappe API (with optional query params)
 function apiGet(method, params) {
   var qs = params ? '?' + new URLSearchParams(params).toString() : '';
   return fetch('/api/method/' + method + qs, {
@@ -475,44 +637,197 @@ function apiGet(method, params) {
     return d.message;
   });
 }
-
 function setText(id, val) {
   var el = document.getElementById(id);
   if (el) el.textContent = val || '—';
 }
 
-// ════════════════════════════════
+// ════════════════════════════════════
 // INIT
-// ════════════════════════════════
+// ════════════════════════════════════
 document.addEventListener('DOMContentLoaded', function() {
   var d = document.getElementById('book-date');
   if (d) d.min = new Date().toISOString().split('T')[0];
 
+  // Set max DOB to today
+  var dob = document.getElementById('r-dob');
+  if (dob) dob.max = new Date().toISOString().split('T')[0];
+
   document.getElementById('login-pwd').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') doLogin();
   });
-
   document.getElementById('rec-modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
+  document.getElementById('reschedule-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeReschedule();
+  });
 });
 
-// ════════════════════════════════
-// LOGIN
-// Frappe built-in: /api/method/login  { usr, pwd }
-// ════════════════════════════════
+// ════════════════════════════════════
+// REGISTRATION FLOW
+// ════════════════════════════════════
+function showRegister() {
+  document.getElementById('login-panel').classList.add('hidden');
+  document.getElementById('register-panel').classList.add('active');
+  goToRegStep(1);
+}
+
+function showLogin() {
+  document.getElementById('register-panel').classList.remove('active');
+  document.getElementById('login-panel').classList.remove('hidden');
+  document.getElementById('reg-error').style.display = 'none';
+}
+
+function showLoginAfterReg() {
+  showLogin();
+  // Pre-fill email from registration
+  var email = document.getElementById('r-email').value;
+  if (email) document.getElementById('login-usr').value = email;
+}
+
+function goToRegStep(step) {
+  currentRegStep = step;
+  // Hide all sections
+  for (var i = 1; i <= 4; i++) {
+    var s = document.getElementById('reg-step-' + i);
+    if (s) s.classList.remove('active');
+  }
+  // Show current
+  var cur = document.getElementById('reg-step-' + step);
+  if (cur) cur.classList.add('active');
+  // Update step indicators (only steps 1–4 shown in progress bar)
+  for (var j = 1; j <= 3; j++) {
+    var circle = document.getElementById('sc-' + j);
+    var label = document.getElementById('sl-' + j);
+    var line = document.getElementById('sl-line-' + j);
+    if (!circle) continue;
+    circle.classList.remove('active', 'done');
+    if (label) label.classList.remove('active');
+    if (j < step) {
+      circle.classList.add('done');
+      circle.textContent = '✓';
+      if (line) line.classList.add('done');
+    } else if (j === step) {
+      circle.classList.add('active');
+      circle.textContent = j;
+      if (label) label.classList.add('active');
+      if (line) line.classList.remove('done');
+    } else {
+      circle.textContent = j;
+      if (line) line.classList.remove('done');
+    }
+  }
+}
+
+// Validate & advance
+function regNext(step) {
+  if (step === 1) {
+    var ok = true;
+    ok = requireField('r-full-name', 'err-full-name') && ok;
+    ok = requireField('r-dob', 'err-dob') && ok;
+    ok = requireField('r-gender', 'err-gender') && ok;
+    if (!ok) return;
+    goToRegStep(2);
+  } else if (step === 2) {
+    var ok2 = true;
+    ok2 = requireEmail('r-email', 'err-email') && ok2;
+    ok2 = requireField('r-mobile', 'err-mobile') && ok2;
+    ok2 = requireField('r-insurance', 'err-insurance') && ok2;
+    if (!ok2) return;
+    // Populate review before showing step 3
+    setText('rv-name', document.getElementById('r-full-name').value.trim());
+    setText('rv-dob', document.getElementById('r-dob').value);
+    setText('rv-gender', document.getElementById('r-gender').value);
+    setText('rv-email', document.getElementById('r-email').value.trim());
+    setText('rv-mobile', document.getElementById('r-mobile').value.trim());
+    setText('rv-insurance', document.getElementById('r-insurance').value.trim());
+    goToRegStep(3);
+  }
+}
+
+function regBack(step) {
+  goToRegStep(step - 1);
+}
+
+function requireField(inputId, errId) {
+  var val = document.getElementById(inputId).value.trim();
+  if (!val) { showFieldErr(inputId, errId); return false; }
+  clearFieldErr(inputId, errId);
+  return true;
+}
+
+function requireEmail(inputId, errId) {
+  var val = document.getElementById(inputId).value.trim();
+  var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!val || !re.test(val)) { showFieldErr(inputId, errId); return false; }
+  clearFieldErr(inputId, errId);
+  return true;
+}
+
+function showFieldErr(inputId, errId) {
+  document.getElementById(inputId).classList.add('error');
+  document.getElementById(errId).classList.add('show');
+}
+function clearFieldErr(inputId, errId) {
+  document.getElementById(inputId).classList.remove('error');
+  document.getElementById(errId).classList.remove('show');
+}
+
+function submitRegistration() {
+  var btn = document.getElementById('reg-submit-btn');
+  var errEl = document.getElementById('reg-error');
+  errEl.style.display = 'none';
+
+  var fullName = document.getElementById('r-full-name').value.trim();
+  var dob = document.getElementById('r-dob').value;
+  var gender = document.getElementById('r-gender').value;
+  var email = document.getElementById('r-email').value.trim();
+  var mobile = document.getElementById('r-mobile').value.trim();
+  var insurance = document.getElementById('r-insurance').value.trim();
+
+  btn.textContent = 'Creating account…';
+  btn.disabled = true;
+
+  // Guest endpoint — no CSRF token available before login, so call fetch directly
+  fetch('/api/method/healthcare_pro.healthcare_management.api.register_patient.register_new_patient', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      full_name: fullName,
+      date_of_birth: dob,
+      gender: gender,
+      email: email,
+      mobile: mobile,
+      insurance_id: insurance
+    })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.exc_type) throw new Error(d.message || d.exception || 'Registration failed');
+    var result = d.message;
+    var patId = (result && result.patient_name) || '—';
+    setText('reg-pat-id', patId);
+    goToRegStep(4);
+    showToast('🎉 Account created! Please sign in.');
+  }).catch(function(e) {
+    errEl.textContent = e.message || 'Registration failed. Please try again.';
+    errEl.style.display = 'block';
+  }).finally(function() {
+    btn.textContent = '✓ Create My Account';
+    btn.disabled = false;
+  });
+}
+
+// ════════════════════════════════════
+// LOGIN / LOGOUT
+// ════════════════════════════════════
 function doLogin() {
   var usr = document.getElementById('login-usr').value.trim();
   var pwd = document.getElementById('login-pwd').value.trim();
   var errEl = document.getElementById('login-error');
   var btn = document.getElementById('login-btn');
-
   errEl.style.display = 'none';
   if (!usr || !pwd) { errEl.textContent = 'Please enter your email and password.'; errEl.style.display = 'block'; return; }
-
-  btn.textContent = 'Signing in…';
-  btn.disabled = true;
-
+  btn.textContent = 'Signing in…'; btn.disabled = true;
   fetch('/api/method/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -531,8 +846,7 @@ function doLogin() {
     errEl.textContent = 'Login failed: ' + e.message;
     errEl.style.display = 'block';
   }).finally(function() {
-    btn.textContent = 'Sign In to Portal';
-    btn.disabled = false;
+    btn.textContent = 'Sign In to Portal'; btn.disabled = false;
   });
 }
 
@@ -543,72 +857,50 @@ function doLogout() {
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('login-usr').value = '';
   document.getElementById('login-pwd').value = '';
+  showLogin();
 }
 
-// ════════════════════════════════
-// INIT APP after login
-// Uses: get_patients() → fields: name, full_name, date_of_birth, gender, email, mobile
-// (from your register_patient.py get_patients function)
-// ════════════════════════════════
+// ════════════════════════════════════
+// INIT APP
+// ════════════════════════════════════
 function initApp(email) {
   var hour = new Date().getHours();
   var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-
-  // Load all patients then find the one matching the logged-in email
   apiGet('healthcare_pro.healthcare_management.api.register_patient.get_patients').then(function(patients) {
-    // Your get_patients() returns: name, full_name, date_of_birth, gender, email, mobile
     currentPatient = (patients || []).find(function(p) { return p.email === email; }) || null;
-
     if (currentPatient) {
       var firstName = (currentPatient.full_name || '').split(' ')[0] || 'there';
       var words = (currentPatient.full_name || '?').split(' ');
       var initials = words.slice(0, 2).map(function(w) { return w[0]; }).join('').toUpperCase();
-
       setText('dash-greeting', greeting + ', ' + firstName + ' 👋');
-      setText('tb-avatar', initials);
-      setText('tb-name', currentPatient.full_name);
+      setText('tb-avatar', initials); setText('tb-name', currentPatient.full_name);
       setText('p-avatar', initials);
       renderProfile(currentPatient);
     }
-  }).catch(function(e) {
-    console.warn('Could not load patient:', e.message);
-  });
-
-  // Load all data in parallel
+  }).catch(function(e) { console.warn('Could not load patient:', e.message); });
   loadDashboard();
   loadPractitioners();
 }
 
-// ════════════════════════════════
-// RENDER PROFILE
-// Fields from HealthcarePatient: full_name, date_of_birth, gender, age, email, mobile, insurance_id, name
-// age is calculated by your calculate_age() method in healthcare_patient.py
-// ════════════════════════════════
+// ════════════════════════════════════
+// PROFILE
+// ════════════════════════════════════
 function renderProfile(p) {
-  // Dashboard summary
-  setText('d-name', p.full_name);
-  setText('d-dob', p.date_of_birth);
-  setText('d-gender', p.gender);
-  setText('d-email', p.email);
-  setText('d-mobile', p.mobile);
-  setText('d-insurance', p.insurance_id);
-
-  // Profile page
-  setText('p-fullname', p.full_name);
-  setText('p-docid', p.name);
+  setText('d-name', p.full_name); setText('d-dob', p.date_of_birth);
+  setText('d-gender', p.gender); setText('d-email', p.email);
+  setText('d-mobile', p.mobile); setText('d-insurance', p.insurance_id);
+  setText('p-fullname', p.full_name); setText('p-docid', p.name);
   setText('p-sub', 'Patient · ' + p.name);
-  setText('pf-name', p.full_name);
-  setText('pf-dob', p.date_of_birth);
+  setText('pf-name', p.full_name); setText('pf-dob', p.date_of_birth);
   setText('pf-gender', p.gender);
   setText('pf-age', p.age ? p.age + ' years' : '—');
-  setText('pf-email', p.email);
-  setText('pf-mobile', p.mobile);
+  setText('pf-email', p.email); setText('pf-mobile', p.mobile);
   setText('pf-insurance', p.insurance_id);
 }
 
-// ════════════════════════════════
+// ════════════════════════════════════
 // NAVIGATION
-// ════════════════════════════════
+// ════════════════════════════════════
 function navigate(page) {
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
@@ -620,60 +912,45 @@ function navigate(page) {
   if (page === 'records') loadMedicalRecords();
 }
 
-// ════════════════════════════════
+// ════════════════════════════════════
 // DASHBOARD
-// Uses: get_appointments(patient=...) 
-// Fields returned: name, patient, practitioner, date, time, status
-// ════════════════════════════════
+// ════════════════════════════════════
 function loadDashboard() {
   if (!currentPatient) return;
-
-  apiGet('healthcare_pro.healthcare_management.api.get_appointments.get_appointments',
-    { patient: currentPatient.name }
-  ).then(function(appts) {
-    allAppointments = appts || [];
-    var upcoming = allAppointments.filter(function(a) { return a.status === 'Scheduled' || a.status === 'Open'; });
-    var waitlisted = allAppointments.filter(function(a) { return a.status === 'Waiting'; });
-
-    setText('d-upcoming', upcoming.length);
-    setText('d-waitlist', waitlisted.length);
-    setText('appt-badge', upcoming.length);
-
-    var list = document.getElementById('dash-appt-list');
-    if (upcoming.length === 0) {
-      list.innerHTML = '<p style="color:var(--slate);font-size:13px;">No upcoming appointments. <a href="#" onclick="navigate(\'book\')" style="color:var(--teal);font-weight:600;">Book one →</a></p>';
-    } else {
-      list.innerHTML = upcoming.slice(0, 3).map(function(a) {
-        var d = new Date(a.date);
-        var month = d.toLocaleString('en', { month: 'short' }).toUpperCase();
-        var day = d.getDate();
-        var sClass = (a.status || '').toLowerCase();
-        return '<div class="upcoming-item">' +
-          '<div class="appt-date-box"><div class="month">' + month + '</div><div class="day">' + day + '</div></div>' +
-          '<div class="appt-info"><div class="doctor">' + (a.practitioner || '—') + '</div><div class="appt-time">' + (a.time || '') + '</div></div>' +
-          '<span class="badge ' + sClass + '">' + a.status + '</span>' +
-          '</div>';
-      }).join('');
-    }
-  }).catch(function(e) {
-    document.getElementById('dash-appt-list').innerHTML = '<p style="color:var(--danger);font-size:13px;">Failed to load: ' + e.message + '</p>';
-  });
-
-  // get_medical_records() — uses frappe.session.user internally, no params
+  apiGet('healthcare_pro.healthcare_management.api.get_appointments.get_appointments', { patient: currentPatient.name })
+    .then(function(appts) {
+      allAppointments = appts || [];
+      var upcoming = allAppointments.filter(function(a) { return a.status === 'Scheduled' || a.status === 'Open'; });
+      var waitlisted = allAppointments.filter(function(a) { return a.status === 'Waiting'; });
+      setText('d-upcoming', upcoming.length);
+      setText('d-waitlist', waitlisted.length);
+      setText('appt-badge', upcoming.length);
+      var list = document.getElementById('dash-appt-list');
+      if (upcoming.length === 0) {
+        list.innerHTML = '<p style="color:var(--slate);font-size:13px;">No upcoming appointments. <a href="#" onclick="navigate(\'book\')" style="color:var(--teal);font-weight:600;">Book one →</a></p>';
+      } else {
+        list.innerHTML = upcoming.slice(0, 3).map(function(a) {
+          var d = new Date(a.date);
+          var month = d.toLocaleString('en', { month: 'short' }).toUpperCase();
+          var day = d.getDate();
+          var sClass = (a.status || '').toLowerCase();
+          return '<div class="upcoming-item">' +
+            '<div class="appt-date-box"><div class="month">' + month + '</div><div class="day">' + day + '</div></div>' +
+            '<div class="appt-info"><div class="doctor">' + (a.practitioner || '—') + '</div><div class="appt-time">' + (a.time || '') + '</div></div>' +
+            '<span class="badge ' + sClass + '">' + a.status + '</span></div>';
+        }).join('');
+      }
+    }).catch(function(e) {
+      document.getElementById('dash-appt-list').innerHTML = '<p style="color:var(--danger);font-size:13px;">Failed to load: ' + e.message + '</p>';
+    });
   apiGet('healthcare_pro.healthcare_management.api.create_medical_record.get_medical_records')
     .then(function(recs) { allRecords = recs || []; setText('d-records', allRecords.length); })
     .catch(function() { setText('d-records', '—'); });
 }
 
-// ════════════════════════════════
+// ════════════════════════════════════
 // BOOK APPOINTMENT
-// Practitioners from: get_practitioner_schedule()
-// Fields: practitioner_id, practitioner_name, day, from_time, to_time
-//
-// Submit to: book_appointment()
-// Your fields: patient_name, practitioner_name, date, time
-// Returns: { status: "scheduled", appointment_id } OR { status: "waitlisted", waitlist_id }
-// ════════════════════════════════
+// ════════════════════════════════════
 function loadPractitioners() {
   var sel = document.getElementById('book-prac');
   apiGet('healthcare_pro.healthcare_management.api.get_schedule.get_practitioner_schedule')
@@ -682,17 +959,11 @@ function loadPractitioners() {
       var seen = {};
       var unique = schedule.filter(function(s) {
         if (seen[s.practitioner_id]) return false;
-        seen[s.practitioner_id] = true;
-        return true;
+        seen[s.practitioner_id] = true; return true;
       });
       sel.innerHTML = '<option value="">Select a practitioner</option>' +
-        unique.map(function(p) {
-          return '<option value="' + p.practitioner_id + '">' + p.practitioner_name + '</option>';
-        }).join('');
-    }).catch(function(e) {
-      sel.innerHTML = '<option value="">Could not load practitioners</option>';
-      console.warn('Schedule error:', e.message);
-    });
+        unique.map(function(p) { return '<option value="' + p.practitioner_id + '">' + p.practitioner_name + '</option>'; }).join('');
+    }).catch(function(e) { sel.innerHTML = '<option value="">Could not load practitioners</option>'; });
 }
 
 function loadSlots() {
@@ -700,98 +971,53 @@ function loadSlots() {
   var date = document.getElementById('book-date').value;
   var container = document.getElementById('slots-container');
   selectedTime = null;
-
-  if (!pracId || !date) {
-    container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a practitioner and date first.</div>';
-    return;
-  }
-
-  // Day name to match schedule "day" field e.g. "Monday"
+  if (!pracId || !date) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a practitioner and date first.</div>'; return; }
   var dayName = new Date(date + 'T00:00:00').toLocaleString('en', { weekday: 'long' });
-
-  var daySlots = schedule.filter(function(s) {
-    return s.practitioner_id === pracId && s.day === dayName;
-  });
-
-  if (daySlots.length === 0) {
-    container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">No available slots on ' + dayName + '. Try another day.</div>';
-    return;
-  }
-
-  // Generate hourly time slots within each from_time → to_time window
+  var daySlots = schedule.filter(function(s) { return s.practitioner_id === pracId && s.day === dayName; });
+  if (daySlots.length === 0) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">No available slots on ' + dayName + '. Try another day.</div>'; return; }
   var times = [];
   daySlots.forEach(function(slot) {
     var fp = slot.from_time.split(':').map(Number);
     var tp = slot.to_time.split(':').map(Number);
-    var cur = fp[0] * 60 + fp[1];
-    var end = tp[0] * 60 + tp[1];
+    var cur = fp[0]*60+fp[1]; var end = tp[0]*60+tp[1];
     while (cur < end) {
-      var h = Math.floor(cur / 60);
-      var m = cur % 60;
-      var ampm = h >= 12 ? 'PM' : 'AM';
-      var dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
-      times.push({
-        display: dh + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm,
-        // Your book_appointment reads time as-is from frappe.form_dict
-        value: (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':00'
-      });
+      var h = Math.floor(cur/60); var m = cur%60;
+      var ampm = h>=12?'PM':'AM'; var dh = h>12?h-12:(h===0?12:h);
+      times.push({ display: dh+':'+(m<10?'0':'')+m+' '+ampm, value: (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':00' });
       cur += 60;
     }
   });
-
-  container.innerHTML = times.map(function(t) {
-    return '<div class="time-slot" data-value="' + t.value + '" onclick="selectSlot(this)">' + t.display + '</div>';
-  }).join('');
+  container.innerHTML = times.map(function(t) { return '<div class="time-slot" data-value="'+t.value+'" onclick="selectSlot(this)">'+t.display+'</div>'; }).join('');
 }
 
 function selectSlot(el) {
   if (el.classList.contains('unavailable')) return;
   document.querySelectorAll('.time-slot').forEach(function(s) { s.classList.remove('selected'); });
-  el.classList.add('selected');
-  selectedTime = el.dataset.value;
+  el.classList.add('selected'); selectedTime = el.dataset.value;
 }
 
 function submitBook() {
   var pracId = document.getElementById('book-prac').value;
   var date = document.getElementById('book-date').value;
   var btn = document.getElementById('book-btn');
-
   if (!pracId) { showToast('⚠️ Please select a practitioner'); return; }
   if (!date) { showToast('⚠️ Please select a date'); return; }
   if (!selectedTime) { showToast('⚠️ Please select a time slot'); return; }
   if (!currentPatient) { showToast('⚠️ Session expired. Please log in again.'); return; }
-
-  btn.textContent = 'Booking…';
-  btn.disabled = true;
-
-  // Your book_appointment() reads from frappe.form_dict:
-  // patient_name → the patient doc name (e.g. PAT-2026-00009)
-  // practitioner_name → the practitioner doc name (e.g. PRAC-00001)
-  // date → "2026-03-15"
-  // time → "09:00:00"
+  btn.textContent = 'Booking…'; btn.disabled = true;
   apiPost('healthcare_pro.healthcare_management.api.create_appointment.book_appointment', {
-    patient_name: currentPatient.name,
-    practitioner_name: pracId,
-    date: date,
-    time: selectedTime
+    patient_name: currentPatient.name, practitioner_name: pracId, date: date, time: selectedTime
   }).then(function(result) {
-    // result.status === "scheduled" or "waitlisted"
     if (result && result.status === 'waitlisted') {
       setText('book-wl-msg', "Slot taken — you've been added to the waitlist. ID: " + (result.waitlist_id || ''));
-      document.getElementById('book-wl').style.display = 'flex';
-      showToast('⏳ Added to waitlist');
+      document.getElementById('book-wl').style.display = 'flex'; showToast('⏳ Added to waitlist');
     } else {
       setText('book-ok-msg', 'Appointment confirmed! ID: ' + (result && result.appointment_id ? result.appointment_id : ''));
-      document.getElementById('book-ok').style.display = 'flex';
-      showToast('✅ Appointment booked!');
+      document.getElementById('book-ok').style.display = 'flex'; showToast('✅ Appointment booked!');
     }
     loadDashboard();
-  }).catch(function(e) {
-    showToast('❌ Booking failed: ' + e.message);
-  }).finally(function() {
-    btn.textContent = 'Confirm Appointment';
-    btn.disabled = false;
-  });
+  }).catch(function(e) { showToast('❌ Booking failed: ' + e.message); })
+  .finally(function() { btn.textContent = 'Confirm Appointment'; btn.disabled = false; });
 }
 
 function resetBook() {
@@ -800,128 +1026,87 @@ function resetBook() {
   document.getElementById('book-ok').style.display = 'none';
   document.getElementById('book-wl').style.display = 'none';
   document.getElementById('book-date').value = '';
-  document.getElementById('slots-container').innerHTML =
-    '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a practitioner and date first.</div>';
+  document.getElementById('slots-container').innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a practitioner and date first.</div>';
 }
 
-// ════════════════════════════════
-// MY APPOINTMENTS
-// Uses: get_appointments(patient=...)
-// Fields: name, patient, practitioner, date, time, status
-// Cancel: cancel_appointment(appointment=...) in patient_appointment.py
-// ════════════════════════════════
+// ════════════════════════════════════
+// APPOINTMENTS
+// ════════════════════════════════════
 function loadAppointments() {
   var tbody = document.getElementById('appt-tbody');
   tbody.innerHTML = '<tr class="empty-row"><td colspan="6"><span class="spinner"></span>Loading…</td></tr>';
-
   var params = currentPatient ? { patient: currentPatient.name } : {};
   apiGet('healthcare_pro.healthcare_management.api.get_appointments.get_appointments', params)
     .then(function(appts) {
       allAppointments = appts || [];
-      if (allAppointments.length === 0) {
-        tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No appointments found.</td></tr>';
-        return;
-      }
+      if (allAppointments.length === 0) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No appointments found.</td></tr>'; return; }
       tbody.innerHTML = allAppointments.map(function(a) {
         var sc = (a.status || '').toLowerCase();
         var canCancel = a.status === 'Scheduled' || a.status === 'Open';
+        var pracId = (a.practitioner || '');
         var isDone = a.status === 'Completed';
-        return '<tr>' +
-          '<td style="font-weight:600;color:var(--teal);">' + a.name + '</td>' +
-          '<td>' + (a.date || '—') + '</td>' +
-          '<td>' + (a.time || '—') + '</td>' +
-          '<td>' + (a.practitioner || '—') + '</td>' +
+        return '<tr><td style="font-weight:600;color:var(--teal);">' + a.name + '</td>' +
+          '<td>' + (a.date || '—') + '</td><td>' + (a.time || '—') + '</td><td>' + (a.practitioner || '—') + '</td>' +
           '<td><span class="badge ' + sc + '">' + (a.status || '—') + '</span></td>' +
           '<td style="display:flex;gap:8px;align-items:center;">' +
-            (canCancel ? '<button class="tbl-action red" onclick="cancelAppt(\'' + a.name + '\')">Cancel</button>' : '') +
-            (canCancel ? '<button class="tbl-action" onclick="openReschedule(\'' + a.name + '\',\'' + (a.practitioner || '') + '\')">Reschedule</button>' : '') +
-            (isDone ? '<button class="tbl-action" onclick="openRecByAppt(\'' + a.name + '\')">View Record</button>' : '') +
-            (!canCancel && !isDone ? '—' : '') +
-          '</td></tr>';
+          (canCancel ? '<button class="tbl-action red" onclick="cancelAppt(\''+a.name+'\')">Cancel</button>' : '') +
+          (canCancel ? '<button class="tbl-action" onclick="openReschedule(\''+a.name+'\',\''+pracId+'\')"  >Reschedule</button>' : '') +
+          (isDone ? '<button class="tbl-action" onclick="openRecByAppt(\''+a.name+'\')">View Record</button>' : '') +
+          (!canCancel && !isDone ? '—' : '') + '</td></tr>';
       }).join('');
-
-      setText('appt-badge', allAppointments.filter(function(a) {
-        return a.status === 'Scheduled' || a.status === 'Open';
-      }).length);
-    }).catch(function(e) {
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="color:var(--danger);">Failed: ' + e.message + '</td></tr>';
-    });
+      setText('appt-badge', allAppointments.filter(function(a) { return a.status==='Scheduled'||a.status==='Open'; }).length);
+    }).catch(function(e) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="color:var(--danger);">Failed: '+e.message+'</td></tr>'; });
 }
 
 function cancelAppt(name) {
   if (!confirm('Cancel appointment ' + name + '?')) return;
-  // Your cancel_appointment(appointment=...) in patient_appointment.py
-  apiPost('healthcare_pro.healthcare_management.doctype.patient_appointment.patient_appointment.cancel_appointment',
-    { appointment: name }
-  ).then(function() {
-    showToast('✅ Appointment cancelled');
-    loadAppointments();
-    loadDashboard();
-  }).catch(function(e) {
-    showToast('❌ Could not cancel: ' + e.message);
-  });
+  apiPost('healthcare_pro.healthcare_management.doctype.patient_appointment.patient_appointment.cancel_appointment', { appointment: name })
+    .then(function() { showToast('✅ Appointment cancelled'); loadAppointments(); loadDashboard(); })
+    .catch(function(e) { showToast('❌ Could not cancel: ' + e.message); });
 }
 
-// ════════════════════════════════
+// ════════════════════════════════════
 // MEDICAL RECORDS
-// Uses: get_medical_records() — uses frappe.session.user internally, no params
-// Fields returned: name, date, practitioner, diagnosis, appointment
-// Full record also has: symptoms (from your create_medical_record fields)
-// ════════════════════════════════
+// ════════════════════════════════════
 function loadMedicalRecords() {
   var tbody = document.getElementById('rec-tbody');
   tbody.innerHTML = '<tr class="empty-row"><td colspan="6"><span class="spinner"></span>Loading…</td></tr>';
-
   apiGet('healthcare_pro.healthcare_management.api.create_medical_record.get_medical_records')
     .then(function(recs) {
-      allRecords = recs || [];
-      setText('d-records', allRecords.length);
-      if (allRecords.length === 0) {
-        tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No medical records found.</td></tr>';
-        return;
-      }
+      allRecords = recs || []; setText('d-records', allRecords.length);
+      if (allRecords.length === 0) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No medical records found.</td></tr>'; return; }
       tbody.innerHTML = allRecords.map(function(r) {
-        return '<tr>' +
-          '<td style="font-weight:600;color:var(--teal);">' + r.name + '</td>' +
-          '<td>' + (r.date || '—') + '</td>' +
-          '<td>' + (r.practitioner || '—') + '</td>' +
-          '<td>' + (r.diagnosis || '—') + '</td>' +
-          '<td>' + (r.appointment || '—') + '</td>' +
-          '<td><button class="tbl-action" onclick="openRecord(\'' + r.name + '\')">View</button></td>' +
-          '</tr>';
+        return '<tr><td style="font-weight:600;color:var(--teal);">' + r.name + '</td>' +
+          '<td>' + (r.date||'—') + '</td><td>' + (r.practitioner||'—') + '</td>' +
+          '<td>' + (r.diagnosis||'—') + '</td><td>' + (r.appointment||'—') + '</td>' +
+          '<td><button class="tbl-action" onclick="openRecord(\''+r.name+'\')">View</button></td></tr>';
       }).join('');
-    }).catch(function(e) {
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="color:var(--danger);">Failed: ' + e.message + '</td></tr>';
-    });
+    }).catch(function(e) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="color:var(--danger);">Failed: '+e.message+'</td></tr>'; });
 }
 
 function openRecord(recName) {
-  // Check local cache first
   var r = allRecords.find(function(x) { return x.name === recName; });
-
-  // Fetch full doc to get symptoms field (create_medical_record stores: patient, practitioner, diagnosis, symptoms, date, appointment)
   apiGet('frappe.client.get', { doctype: 'Medical Record', name: recName })
     .then(function(full) {
       var rec = full || r;
       if (!rec) { showToast('Could not load record'); return; }
       document.getElementById('modal-body').innerHTML =
         '<div class="rec-field"><label>Record ID</label><div class="val" style="color:var(--teal);font-weight:600;">' + rec.name + '</div></div>' +
-        '<div class="rec-field"><label>Date</label><div class="val">' + (rec.date || '—') + '</div></div>' +
-        '<div class="rec-field"><label>Practitioner</label><div class="val">' + (rec.practitioner || '—') + '</div></div>' +
-        '<div class="rec-field"><label>Linked Appointment</label><div class="val">' + (rec.appointment || '—') + '</div></div>' +
+        '<div class="rec-field"><label>Date</label><div class="val">' + (rec.date||'—') + '</div></div>' +
+        '<div class="rec-field"><label>Practitioner</label><div class="val">' + (rec.practitioner||'—') + '</div></div>' +
+        '<div class="rec-field"><label>Linked Appointment</label><div class="val">' + (rec.appointment||'—') + '</div></div>' +
         '<div style="height:1px;background:var(--border);margin:16px 0;"></div>' +
-        '<div class="rec-field"><label>Diagnosis</label><div class="val" style="font-weight:600;">' + (rec.diagnosis || '—') + '</div></div>' +
-        '<div class="rec-field"><label>Symptoms</label><div class="val">' + (rec.symptoms || '—') + '</div></div>';
+        '<div class="rec-field"><label>Diagnosis</label><div class="val" style="font-weight:600;">' + (rec.diagnosis||'—') + '</div></div>' +
+        '<div class="rec-field"><label>Symptoms</label><div class="val">' + (rec.symptoms||'—') + '</div></div>';
       document.getElementById('rec-modal').classList.add('open');
     }).catch(function() {
-      // Fallback to cached data if full fetch fails
       if (r) {
         document.getElementById('modal-body').innerHTML =
           '<div class="rec-field"><label>Record ID</label><div class="val" style="color:var(--teal);font-weight:600;">' + r.name + '</div></div>' +
-          '<div class="rec-field"><label>Date</label><div class="val">' + (r.date || '—') + '</div></div>' +
-          '<div class="rec-field"><label>Practitioner</label><div class="val">' + (r.practitioner || '—') + '</div></div>' +
-          '<div class="rec-field"><label>Linked Appointment</label><div class="val">' + (r.appointment || '—') + '</div></div>' +
-          '<div class="rec-field"><label>Diagnosis</label><div class="val">' + (r.diagnosis || '—') + '</div></div>';
+          '<div class="rec-field"><label>Date</label><div class="val">' + (r.date||'—') + '</div></div>' +
+          '<div class="rec-field"><label>Practitioner</label><div class="val">' + (r.practitioner||'—') + '</div></div>' +
+          '<div class="rec-field"><label>Linked Appointment</label><div class="val">' + (r.appointment||'—') + '</div></div>' +
+          '<div class="rec-field"><label>Diagnosis</label><div class="val">' + (r.diagnosis||'—') + '</div></div>';
         document.getElementById('rec-modal').classList.add('open');
       }
     });
@@ -933,158 +1118,81 @@ function openRecByAppt(apptName) {
   showToast('No medical record linked to this appointment yet.');
 }
 
-function closeModal() {
-  document.getElementById('rec-modal').classList.remove('open');
-}
+function closeModal() { document.getElementById('rec-modal').classList.remove('open'); }
 
-// ════════════════════════════════
-// RESCHEDULE APPOINTMENT
-// Cancels the old appointment and creates a new one
-// Uses same book_appointment() API: patient_name, practitioner_name, date, time
-// ════════════════════════════════
+// ════════════════════════════════════
+// RESCHEDULE
+// ════════════════════════════════════
 function openReschedule(apptName, practitionerId) {
-  // Store which appointment we're rescheduling
   rescheduleAppt = { name: apptName, practitioner_id: practitionerId };
   rsSelectedTime = null;
-
-  // Set minimum date to today
   var rs = document.getElementById('rs-date');
-  rs.min = new Date().toISOString().split('T')[0];
-  rs.value = '';
-
-  // Show appointment ID in modal
+  rs.min = new Date().toISOString().split('T')[0]; rs.value = '';
   setText('rs-appt-id', apptName);
-
-  // Reset slots
-  document.getElementById('rs-slots').innerHTML =
-    '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a date to see available slots.</div>';
-
+  document.getElementById('rs-slots').innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a date to see available slots.</div>';
   document.getElementById('reschedule-modal').classList.add('open');
 }
 
 function closeReschedule() {
   document.getElementById('reschedule-modal').classList.remove('open');
-  rescheduleAppt = null;
-  rsSelectedTime = null;
+  rescheduleAppt = null; rsSelectedTime = null;
 }
 
 function loadRescheduleSlots() {
   var date = document.getElementById('rs-date').value;
   var container = document.getElementById('rs-slots');
   rsSelectedTime = null;
-
-  if (!date || !rescheduleAppt) {
-    container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a date to see available slots.</div>';
-    return;
-  }
-
-  // Get day name e.g. "Monday"
+  if (!date || !rescheduleAppt) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a date to see available slots.</div>'; return; }
   var dayName = new Date(date + 'T00:00:00').toLocaleString('en', { weekday: 'long' });
-
-  // Filter schedule for this practitioner and day
-  var daySlots = schedule.filter(function(s) {
-    return s.practitioner_id === rescheduleAppt.practitioner_id && s.day === dayName;
-  });
-
-  if (daySlots.length === 0) {
-    container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">No available slots on ' + dayName + '. Try another day.</div>';
-    return;
-  }
-
-  // Generate hourly slots — same logic as booking
+  var daySlots = schedule.filter(function(s) { return s.practitioner_id === rescheduleAppt.practitioner_id && s.day === dayName; });
+  if (daySlots.length === 0) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">No available slots on ' + dayName + '.</div>'; return; }
   var times = [];
   daySlots.forEach(function(slot) {
-    var fp = slot.from_time.split(':').map(Number);
-    var tp = slot.to_time.split(':').map(Number);
-    var cur = fp[0] * 60 + fp[1];
-    var end = tp[0] * 60 + tp[1];
+    var fp = slot.from_time.split(':').map(Number); var tp = slot.to_time.split(':').map(Number);
+    var cur = fp[0]*60+fp[1]; var end = tp[0]*60+tp[1];
     while (cur < end) {
-      var h = Math.floor(cur / 60);
-      var m = cur % 60;
-      var ampm = h >= 12 ? 'PM' : 'AM';
-      var dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
-      times.push({
-        display: dh + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm,
-        value: (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':00'
-      });
+      var h = Math.floor(cur/60); var m = cur%60;
+      var ampm = h>=12?'PM':'AM'; var dh = h>12?h-12:(h===0?12:h);
+      times.push({ display: dh+':'+(m<10?'0':'')+m+' '+ampm, value: (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':00' });
       cur += 60;
     }
   });
-
-  container.innerHTML = times.map(function(t) {
-    return '<div class="time-slot" data-value="' + t.value + '" onclick="selectRsSlot(this)">' + t.display + '</div>';
-  }).join('');
+  container.innerHTML = times.map(function(t) { return '<div class="time-slot" data-value="'+t.value+'" onclick="selectRsSlot(this)">'+t.display+'</div>'; }).join('');
 }
 
 function selectRsSlot(el) {
   if (el.classList.contains('unavailable')) return;
   document.querySelectorAll('#rs-slots .time-slot').forEach(function(s) { s.classList.remove('selected'); });
-  el.classList.add('selected');
-  rsSelectedTime = el.dataset.value;
+  el.classList.add('selected'); rsSelectedTime = el.dataset.value;
 }
 
 function confirmReschedule() {
   if (!rescheduleAppt) return;
   if (!document.getElementById('rs-date').value) { showToast('⚠️ Please select a new date'); return; }
   if (!rsSelectedTime) { showToast('⚠️ Please select a new time slot'); return; }
-
   var btn = document.getElementById('rs-btn');
   var newDate = document.getElementById('rs-date').value;
-  btn.textContent = 'Rescheduling…';
-  btn.disabled = true;
-
-  // Step 1: Cancel the existing appointment
-  apiPost(
-    'healthcare_pro.healthcare_management.doctype.patient_appointment.patient_appointment.cancel_appointment',
-    { appointment: rescheduleAppt.name }
-  ).then(function() {
-
-    // Step 2: Book a new appointment with the new date/time
-    return apiPost(
-      'healthcare_pro.healthcare_management.api.create_appointment.book_appointment',
-      {
-        patient_name: currentPatient.name,
-        practitioner_name: rescheduleAppt.practitioner_id,
-        date: newDate,
-        time: rsSelectedTime
-      }
-    );
-
-  }).then(function(result) {
-    closeReschedule();
-
-    if (result && result.status === 'waitlisted') {
-      showToast('⏳ Slot taken — added to waitlist. ID: ' + (result.waitlist_id || ''));
-    } else {
-      showToast('✅ Appointment rescheduled! New ID: ' + (result && result.appointment_id ? result.appointment_id : ''));
-    }
-
-    // Refresh appointments and dashboard
-    loadAppointments();
-    loadDashboard();
-
-  }).catch(function(e) {
-    showToast('❌ Reschedule failed: ' + e.message);
-  }).finally(function() {
-    btn.textContent = 'Confirm Reschedule';
-    btn.disabled = false;
-  });
+  btn.textContent = 'Rescheduling…'; btn.disabled = true;
+  apiPost('healthcare_pro.healthcare_management.doctype.patient_appointment.patient_appointment.cancel_appointment', { appointment: rescheduleAppt.name })
+    .then(function() {
+      return apiPost('healthcare_pro.healthcare_management.api.create_appointment.book_appointment', {
+        patient_name: currentPatient.name, practitioner_name: rescheduleAppt.practitioner_id, date: newDate, time: rsSelectedTime
+      });
+    }).then(function(result) {
+      closeReschedule();
+      if (result && result.status === 'waitlisted') { showToast('⏳ Slot taken — added to waitlist. ID: ' + (result.waitlist_id || '')); }
+      else { showToast('✅ Rescheduled! New ID: ' + (result && result.appointment_id ? result.appointment_id : '')); }
+      loadAppointments(); loadDashboard();
+    }).catch(function(e) { showToast('❌ Reschedule failed: ' + e.message); })
+    .finally(function() { btn.textContent = 'Confirm Reschedule'; btn.disabled = false; });
 }
 
-// Close reschedule modal when clicking outside
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('reschedule-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeReschedule();
-  });
-});
-
-// ════════════════════════════════
+// ════════════════════════════════════
 // TOAST
-// ════════════════════════════════
+// ════════════════════════════════════
 function showToast(msg) {
   var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(function() { t.classList.remove('show'); }, 3500);
 }

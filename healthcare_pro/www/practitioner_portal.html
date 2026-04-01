@@ -1125,46 +1125,34 @@ function initApp() {
   var hour = new Date().getHours();
   var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 
-  // Step 1: get logged-in user email from Frappe
-  fetch('/api/method/frappe.auth.get_logged_user', { credentials: 'include' })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      var email = d.message;
+  // Get current practitioner using our custom API
+  apiGet('healthcare_pro.healthcare_management.api.get_current_practitioner.get_current_practitioner')
+    .then(function(practitioner) {
+      if (!practitioner) {
+        // Not a practitioner — show error
+        document.getElementById('app').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+        var errEl = document.getElementById('login-error');
+        errEl.textContent = 'No practitioner record found for this account. Please contact admin.';
+        errEl.style.display = 'block';
+        return;
+      }
 
-      // Step 2: get practitioner record matching this email
-      // Uses frappe.client.get_list to find Healthcare Practitioner by email
-      return apiGet('frappe.client.get_list', {
-        doctype: 'Healthcare Practitioner',
-        filters: JSON.stringify([['email', '=', email]]),
-        fields: JSON.stringify(['name', 'practitioner_name', 'email']),
-        limit: 1
-      }).then(function(results) {
-        if (!results || results.length === 0) {
-          // Not a practitioner — show error
-          document.getElementById('app').style.display = 'none';
-          document.getElementById('login-screen').style.display = 'flex';
-          var errEl = document.getElementById('login-error');
-          errEl.textContent = 'No practitioner record found for this account. Please contact admin.';
-          errEl.style.display = 'block';
-          return;
-        }
+      currentPractitioner = practitioner;
 
-        currentPractitioner = results[0];
+      var words = (currentPractitioner.practitioner_name || '?').split(' ');
+      var initials = words.slice(0, 2).map(function(w) { return w[0]; }).join('').toUpperCase();
+      var firstName = words[0] || 'Doctor';
 
-        var words = (currentPractitioner.practitioner_name || '?').split(' ');
-        var initials = words.slice(0, 2).map(function(w) { return w[0]; }).join('').toUpperCase();
-        var firstName = words[0] || 'Doctor';
+      setText('dash-greeting', greeting + ', ' + firstName + ' 👋');
+      setText('tb-avatar', initials);
+      setText('tb-name', currentPractitioner.practitioner_name);
+      setText('p-avatar', initials);
+      renderProfile(currentPractitioner);
 
-        setText('dash-greeting', greeting + ', ' + firstName + ' 👋');
-        setText('tb-avatar', initials);
-        setText('tb-name', currentPractitioner.practitioner_name);
-        setText('p-avatar', initials);
-        renderProfile(currentPractitioner);
-
-        // Load schedule and appointments
-        loadPractSchedule();
-        loadDashboard();
-      });
+      // Load schedule and appointments
+      loadPractSchedule();
+      loadDashboard();
     })
     .catch(function(e) {
       console.warn('Init failed:', e.message);
@@ -1244,9 +1232,12 @@ function renderProfile(p) {
 function loadDashboard() {
   if (!currentPractitioner) return;
 
+  console.log('Loading dashboard for practitioner:', currentPractitioner.name);
+
   apiGet('healthcare_pro.healthcare_management.api.get_appointments.get_appointments',
     { practitioner: currentPractitioner.name }
   ).then(function(appts) {
+    console.log('Dashboard appointments received:', appts ? appts.length : 0, appts);
     allAppointments = appts || [];
 
     var todayStr = new Date().toISOString().split('T')[0];
@@ -1320,9 +1311,12 @@ function loadAppointments() {
     return;
   }
 
+  console.log('Loading appointments for practitioner:', currentPractitioner ? currentPractitioner.name : 'none');
+
   apiGet('healthcare_pro.healthcare_management.api.get_appointments.get_appointments',
     { practitioner: currentPractitioner ? currentPractitioner.name : '' }
   ).then(function(appts) {
+    console.log('All appointments received:', appts ? appts.length : 0, appts);
     allAppointments = appts || [];
     renderApptTable();
   }).catch(function(e) {

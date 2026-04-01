@@ -13,24 +13,88 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Healthcare Portal — Better Care</title>
+<!-- Preloader -->
+<style>
+  .preloader {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, var(--primary-dark, #03045e) 0%, var(--primary, #023e8a) 50%, var(--primary-light, #0E7BB5) 100%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  .preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .preloader-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    animation: preloaderPulse 1.5s ease-in-out infinite;
+    border: 1.5px solid rgba(255,255,255,0.15);
+  }
+  .preloader-icon svg {
+    color: #fff;
+  }
+  .preloader-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+  }
+  .preloader-bar {
+    width: 180px;
+    height: 3px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .preloader-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #48cae4, #ade8f4);
+    border-radius: 99px;
+    animation: preloaderFill 1.2s ease-in-out forwards;
+  }
+  @keyframes preloaderPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(72,202,228,0.3); }
+    50% { transform: scale(1.06); box-shadow: 0 0 30px 8px rgba(72,202,228,0.15); }
+  }
+  @keyframes preloaderFill {
+    0% { width: 0%; }
+    60% { width: 70%; }
+    100% { width: 100%; }
+  }
+</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <style>
   /* ═══════════════════════════════════════════════════════════════
      DESIGN SYSTEM
      ═══════════════════════════════════════════════════════════════ */
   :root {
-    /* Colors - Minimal medical palette */
-    --primary: #0f172a;
-    --primary-dark: #020617;
-    --primary-light: #1e293b;
-    --primary-pale: #f1f5f9;
+    /* Colors - Ocean blue palette */
+    --primary: #023e8a;          /* french-blue */
+    --primary-dark: #03045e;     /* deep-twilight */
+    --primary-light: #0E7BB5;    /* bright-teal-blue */
+    --primary-pale: #E5EFF0;     /* azure-mist */
 
-    --accent: #06b6d4;
-    --accent-dark: #0891b2;
-    --accent-light: #22d3ee;
-    --accent-pale: #cffafe;
+    --accent: #00b4d8;           /* turquoise-surf */
+    --accent-dark: #0096c7;      /* blue-green */
+    --accent-light: #48cae4;     /* sky-aqua */
+    --accent-pale: #ade8f4;      /* frosted-blue-2 */
 
     --neutral-950: #0f172a;
     --neutral-900: #1e293b;
@@ -50,7 +114,7 @@
     --info: #3b82f6;
 
     /* Typography */
-    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
@@ -98,7 +162,7 @@
   .login-left {
     flex: 1;
     background:
-      linear-gradient(135deg, rgba(29, 78, 216, 0.75) 0%, rgba(30, 64, 175, 0.7) 100%),
+      linear-gradient(135deg, rgba(2, 62, 138, 0.75) 0%, rgba(3, 4, 94, 0.7) 100%),
       url('https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=1200&q=80') center/cover;
     display: flex;
     flex-direction: column;
@@ -127,7 +191,7 @@
     left: -100px;
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(0, 180, 216, 0.15) 0%, transparent 70%);
     border-radius: 50%;
   }
 
@@ -290,30 +354,31 @@
   }
 
   .step-circle {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 13px;
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
     flex-shrink: 0;
     border: 2px solid var(--neutral-300);
     background: var(--neutral-50);
     color: var(--neutral-500);
-    transition: all 0.25s ease;
+    transition: all 0.3s ease;
   }
 
   .step-circle.active {
-    border-color: var(--primary);
-    background: var(--primary);
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
     color: var(--neutral-50);
+    box-shadow: 0 4px 12px rgba(2, 62, 138, 0.25);
   }
 
   .step-circle.done {
-    border-color: var(--primary);
-    background: var(--primary);
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
     color: var(--neutral-50);
   }
 
@@ -367,7 +432,7 @@
     right: -40px;
     width: 120px;
     height: 120px;
-    background: radial-gradient(circle, rgba(29, 78, 216, 0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(2, 62, 138, 0.15) 0%, transparent 70%);
     border-radius: 50%;
   }
 
@@ -455,22 +520,22 @@
   .form-group select,
   .form-group textarea {
     width: 100%;
-    padding: 11px 14px;
-    border: 1px solid var(--neutral-300);
-    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    border: 1.5px solid var(--neutral-300);
+    border-radius: var(--radius-lg);
     font-family: var(--font-family);
     font-size: 14px;
     color: var(--neutral-950);
     background: var(--neutral-50);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.25s ease;
     outline: none;
   }
 
   .form-group input:focus,
   .form-group select:focus,
   .form-group textarea:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px var(--primary-pale);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(0, 180, 216, 0.1);
   }
 
   .form-group input.error,
@@ -504,95 +569,84 @@
   /* ═══════════════════════════════════════════════════════════════
      BUTTONS
      ═══════════════════════════════════════════════════════════════ */
-  .btn-primary {
-    width: 100%;
-    padding: 13px 24px;
-    background: var(--primary);
-    color: var(--neutral-50);
-    border: none;
-    border-radius: var(--radius-md);
+  /* Shared button base */
+  .btn-primary, .btn-teal, .btn-secondary, .btn-outline-teal {
     font-family: var(--font-family);
-    font-size: 15px;
     font-weight: var(--font-weight-semibold);
     cursor: pointer;
-    transition: all 0.2s ease;
+    border-radius: 9999px;
+    transition: all 0.25s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: var(--neutral-50);
+    font-size: 15px;
+    box-shadow: 0 4px 15px rgba(2, 62, 138, 0.3);
   }
 
   .btn-primary:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(2, 62, 138, 0.4);
   }
 
-  .btn-primary:active {
-    transform: translateY(0);
-  }
+  .btn-primary:active { transform: translateY(0); }
 
-  .btn-primary:disabled {
+  .btn-primary:disabled, .btn-teal:disabled {
     background: var(--neutral-400);
     cursor: not-allowed;
     box-shadow: none;
+    transform: none;
   }
 
   .btn-teal {
     padding: 12px 28px;
-    background: var(--primary);
-    border: none;
-    border-radius: var(--radius-md);
-    font-family: var(--font-family);
-    font-size: 14px;
-    font-weight: var(--font-weight-semibold);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     color: var(--neutral-50);
-    cursor: pointer;
-    transition: all 0.2s ease;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(2, 62, 138, 0.25);
   }
 
   .btn-teal:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .btn-teal:disabled {
-    background: var(--neutral-400);
-    cursor: not-allowed;
-    box-shadow: none;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(2, 62, 138, 0.35);
   }
 
   .btn-secondary {
-    padding: 11px 24px;
+    padding: 12px 24px;
     background: var(--neutral-50);
-    border: 1px solid var(--neutral-300);
-    border-radius: var(--radius-md);
-    font-family: var(--font-family);
+    border: 1.5px solid var(--neutral-300);
     font-size: 14px;
     font-weight: var(--font-weight-medium);
     color: var(--neutral-700);
-    cursor: pointer;
-    transition: all 0.2s;
   }
 
   .btn-secondary:hover {
-    border-color: var(--neutral-400);
-    background: var(--neutral-100);
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-pale);
   }
 
   .btn-outline-teal {
     width: 100%;
-    padding: 12px 24px;
+    padding: 13px 24px;
     background: var(--neutral-50);
-    border: 1px solid var(--primary);
+    border: 1.5px solid var(--primary);
     color: var(--primary);
-    border-radius: var(--radius-md);
-    font-family: var(--font-family);
     font-size: 14px;
-    font-weight: var(--font-weight-semibold);
-    cursor: pointer;
-    transition: all 0.2s;
   }
 
   .btn-outline-teal:hover {
-    background: var(--primary-pale);
+    background: var(--primary);
+    color: var(--neutral-50);
+    box-shadow: 0 4px 15px rgba(2, 62, 138, 0.3);
   }
 
   .reg-nav {
@@ -659,80 +713,217 @@
   }
 
   .topbar {
-    background: var(--neutral-50);
-    border-bottom: 1px solid var(--neutral-200);
-    padding: 0 32px;
-    height: 64px;
+    background: transparent;
+    border-bottom: none;
+    padding: 0 48px;
+    height: 76px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: sticky;
+    position: absolute;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
-    box-shadow: var(--shadow-sm);
   }
 
   .topbar-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
+    flex-shrink: 0;
   }
 
   .t-icon {
-    width: 36px;
-    height: 36px;
-    background: var(--primary);
-    border-radius: var(--radius-md);
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 150, 199, 0.25);
   }
 
   .topbar-brand span {
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: var(--font-weight-bold);
+    color: var(--neutral-50);
+    letter-spacing: -0.02em;
+  }
+
+  /* Horizontal navigation in topbar */
+  .topbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .topbar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: var(--font-weight-medium);
+    transition: all 0.25s ease;
+    border: none;
+    background: none;
+    font-family: var(--font-family);
+    white-space: nowrap;
+  }
+
+  .topbar-nav-item:hover {
+    color: var(--neutral-50);
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .topbar-nav-item.active {
+    color: var(--neutral-50);
+    background: rgba(255, 255, 255, 0.2);
     font-weight: var(--font-weight-semibold);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .topbar-nav-item .nav-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .topbar-nav-item .nav-badge {
+    margin-left: 2px;
+  }
+
+  /* Solid topbar for non-dashboard pages */
+  .topbar.topbar-solid {
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    position: sticky;
+  }
+
+  .topbar.topbar-solid .topbar-brand span {
+    color: var(--primary-dark);
+  }
+
+  .topbar.topbar-solid .topbar-nav-item {
+    color: var(--neutral-600);
+  }
+
+  .topbar.topbar-solid .topbar-nav-item:hover {
+    color: var(--primary);
+    background: var(--primary-pale);
+  }
+
+  .topbar.topbar-solid .topbar-nav-item.active {
+    color: var(--neutral-50);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    border: none;
+    box-shadow: 0 4px 12px rgba(2, 62, 138, 0.2);
+    backdrop-filter: none;
+  }
+
+  .topbar.topbar-solid .patient-chip {
+    border-color: var(--neutral-200);
+    background: var(--neutral-50);
+  }
+
+  .topbar.topbar-solid .patient-chip:hover {
+    border-color: var(--accent);
+    background: var(--neutral-50);
+    box-shadow: 0 4px 15px rgba(0, 180, 216, 0.15);
+  }
+
+  .topbar.topbar-solid .patient-name {
     color: var(--neutral-950);
-    letter-spacing: -0.01em;
+  }
+
+  .topbar.topbar-solid .topbar-logout {
+    color: var(--neutral-600);
+    border-color: var(--neutral-200);
+  }
+
+  .topbar.topbar-solid .topbar-logout:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: #fef2f2;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .topbar-logout {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: var(--font-weight-medium);
+    transition: all 0.2s;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    background: none;
+    font-family: var(--font-family);
+  }
+
+  .topbar-logout:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: var(--neutral-50);
+    background: rgba(255, 255, 255, 0.15);
   }
 
   .patient-chip {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 6px 14px 6px 6px;
-    border: 1px solid var(--neutral-300);
-    border-radius: 24px;
+    gap: 12px;
+    padding: 6px 18px 6px 6px;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 9999px;
     cursor: pointer;
-    transition: all 0.2s;
-    background: var(--neutral-50);
+    transition: all 0.25s ease;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
   }
 
   .patient-chip:hover {
-    border-color: var(--primary);
-    box-shadow: var(--shadow-sm);
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
   }
 
   .avatar {
-    width: 32px;
-    height: 32px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--neutral-50);
-    font-weight: var(--font-weight-semibold);
-    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+    font-size: 13px;
+    letter-spacing: 0.5px;
   }
 
   .patient-name {
     font-size: 14px;
-    font-weight: var(--font-weight-medium);
-    color: var(--neutral-950);
+    font-weight: var(--font-weight-semibold);
+    color: var(--neutral-50);
   }
 
   .app-body {
-    display: flex;
+    display: block;
     flex: 1;
   }
 
@@ -740,55 +931,49 @@
      SIDEBAR
      ═══════════════════════════════════════════════════════════════ */
   .sidebar {
-    width: 260px;
-    background: var(--neutral-50);
-    border-right: 1px solid var(--neutral-200);
-    padding: 24px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    position: sticky;
-    top: 64px;
-    height: calc(100vh - 64px);
-    overflow-y: auto;
+    display: none; /* Navigation moved to topbar */
   }
 
   .nav-label {
     font-size: 11px;
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
     color: var(--neutral-500);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 16px 12px 8px;
+    letter-spacing: 0.1em;
+    padding: 20px 16px 10px;
   }
 
   .nav-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    border-radius: var(--radius-md);
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: var(--radius-lg);
     cursor: pointer;
     font-size: 14px;
-    color: var(--neutral-700);
+    color: var(--neutral-600);
     font-weight: var(--font-weight-medium);
-    transition: all 0.2s;
+    transition: all 0.25s ease;
     border: none;
     background: none;
     width: 100%;
     text-align: left;
+    position: relative;
   }
 
   .nav-item:hover {
-    background: var(--neutral-100);
-    color: var(--neutral-950);
+    background: var(--primary-pale);
+    color: var(--primary);
   }
 
   .nav-item.active {
-    background: var(--primary-pale);
-    color: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: var(--neutral-50);
     font-weight: var(--font-weight-semibold);
+    box-shadow: 0 4px 12px rgba(2, 62, 138, 0.25);
   }
+
+  .nav-item.active .nav-icon { color: var(--neutral-50); }
 
   .nav-icon {
     width: 20px;
@@ -798,13 +983,17 @@
 
   .nav-badge {
     margin-left: auto;
-    background: var(--primary);
+    background: var(--accent);
     color: var(--neutral-50);
     font-size: 11px;
-    font-weight: var(--font-weight-semibold);
-    padding: 2px 8px;
-    border-radius: 12px;
+    font-weight: var(--font-weight-bold);
+    padding: 2px 10px;
+    border-radius: 9999px;
     line-height: 1.4;
+  }
+
+  .nav-item.active .nav-badge {
+    background: rgba(255, 255, 255, 0.25);
   }
 
   .sidebar-footer {
@@ -818,15 +1007,32 @@
      ═══════════════════════════════════════════════════════════════ */
   .main {
     flex: 1;
-    padding: 48px;
+    padding: 0;
     overflow-y: auto;
-    background: var(--neutral-100);
+    background: #f7fafb;
     position: relative;
+    background-image: radial-gradient(circle at 20px 20px, rgba(2, 62, 138, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .main .page {
+    padding: 0;
+  }
+
+  /* Full-width sections inside dashboard */
+  .main .section {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+
+  /* Non-dashboard pages get normal padding */
+  #page-book, #page-appointments, #page-records, #page-profile {
+    padding: 44px 48px;
   }
 
   .page {
     display: none;
-    animation: fadeIn 0.3s ease;
+    animation: slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     z-index: 1;
   }
@@ -835,10 +1041,65 @@
     display: block;
   }
 
-  @keyframes fadeIn {
+  /* Scroll fade-in animations */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .fade-in-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .fade-in-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .fade-in-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .fade-in-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Stagger children */
+  .fade-in-stagger > * {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .fade-in-stagger.visible > *:nth-child(1) { transition-delay: 0.1s; }
+  .fade-in-stagger.visible > *:nth-child(2) { transition-delay: 0.25s; }
+  .fade-in-stagger.visible > *:nth-child(3) { transition-delay: 0.4s; }
+  .fade-in-stagger.visible > *:nth-child(4) { transition-delay: 0.55s; }
+
+  .fade-in-stagger.visible > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @keyframes slideUp {
     from {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(16px);
     }
     to {
       opacity: 1;
@@ -847,91 +1108,485 @@
   }
 
   .page-header {
-    margin-bottom: 32px;
+    margin-bottom: 36px;
   }
 
   .page-header h2 {
-    font-size: 28px;
+    font-size: 30px;
     font-weight: var(--font-weight-bold);
-    color: var(--neutral-950);
-    letter-spacing: -0.02em;
+    color: var(--primary-dark);
+    letter-spacing: -0.03em;
   }
 
   .page-header p {
     color: var(--neutral-600);
     font-size: 15px;
-    margin-top: 6px;
+    margin-top: 8px;
   }
 
-  /* Dashboard Hero Banner */
-  .dash-hero {
-    background:
-      linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(2, 6, 23, 0.8) 100%),
-      url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&q=80') center/cover;
-    border-radius: var(--radius-xl);
-    padding: 48px;
-    margin-bottom: 36px;
+  /* ═══════════════════════════════════════════════════════════════
+     CIYACARE-STYLE SECTIONS
+     ═══════════════════════════════════════════════════════════════ */
+  .section {
+    padding: 48px 0;
+    position: relative;
+  }
+
+  .section + .section {
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .section-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 14px;
+    color: var(--accent);
+    font-size: 24px;
+  }
+
+  .section-dot svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .section-label {
+    display: block;
+    font-size: 13px;
+    font-weight: var(--font-weight-bold);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-dark);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--neutral-600);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .section-header-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .section-header-left {
+    text-align: left;
+  }
+
+  .section-header-left .section-title {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+
+  .section-link {
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 22px;
+    border: 1.5px solid var(--accent);
+    border-radius: 9999px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    background: none;
+    font-family: var(--font-family);
+  }
+
+  .section-link:hover {
+    background: var(--accent);
+    color: var(--neutral-50);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
+  }
+
+  /* Scrolling marquee */
+  .marquee {
+    overflow: hidden;
+    padding: 18px 0;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+    margin: 0;
+  }
+
+  .marquee-inner {
+    display: flex;
+    gap: 48px;
+    animation: marquee 18s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-item {
+    font-size: 15px;
+    font-weight: var(--font-weight-bold);
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .marquee-item span {
+    color: var(--accent-light);
+    font-size: 13px;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Stats bar - CiyaCare info cards */
+  .stats-section {
+    background: #e4fffe;
+    padding: 80px 48px 48px;
+    margin: 0;
+    position: relative;
+  }
+
+  .stats-section::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent 0%, #e4fffe 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 0;
+  }
+
+  .stats-bar .stat-card {
+    border: none;
+    border-radius: 24px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    padding: 40px 32px;
+    text-align: left;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
     position: relative;
     overflow: hidden;
-    box-shadow: var(--shadow-md);
-    background-blend-mode: multiply;
+    min-height: 160px;
+    background-size: cover;
+    background-position: center;
+    cursor: default;
+  }
+
+  .stats-bar .stat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .stats-bar .stat-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .stats-bar .stat-card:hover::before {
+    opacity: 0.92;
+  }
+
+  /* Card 1: Upcoming Appointments - teal */
+  .stats-bar .stat-card:nth-child(1) {
+    background-image: url('https://images.unsplash.com/photo-1666214280577-5765a8e9a23b?w=600&q=80');
+  }
+  .stats-bar .stat-card:nth-child(1)::before {
+    background: linear-gradient(135deg, rgba(0, 150, 199, 0.88) 0%, rgba(0, 180, 216, 0.82) 100%);
+  }
+
+  /* Card 2: Medical Records - deep navy */
+  .stats-bar .stat-card:nth-child(2) {
+    background-image: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80');
+  }
+  .stats-bar .stat-card:nth-child(2)::before {
+    background: linear-gradient(135deg, rgba(3, 4, 94, 0.88) 0%, rgba(2, 62, 138, 0.82) 100%);
+  }
+
+  /* Card 3: Waitlisted - bright teal blue */
+  .stats-bar .stat-card:nth-child(3) {
+    background-image: url('https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&q=80');
+  }
+  .stats-bar .stat-card:nth-child(3)::before {
+    background: linear-gradient(135deg, rgba(14, 123, 181, 0.88) 0%, rgba(0, 150, 199, 0.82) 100%);
+  }
+
+  .stats-bar .stat-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--neutral-50);
+    position: relative;
+    z-index: 1;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .stats-bar .stat-info {
+    text-align: left;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stats-bar .stat-info .num {
+    color: var(--neutral-50);
+    font-size: 40px;
+  }
+
+  .stats-bar .stat-info .label {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    margin-top: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Service grid (for quick actions CiyaCare-style) */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .service-card {
+    background: var(--neutral-50);
+    border: 1px solid var(--neutral-200);
+    border-radius: 20px;
+    padding: 32px 28px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--accent) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 0;
+  }
+
+  .service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(2, 62, 138, 0.2);
+    border-color: transparent;
+  }
+
+  .service-card:hover::after {
+    opacity: 1;
+  }
+
+  .service-num {
+    font-size: 48px;
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-pale);
+    line-height: 1;
+    flex-shrink: 0;
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    opacity: 0.6;
+    z-index: 1;
+    transition: all 0.4s ease;
+  }
+
+  .service-card:hover .service-num {
+    color: rgba(255, 255, 255, 0.15);
+  }
+
+  .service-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.4s ease;
+    z-index: 1;
+    position: relative;
+  }
+
+  .service-card:hover .service-icon {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: var(--neutral-50) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .service-content {
+    position: relative;
+    z-index: 1;
+    transition: all 0.4s ease;
+  }
+
+  .service-content h4 {
+    font-size: 17px;
+    font-weight: var(--font-weight-bold);
+    color: var(--neutral-950);
+    margin-bottom: 6px;
+    transition: color 0.4s ease;
+  }
+
+  .service-content p {
+    font-size: 13px;
+    color: var(--neutral-600);
+    line-height: 1.6;
+    transition: color 0.4s ease;
+  }
+
+  .service-card:hover .service-content h4 {
+    color: var(--neutral-50);
+  }
+
+  .service-card:hover .service-content p {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .service-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--accent);
+    margin-top: 10px;
+    transition: all 0.4s ease;
+  }
+
+  .service-card:hover .service-arrow {
+    gap: 10px;
+    color: var(--accent-light);
+  }
+
+  /* Practitioner grid CiyaCare style */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  /* Dashboard Hero Banner - Full width with background image */
+  .dash-hero {
+    background:
+      linear-gradient(to right, rgba(3, 4, 94, 0.88) 0%, rgba(2, 62, 138, 0.7) 35%, rgba(14, 123, 181, 0.25) 60%, transparent 80%),
+      url('https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=1600&q=80') center/cover no-repeat;
+    border-radius: 0;
+    padding: 120px 48px 72px;
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
   }
 
   .dash-hero::before {
     content: '';
     position: absolute;
-    top: -100px;
-    right: -100px;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+    top: -60px;
+    right: -60px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(0, 180, 216, 0.25) 0%, transparent 70%);
     border-radius: 50%;
+    animation: floatBubble 6s ease-in-out infinite;
   }
 
   .dash-hero::after {
     content: '';
     position: absolute;
-    bottom: -80px;
-    left: -80px;
-    width: 250px;
-    height: 250px;
-    background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+    bottom: -40px;
+    left: 30%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(72, 202, 228, 0.2) 0%, transparent 70%);
     border-radius: 50%;
+    animation: floatBubble 8s ease-in-out infinite reverse;
+  }
+
+  @keyframes floatBubble {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-15px) scale(1.05); }
   }
 
   .dash-hero-content {
     position: relative;
     z-index: 1;
+    max-width: 640px;
+  }
+
+  .dash-hero-content .section-dot {
+    color: var(--accent-light);
+    margin-bottom: 16px;
   }
 
   .dash-hero h2 {
-    font-size: 32px;
+    font-size: 46px;
     font-weight: var(--font-weight-bold);
     color: var(--neutral-50);
-    margin-bottom: 8px;
-    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
   }
 
   .dash-hero p {
-    font-size: 16px;
-    color: rgba(255,255,255,0.9);
-    line-height: 1.6;
-    max-width: 600px;
+    font-size: 17px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.8;
+    max-width: 520px;
   }
 
   .dash-hero-actions {
-    margin-top: 24px;
+    margin-top: 28px;
     display: flex;
-    gap: 12px;
+    gap: 14px;
   }
 
   .hero-btn {
-    padding: 12px 24px;
-    border-radius: var(--radius-md);
+    padding: 14px 32px;
+    border-radius: 9999px;
     font-size: 14px;
     font-weight: var(--font-weight-semibold);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s ease;
     border: none;
     font-family: var(--font-family);
   }
@@ -939,22 +1594,25 @@
   .hero-btn-primary {
     background: var(--neutral-50);
     color: var(--primary);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   }
 
   .hero-btn-primary:hover {
-    background: var(--neutral-100);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   }
 
   .hero-btn-secondary {
-    background: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.12);
     color: var(--neutral-50);
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(4px);
   }
 
   .hero-btn-secondary:hover {
-    background: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.22);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-2px);
   }
 
   /* ═══════════════════════════════════════════════════════════════
@@ -963,33 +1621,17 @@
   .card {
     background: var(--neutral-50);
     border: 1px solid var(--neutral-200);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: 28px;
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s ease;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
   }
 
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
   .card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
-  }
-
-  .card:hover::before {
-    opacity: 1;
+    box-shadow: 0 8px 30px rgba(2, 62, 138, 0.08);
+    transform: translateY(-4px);
   }
 
   .card-title {
@@ -1021,24 +1663,24 @@
   .stat-card {
     background: var(--neutral-50);
     border: 1px solid var(--neutral-200);
-    border-radius: var(--radius-lg);
+    border-radius: 20px;
     padding: 28px;
     display: flex;
-    align-items: flex-start;
-    gap: 18px;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.2s ease;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .stat-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(2, 62, 138, 0.1);
+    transform: translateY(-4px);
   }
 
   .stat-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius-lg);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1046,26 +1688,26 @@
   }
 
   .stat-icon.teal {
-    background: var(--accent-pale);
-    color: var(--accent);
+    background: linear-gradient(135deg, #d0f4f7 0%, var(--accent-light) 100%);
+    color: var(--primary-dark);
   }
 
   .stat-icon.navy {
-    background: var(--primary-pale);
-    color: var(--primary);
+    background: linear-gradient(135deg, #d0dff5 0%, var(--primary-light) 100%);
+    color: var(--neutral-50);
   }
 
   .stat-icon.amber {
-    background: #fef3c7;
-    color: #d97706;
+    background: linear-gradient(135deg, #d0f4f7 0%, var(--accent-pale) 100%);
+    color: var(--primary);
   }
 
   .stat-info .num {
-    font-size: 32px;
+    font-size: 36px;
     font-weight: var(--font-weight-bold);
     color: var(--neutral-950);
     line-height: 1;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
   }
 
   .stat-info .label {
@@ -1081,10 +1723,10 @@
     gap: 24px;
   }
 
-  /* Quick Actions - Simplified */
+  /* Quick Actions */
   .quick-actions {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     margin-bottom: 36px;
   }
 
@@ -1092,32 +1734,41 @@
     flex: 1;
     background: var(--neutral-50);
     border: 1px solid var(--neutral-200);
-    border-radius: var(--radius-lg);
-    padding: 20px 24px;
+    border-radius: 20px;
+    padding: 28px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 16px;
+    text-align: center;
+    gap: 14px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   }
 
   .quick-action-card:hover {
-    transform: translateX(4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--primary);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 35px rgba(2, 62, 138, 0.12);
+    border-color: var(--accent-light);
   }
 
   .quick-action-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-lg);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--primary-pale);
+    background: linear-gradient(135deg, var(--primary-pale) 0%, #d0e8f0 100%);
     color: var(--primary);
     flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+
+  .quick-action-card:hover .quick-action-icon {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    color: var(--neutral-50);
+    transform: scale(1.1);
   }
 
   .quick-action-icon svg {
@@ -1126,25 +1777,26 @@
   }
 
   .quick-action-card:nth-child(2) .quick-action-icon {
-    background: var(--accent-pale);
-    color: var(--accent);
+    background: linear-gradient(135deg, var(--accent-pale) 0%, #8dd6e8 100%);
+    color: var(--accent-dark);
   }
 
   .quick-action-content {
     flex: 1;
-    text-align: left;
+    text-align: center;
   }
 
   .quick-action-label {
     font-size: 15px;
     font-weight: var(--font-weight-semibold);
     color: var(--neutral-950);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
 
   .quick-action-desc {
     font-size: 13px;
     color: var(--neutral-600);
+    line-height: 1.5;
   }
 
   .upcoming-item {
@@ -1155,38 +1807,32 @@
     border-bottom: none;
     background: var(--neutral-50);
     border: 1px solid var(--neutral-200);
-    border-radius: var(--radius-lg);
+    border-radius: 16px;
     margin-bottom: 12px;
-    transition: all 0.2s ease;
-    box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
   }
 
   .upcoming-item:hover {
-    transform: translateX(4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--primary);
+    transform: translateX(6px);
+    box-shadow: 0 6px 20px rgba(2, 62, 138, 0.1);
+    border-color: var(--accent-light);
   }
 
-  .upcoming-item:first-child {
-    padding: 16px;
-  }
-
-  .upcoming-item:last-child {
-    border-bottom: none;
-    padding-bottom: 16px;
-    margin-bottom: 0;
-  }
+  .upcoming-item:first-child { padding: 16px; }
+  .upcoming-item:last-child { border-bottom: none; padding-bottom: 16px; margin-bottom: 0; }
 
   .appt-date-box {
     width: 60px;
     height: 60px;
-    background: var(--primary);
-    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(2, 62, 138, 0.2);
   }
 
   .appt-date-box .month {
@@ -1294,62 +1940,128 @@
   .practitioner-card {
     background: var(--neutral-50);
     border: 1px solid var(--neutral-200);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    transition: all 0.2s ease;
+    border-radius: 20px;
+    padding: 0;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     cursor: pointer;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    text-align: center;
+    overflow: hidden;
   }
 
   .practitioner-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--accent);
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(2, 62, 138, 0.14);
+    border-color: transparent;
+  }
+
+  .practitioner-banner {
+    position: relative;
+    padding: 32px 24px 40px;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-light) 100%);
+    overflow: hidden;
+  }
+
+  .practitioner-banner::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(0, 180, 216, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .practitioner-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(72, 202, 228, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  /* Dot pattern on banner */
+  .practitioner-banner-dots {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: grid;
+    grid-template-columns: repeat(3, 6px);
+    gap: 5px;
+    opacity: 0.3;
+  }
+
+  .practitioner-banner-dots span {
+    width: 6px;
+    height: 6px;
+    background: var(--neutral-50);
+    border-radius: 50%;
+    display: block;
   }
 
   .practitioner-header {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 16px;
+    gap: 0;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 1;
   }
 
   .practitioner-avatar {
-    width: 48px;
-    height: 48px;
-    background: var(--accent-pale);
-    border-radius: var(--radius-lg);
+    width: 76px;
+    height: 76px;
+    background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent-pale) 100%);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent);
+    color: var(--primary-dark);
     flex-shrink: 0;
+    font-size: 24px;
+    font-weight: var(--font-weight-bold);
+    border: 4px solid var(--neutral-50);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    margin-bottom: -38px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .practitioner-body {
+    padding: 48px 24px 24px;
   }
 
   .practitioner-info {
     flex: 1;
+    text-align: center;
   }
 
   .practitioner-name {
-    font-size: 16px;
-    font-weight: var(--font-weight-semibold);
+    font-size: 17px;
+    font-weight: var(--font-weight-bold);
     color: var(--neutral-950);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    margin-bottom: 2px;
+    margin-bottom: 6px;
   }
 
   .practitioner-rating {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 4px;
-    background: #fef3c7;
-    color: #d97706;
-    padding: 2px 8px;
-    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent-pale) 0%, #d0f4f7 100%);
+    color: var(--primary);
+    padding: 3px 12px;
+    border-radius: 9999px;
     font-size: 11px;
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
   }
 
   .practitioner-specialty {
@@ -1357,7 +2069,13 @@
     color: var(--neutral-600);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
+    margin-top: 4px;
+  }
+
+  .practitioner-specialty svg {
+    color: var(--accent);
   }
 
   .practitioner-footer {
@@ -1377,21 +2095,26 @@
     gap: 6px;
   }
 
+  .practitioner-availability svg {
+    color: var(--accent);
+  }
+
   .practitioner-book-btn {
-    background: var(--accent);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     color: var(--neutral-50);
     border: none;
-    padding: 8px 16px;
-    border-radius: var(--radius-md);
+    padding: 10px 24px;
+    border-radius: 9999px;
     font-size: 13px;
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(2, 62, 138, 0.25);
   }
 
   .practitioner-book-btn:hover {
-    background: var(--accent-dark);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(2, 62, 138, 0.35);
   }
 
   /* ═══════════════════════════════════════════════════════════════
@@ -1399,17 +2122,18 @@
      ═══════════════════════════════════════════════════════════════ */
   .badge {
     font-size: 12px;
-    font-weight: var(--font-weight-semibold);
-    padding: 4px 12px;
-    border-radius: 16px;
+    font-weight: var(--font-weight-bold);
+    padding: 5px 14px;
+    border-radius: 9999px;
     flex-shrink: 0;
     display: inline-block;
+    letter-spacing: 0.02em;
   }
 
   .badge.scheduled,
   .badge.open {
     background: #dbeafe;
-    color: #1e40af;
+    color: #023e8a;
   }
 
   .badge.completed {
@@ -1438,31 +2162,64 @@
     margin-top: 12px;
   }
 
+  /* Practitioner availability days */
+  .avail-days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .avail-days-label {
+    font-size: 12px;
+    color: var(--neutral-600);
+    font-weight: var(--font-weight-medium);
+    margin-right: 4px;
+  }
+
+  .avail-day {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: var(--font-weight-semibold);
+    background: var(--accent-pale);
+    color: var(--primary);
+    border: 1px solid var(--accent-light);
+  }
+
+  .avail-day.today {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: var(--neutral-50);
+    border-color: var(--primary);
+  }
+
   .time-slot {
     padding: 14px 12px;
     text-align: center;
-    border: 2px solid var(--neutral-300);
-    border-radius: var(--radius-md);
+    border: 2px solid var(--neutral-200);
+    border-radius: 9999px;
     font-size: 14px;
     font-weight: var(--font-weight-semibold);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s ease;
     color: var(--neutral-950);
     background: var(--neutral-50);
   }
 
   .time-slot:hover {
-    border-color: var(--primary);
-    background: var(--primary-pale);
+    border-color: var(--accent);
+    background: var(--accent-pale);
     color: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 180, 216, 0.15);
   }
 
   .time-slot.selected {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     border-color: var(--primary);
     color: var(--neutral-50);
+    box-shadow: 0 4px 15px rgba(2, 62, 138, 0.3);
   }
 
   .time-slot.unavailable {
@@ -1473,18 +2230,18 @@
   }
 
   .success-banner {
-    background: var(--accent-pale);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--accent-pale) 0%, rgba(144, 224, 239, 0.5) 100%);
+    border: 1px solid var(--accent-light);
+    border-radius: 16px;
     padding: 18px 24px;
     display: none;
     align-items: center;
     gap: 14px;
     margin-bottom: 24px;
     font-size: 14px;
-    color: var(--accent-dark);
-    font-weight: var(--font-weight-medium);
-    box-shadow: var(--shadow-sm);
+    color: var(--primary);
+    font-weight: var(--font-weight-semibold);
+    box-shadow: 0 4px 12px rgba(0, 180, 216, 0.1);
   }
 
   .success-banner svg {
@@ -1515,20 +2272,24 @@
      ═══════════════════════════════════════════════════════════════ */
   .tbl {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
   }
 
   .tbl th {
     text-align: left;
-    font-size: 12px;
-    font-weight: var(--font-weight-semibold);
-    color: var(--neutral-600);
+    font-size: 11px;
+    font-weight: var(--font-weight-bold);
+    color: var(--neutral-500);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 12px 16px;
-    background: var(--neutral-100);
-    border-bottom: 1px solid var(--neutral-200);
+    letter-spacing: 0.08em;
+    padding: 14px 16px;
+    background: var(--primary-pale);
+    border-bottom: none;
   }
+
+  .tbl th:first-child { border-radius: 12px 0 0 0; }
+  .tbl th:last-child { border-radius: 0 12px 0 0; }
 
   .tbl td {
     padding: 16px;
@@ -1537,16 +2298,14 @@
     border-bottom: 1px solid var(--neutral-200);
   }
 
-  .tbl tr:last-child td {
-    border-bottom: none;
-  }
+  .tbl tr:last-child td { border-bottom: none; }
 
   .tbl tbody tr {
-    transition: background 0.15s;
+    transition: all 0.2s ease;
   }
 
   .tbl tbody tr:hover td {
-    background: var(--neutral-100);
+    background: rgba(229, 239, 240, 0.5);
   }
 
   .tbl-action {
@@ -1672,10 +2431,8 @@
      PROFILE
      ═══════════════════════════════════════════════════════════════ */
   .profile-header {
-    background:
-      linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(2, 6, 23, 0.85) 100%),
-      url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80') center/cover;
-    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+    border-radius: 24px;
     padding: 48px;
     display: flex;
     align-items: center;
@@ -1683,29 +2440,31 @@
     margin-bottom: 28px;
     position: relative;
     overflow: hidden;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 8px 32px rgba(3, 4, 94, 0.2);
   }
 
   .profile-header::before {
     content: '';
     position: absolute;
-    right: -80px;
-    top: -80px;
+    right: -60px;
+    top: -60px;
     width: 280px;
     height: 280px;
-    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(0, 180, 216, 0.25) 0%, transparent 70%);
     border-radius: 50%;
+    animation: floatBubble 6s ease-in-out infinite;
   }
 
   .profile-header::after {
     content: '';
     position: absolute;
-    left: -60px;
-    bottom: -60px;
+    left: -40px;
+    bottom: -40px;
     width: 200px;
     height: 200px;
-    background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(72, 202, 228, 0.2) 0%, transparent 70%);
     border-radius: 50%;
+    animation: floatBubble 8s ease-in-out infinite reverse;
   }
 
   .p-avatar {
@@ -1722,7 +2481,8 @@
     flex-shrink: 0;
     position: relative;
     z-index: 1;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    border: 3px solid rgba(255, 255, 255, 0.3);
   }
 
   .p-info {
@@ -1790,7 +2550,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(3, 4, 94, 0.6);
     z-index: 200;
     align-items: center;
     justify-content: center;
@@ -1803,20 +2563,20 @@
 
   .modal {
     background: var(--neutral-50);
-    border-radius: var(--radius-xl);
-    padding: 32px;
+    border-radius: 24px;
+    padding: 36px;
     width: 540px;
     max-width: 90vw;
     max-height: 85vh;
     overflow-y: auto;
-    animation: modalIn 0.3s ease;
-    box-shadow: var(--shadow-xl);
+    animation: modalIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 20px 60px rgba(3, 4, 94, 0.2);
   }
 
   @keyframes modalIn {
     from {
       opacity: 0;
-      transform: translateY(20px) scale(0.96);
+      transform: translateY(24px) scale(0.95);
     }
     to {
       opacity: 1;
@@ -1946,6 +2706,59 @@
     line-height: 1.5;
   }
 
+  /* ═══════════════════════════════════════════════════════════════
+     CANCELLATION MODAL
+     ═══════════════════════════════════════════════════════════════ */
+  .cancellation-warning {
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .cancellation-warning svg {
+    color: var(--danger);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .cancellation-warning-content {
+    flex: 1;
+  }
+
+  .cancellation-title {
+    font-size: 15px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--danger);
+    margin-bottom: 4px;
+  }
+
+  .cancellation-message {
+    font-size: 14px;
+    color: #991b1b;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .cancellation-consequences {
+    font-size: 13px;
+    color: #7f1d1d;
+    margin-top: 8px;
+  }
+
+  .cancellation-consequences ul {
+    margin: 6px 0 0 20px;
+    padding: 0;
+  }
+
+  .cancellation-consequences li {
+    margin-bottom: 4px;
+  }
+
   .rec-field {
     margin-bottom: 20px;
   }
@@ -1969,21 +2782,37 @@
   /* ═══════════════════════════════════════════════════════════════
      TOAST NOTIFICATIONS
      ═══════════════════════════════════════════════════════════════ */
+  /* Footer */
+  .site-footer {
+    text-align: center;
+    padding: 28px 48px;
+    background: var(--primary-dark);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.02em;
+  }
+
+  .site-footer strong {
+    color: var(--neutral-50);
+    font-weight: var(--font-weight-bold);
+  }
+
   .toast {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--neutral-950);
+    bottom: 32px;
+    right: 32px;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
     color: var(--neutral-50);
-    padding: 14px 20px;
-    border-radius: var(--radius-lg);
+    padding: 16px 28px;
+    border-radius: 9999px;
     font-size: 14px;
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-semibold);
     z-index: 300;
     transform: translateY(100px);
     opacity: 0;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-xl);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 8px 30px rgba(3, 4, 94, 0.3);
     max-width: 400px;
   }
 
@@ -1995,105 +2824,211 @@
   /* ═══════════════════════════════════════════════════════════════
      RESPONSIVE
      ═══════════════════════════════════════════════════════════════ */
+  @media (max-width: 1024px) {
+    .topbar-nav-item .nav-icon { display: none; }
+    .topbar-nav-item { padding: 8px 14px; font-size: 13px; }
+    .topbar { padding: 0 24px; }
+  }
+
+  /* Mobile hamburger menu */
+  .mobile-menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .mobile-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .topbar.topbar-solid .mobile-menu-btn {
+    border-color: var(--neutral-200);
+    background: var(--neutral-50);
+  }
+
+  .hamburger {
+    width: 20px;
+    height: 14px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hamburger span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--neutral-50);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .topbar.topbar-solid .hamburger span {
+    background: var(--neutral-950);
+  }
+
+  .mobile-menu-btn.open .hamburger span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .mobile-menu-btn.open .hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-btn.open .hamburger span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .mobile-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--neutral-50);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    padding: 12px 16px;
+    z-index: 99;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    animation: mobileMenuIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .mobile-dropdown.open {
+    display: block;
+  }
+
+  @keyframes mobileMenuIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .mobile-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    color: var(--neutral-700);
+    font-weight: var(--font-weight-medium);
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font-family);
+  }
+
+  .mobile-nav-item:hover {
+    background: var(--primary-pale);
+    color: var(--primary);
+  }
+
+  .mobile-nav-item.active {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: var(--neutral-50);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .mobile-nav-item .nav-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mobile-nav-divider {
+    height: 1px;
+    background: var(--neutral-200);
+    margin: 8px 0;
+  }
+
+  .mobile-nav-item.logout {
+    color: var(--danger);
+  }
+
+  .mobile-nav-item.logout:hover {
+    background: #fef2f2;
+  }
+
   @media (max-width: 900px) {
-    .login-left {
-      display: none;
-    }
+    .login-left { display: none; }
+    .login-right { width: 100%; }
 
-    .login-right {
-      width: 100%;
-    }
+    .topbar-nav { display: none; }
+    .mobile-menu-btn { display: flex; }
 
-    .dash-grid {
-      grid-template-columns: 1fr 1fr;
-    }
+    .stats-bar { grid-template-columns: 1fr; }
 
-    .dash-two-col,
-    .p-grid {
-      grid-template-columns: 1fr;
-    }
+    .services-grid { grid-template-columns: 1fr; }
+    .p-grid { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: 1fr 1fr; }
 
-    .quick-actions {
-      flex-direction: column;
-    }
+    .section-header-row { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .main .section { padding-left: 24px; padding-right: 24px; }
+    #page-book, #page-appointments, #page-records, #page-profile { padding: 32px 24px; }
   }
 
   @media (max-width: 640px) {
-    .sidebar {
-      display: none;
-    }
+    .topbar { padding: 0 16px; height: 64px; gap: 8px; }
+    .topbar-brand span { display: none; }
+    .topbar-logout { display: none; }
+    .patient-chip { display: none; }
 
-    .main {
-      padding: 24px 16px;
-    }
+    .form-row { grid-template-columns: 1fr; }
+    .time-slots { grid-template-columns: repeat(3, 1fr); }
+    .reg-steps { gap: 4px; }
+    .step-label { display: none; }
 
-    .dash-grid {
-      grid-template-columns: 1fr;
-    }
+    .dash-hero { padding: 48px 20px 40px; min-height: 320px; }
+    .dash-hero h2 { font-size: 28px; }
+    .dash-hero-actions { flex-direction: column; width: 100%; }
+    .hero-btn { width: 100%; text-align: center; }
 
-    .form-row {
-      grid-template-columns: 1fr;
-    }
+    .main .section { padding-left: 16px; padding-right: 16px; }
+    #page-book, #page-appointments, #page-records, #page-profile { padding: 24px 16px; }
 
-    .time-slots {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    .services-grid { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: 1fr !important; }
+    .section-title { font-size: 24px; }
+    .section-header-left .section-title { font-size: 22px; }
 
-    .reg-steps {
-      gap: 4px;
-    }
+    .practitioner-footer { flex-direction: column; gap: 12px; align-items: stretch; }
+    .practitioner-book-btn { width: 100%; text-align: center; }
 
-    .step-label {
-      display: none;
-    }
-
-    .dash-hero {
-      padding: 32px 24px;
-    }
-
-    .dash-hero h2 {
-      font-size: 24px;
-    }
-
-    .quick-actions {
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .dash-hero-actions {
-      flex-direction: column;
-      width: 100%;
-    }
-
-    .hero-btn {
-      width: 100%;
-    }
-
-    /* Practitioner cards mobile */
-    #practitioners-grid {
-      grid-template-columns: 1fr !important;
-    }
-
-    .practitioner-footer {
-      flex-direction: column;
-      gap: 12px;
-      align-items: stretch;
-    }
-
-    .practitioner-book-btn {
-      width: 100%;
-    }
+    .profile-header { padding: 32px 24px; flex-direction: column; text-align: center; }
+    .p-info { text-align: center; }
   }
 </style>
 </head>
 <body>
+
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+  <div class="preloader-icon">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+    </svg>
+  </div>
+  <div class="preloader-text">Better.Care</div>
+  <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
+</div>
 
 <!-- ══════════ LOGIN / REGISTER ══════════ -->
 <div id="login-screen">
   <div class="login-left">
     <div class="brand">
       <div class="brand-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #1d4ed8;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #023e8a;">
           <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
         </svg>
       </div>
@@ -2261,64 +3196,100 @@
           <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
         </svg>
       </div>
-      <span>Healthcare Portal</span>
+      <span>Better Care</span>
     </div>
-    <div class="patient-chip" onclick="navigate('profile')">
-      <div class="avatar" id="tb-avatar">?</div>
-      <span class="patient-name" id="tb-name">Loading…</span>
+
+    <nav class="topbar-nav">
+      <button class="topbar-nav-item active" onclick="navigate('dashboard')" id="nav-dashboard">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        Home
+      </button>
+      <button class="topbar-nav-item" onclick="navigate('book')" id="nav-book">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Book
+      </button>
+      <button class="topbar-nav-item" onclick="navigate('appointments')" id="nav-appointments">
+        Appointments
+        <span class="nav-badge" id="appt-badge">0</span>
+      </button>
+      <button class="topbar-nav-item" onclick="navigate('records')" id="nav-records">
+        Records
+      </button>
+      <button class="topbar-nav-item" onclick="navigate('profile')" id="nav-profile">
+        Profile
+      </button>
+    </nav>
+
+    <div class="topbar-right">
+      <div class="patient-chip" onclick="navigate('profile')">
+        <div class="avatar" id="tb-avatar">?</div>
+        <span class="patient-name" id="tb-name">Loading…</span>
+      </div>
+      <button class="topbar-logout" onclick="doLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Sign Out
+      </button>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <div class="hamburger"><span></span><span></span><span></span></div>
+      </button>
+    </div>
+
+    <!-- Mobile dropdown menu -->
+    <div class="mobile-dropdown" id="mobile-menu">
+      <button class="mobile-nav-item active" onclick="mobileNav('dashboard')" id="mob-dashboard">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Home
+      </button>
+      <button class="mobile-nav-item" onclick="mobileNav('book')" id="mob-book">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Book Appointment
+      </button>
+      <button class="mobile-nav-item" onclick="mobileNav('appointments')" id="mob-appointments">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>
+        My Appointments
+      </button>
+      <button class="mobile-nav-item" onclick="mobileNav('records')" id="mob-records">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Medical Records
+      </button>
+      <button class="mobile-nav-item" onclick="mobileNav('profile')" id="mob-profile">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        My Profile
+      </button>
+      <div class="mobile-nav-divider"></div>
+      <button class="mobile-nav-item logout" onclick="doLogout()">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </button>
     </div>
   </div>
 
   <div class="app-body">
+    <!-- Sidebar hidden, kept for JS compatibility -->
     <nav class="sidebar">
-      <div class="nav-label">Main</div>
-      <button class="nav-item active" onclick="navigate('dashboard')" id="nav-dashboard">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-        </svg>
-        Dashboard
-      </button>
-      <button class="nav-item" onclick="navigate('book')" id="nav-book">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-        </svg>
-        Book Appointment
-      </button>
-      <button class="nav-item" onclick="navigate('appointments')" id="nav-appointments">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>
-        </svg>
-        My Appointments
-        <span class="nav-badge" id="appt-badge">0</span>
-      </button>
-      <div class="nav-label">Health</div>
-      <button class="nav-item" onclick="navigate('records')" id="nav-records">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-        </svg>
-        Medical Records
-      </button>
-      <button class="nav-item" onclick="navigate('profile')" id="nav-profile">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-        </svg>
-        My Profile
-      </button>
-      <div class="sidebar-footer">
-        <button class="nav-item" onclick="doLogout()">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
-          </svg>
-          Sign Out
-        </button>
-      </div>
+      <button class="nav-item active" onclick="navigate('dashboard')" id="nav-dashboard-sb"></button>
+      <button class="nav-item" onclick="navigate('book')" id="nav-book-sb"></button>
+      <button class="nav-item" onclick="navigate('appointments')" id="nav-appointments-sb"></button>
+      <button class="nav-item" onclick="navigate('records')" id="nav-records-sb"></button>
+      <button class="nav-item" onclick="navigate('profile')" id="nav-profile-sb"></button>
     </nav>
 
     <main class="main">
       <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
+
+        <!-- ══ SECTION 1: HERO ══ -->
         <div class="dash-hero">
-          <div class="dash-hero-content">
+          <div class="dash-hero-content fade-in-stagger">
+            <div class="section-dot">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
             <h2 id="dash-greeting">Good morning</h2>
             <p>Welcome to your healthcare portal. Manage appointments, view medical records, and stay connected with your healthcare providers.</p>
             <div class="dash-hero-actions">
@@ -2328,102 +3299,169 @@
           </div>
         </div>
 
-        <!-- Practitioner Search & Display -->
-        <div class="card" style="margin-bottom: 36px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <div class="card-title" style="margin: 0;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-              </svg>
-              Find a Practitioner
+        <!-- ══ SECTION 2: STATS BAR ══ -->
+        <div class="stats-section">
+          <div class="stats-bar fade-in-stagger">
+            <div class="stat-card">
+              <div class="stat-icon teal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <div class="stat-info"><div class="num" id="d-upcoming">—</div><div class="label">Upcoming Appointments</div></div>
             </div>
-            <button class="btn-secondary" onclick="navigate('book')" style="padding: 8px 16px; font-size: 13px;">View All</button>
+            <div class="stat-card">
+              <div class="stat-icon navy">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                </svg>
+              </div>
+              <div class="stat-info"><div class="num" id="d-records">—</div><div class="label">Medical Records</div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon amber">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <div class="stat-info"><div class="num" id="d-waitlist">—</div><div class="label">Waitlisted</div></div>
+            </div>
           </div>
-          <div style="margin-bottom: 24px; display: grid; grid-template-columns: 1fr auto; gap: 12px;">
+        </div>
+
+        <!-- ══ SECTION 3: SERVICES / QUICK ACTIONS ══ -->
+        <div class="section fade-in">
+          <div class="section-header">
+            <div class="section-dot">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="section-label">Our Services</span>
+            <h3 class="section-title">Complete Range of Services for Every Patient</h3>
+            <p class="section-desc">Access all the tools you need to manage your health — from booking appointments to viewing your full medical history.</p>
+          </div>
+          <div class="services-grid fade-in-stagger">
+            <div class="service-card" onclick="navigate('book')">
+              <div class="service-num">01</div>
+              <div class="service-icon" style="background: linear-gradient(135deg, var(--accent-pale) 0%, var(--accent-light) 100%); color: var(--primary);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <div class="service-content">
+                <h4>Book Appointment</h4>
+                <p>Schedule a visit with any of our qualified practitioners at your preferred time.</p>
+                <div class="service-arrow">Get Started <span>→</span></div>
+              </div>
+            </div>
+            <div class="service-card" onclick="navigate('records')">
+              <div class="service-num">02</div>
+              <div class="service-icon" style="background: linear-gradient(135deg, var(--primary-pale) 0%, #c7d7e8 100%); color: var(--primary);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                </svg>
+              </div>
+              <div class="service-content">
+                <h4>Medical Records</h4>
+                <p>Access your complete health history, diagnoses, and treatment records securely.</p>
+                <div class="service-arrow">View Records <span>→</span></div>
+              </div>
+            </div>
+            <div class="service-card" onclick="navigate('appointments')">
+              <div class="service-num">03</div>
+              <div class="service-icon" style="background: linear-gradient(135deg, #d0f4f7 0%, var(--accent-light) 100%); color: var(--primary-dark);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>
+                </svg>
+              </div>
+              <div class="service-content">
+                <h4>Manage Appointments</h4>
+                <p>View, reschedule, or cancel your upcoming appointments with ease.</p>
+                <div class="service-arrow">My Appointments <span>→</span></div>
+              </div>
+            </div>
+            <div class="service-card" onclick="navigate('profile')">
+              <div class="service-num">04</div>
+              <div class="service-icon" style="background: linear-gradient(135deg, var(--primary-pale) 0%, #b8d8e8 100%); color: var(--primary);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+              <div class="service-content">
+                <h4>My Profile</h4>
+                <p>View and manage your personal details, contact information, and insurance data.</p>
+                <div class="service-arrow">View Profile <span>→</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ MARQUEE ══ -->
+        <div class="marquee fade-in">
+          <div class="marquee-inner">
+            <div class="marquee-item"><span>✦</span> Together, We Care</div>
+            <div class="marquee-item"><span>✦</span> Your Health, Our Priority</div>
+            <div class="marquee-item"><span>✦</span> Advanced Healthcare Made Personal</div>
+            <div class="marquee-item"><span>✦</span> Expert Doctors, Quality Care</div>
+            <div class="marquee-item"><span>✦</span> Together, We Care</div>
+            <div class="marquee-item"><span>✦</span> Your Health, Our Priority</div>
+            <div class="marquee-item"><span>✦</span> Advanced Healthcare Made Personal</div>
+            <div class="marquee-item"><span>✦</span> Expert Doctors, Quality Care</div>
+          </div>
+        </div>
+
+        <!-- ══ SECTION 4: PRACTITIONERS / TEAM ══ -->
+        <div class="section fade-in">
+          <div class="section-header-row">
+            <div class="section-header-left">
+              <div class="section-dot" style="margin: 0 0 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <span class="section-label" style="text-align: left;">Our Doctors</span>
+              <h3 class="section-title">Dedicated Doctors Committed to Your Health</h3>
+            </div>
+            <button class="section-link" onclick="navigate('book')">View All Doctors</button>
+          </div>
+          <div style="margin-bottom: 24px; display: grid; grid-template-columns: 1fr auto; gap: 12px; max-width: 500px;">
             <div style="position: relative;">
-              <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--neutral-400);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--neutral-400);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8"/><path d="21 21l-4.35-4.35"/>
               </svg>
-              <input type="text" id="practitioner-search" placeholder="Search doctor or specialty..." style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 14px; background: var(--neutral-50);">
+              <input type="text" id="practitioner-search" placeholder="Search doctor or specialty..." style="width: 100%; padding: 12px 12px 12px 42px; border: 1.5px solid var(--neutral-200); border-radius: 9999px; font-size: 14px; background: var(--neutral-50); outline: none; transition: all 0.25s; font-family: var(--font-family);">
             </div>
-            <button class="btn-teal" onclick="searchPractitioners()" style="padding: 12px 24px; white-space: nowrap;">Search</button>
+            <button class="btn-teal" onclick="searchPractitioners()" style="padding: 12px 28px; white-space: nowrap;">Search</button>
           </div>
-          <div id="practitioners-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+          <div id="practitioners-grid" class="team-grid">
             <div style="color: var(--neutral-600); font-size: 14px; text-align: center; padding: 20px; grid-column: 1 / -1;">
               <span class="spinner"></span>Loading practitioners...
             </div>
           </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-          <div class="quick-action-card" onclick="navigate('book')">
-            <div class="quick-action-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-              </svg>
+        <!-- ══ SECTION 5: UPCOMING APPOINTMENTS ══ -->
+        <div class="section fade-in">
+          <div class="section-header-row">
+            <div class="section-header-left">
+              <div class="section-dot" style="margin: 0 0 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <span class="section-label" style="text-align: left;">Schedule</span>
+              <h3 class="section-title">Upcoming Appointments</h3>
             </div>
-            <div class="quick-action-content">
-              <div class="quick-action-label">Book Appointment</div>
-              <div class="quick-action-desc">Schedule a visit with a practitioner</div>
-            </div>
+            <button class="section-link" onclick="navigate('appointments')">View All</button>
           </div>
-          <div class="quick-action-card" onclick="navigate('records')">
-            <div class="quick-action-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-              </svg>
-            </div>
-            <div class="quick-action-content">
-              <div class="quick-action-label">View Medical Records</div>
-              <div class="quick-action-desc">Access your complete health history</div>
-            </div>
-          </div>
+          <div id="dash-appt-list"><div style="color:var(--neutral-600);font-size:14px;"><span class="spinner"></span>Loading…</div></div>
         </div>
 
-        <div class="dash-grid">
-          <div class="stat-card">
-            <div class="stat-icon teal">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-              </svg>
+        <!-- ══ SECTION 6: PERSONAL DETAILS ══ -->
+        <div class="section fade-in">
+          <div class="section-header">
+            <div class="section-dot">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
-            <div class="stat-info"><div class="num" id="d-upcoming">—</div><div class="label">Upcoming Appointments</div></div>
+            <span class="section-label">Your Profile</span>
+            <h3 class="section-title">Personal Details</h3>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon navy">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-              </svg>
-            </div>
-            <div class="stat-info"><div class="num" id="d-records">—</div><div class="label">Medical Records</div></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon amber">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-              </svg>
-            </div>
-            <div class="stat-info"><div class="num" id="d-waitlist">—</div><div class="label">Waitlisted</div></div>
-          </div>
-        </div>
-        <div class="dash-two-col">
-          <div class="card">
-            <div class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-              </svg>
-              Upcoming Appointments
-            </div>
-            <div id="dash-appt-list"><div style="color:var(--neutral-600);font-size:14px;"><span class="spinner"></span>Loading…</div></div>
-          </div>
-          <div class="card">
-            <div class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-              </svg>
-              Personal Details
-            </div>
+          <div class="card" style="max-width: 680px; margin: 0 auto;">
             <div class="health-item"><span class="health-label">Full Name</span><span class="health-value" id="d-name">—</span></div>
             <div class="health-item"><span class="health-label">Date of Birth</span><span class="health-value" id="d-dob">—</span></div>
             <div class="health-item"><span class="health-label">Gender</span><span class="health-value" id="d-gender">—</span></div>
@@ -2432,6 +3470,7 @@
             <div class="health-item"><span class="health-label">Insurance ID</span><span class="health-value" id="d-insurance">—</span></div>
           </div>
         </div>
+
       </div>
 
       <!-- BOOK APPOINTMENT -->
@@ -2456,13 +3495,15 @@
           <div class="form-row">
             <div class="form-group">
               <label>Practitioner</label>
-              <select id="book-prac" onchange="loadSlots()">
+              <select id="book-prac" onchange="onPracChange()">
                 <option value="">Loading practitioners…</option>
               </select>
+              <div id="prac-availability" style="margin-top: 10px;"></div>
             </div>
             <div class="form-group">
               <label>Date</label>
               <input type="date" id="book-date" onchange="loadSlots()">
+              <div id="date-hint" class="field-hint"></div>
             </div>
           </div>
           <div class="form-group">
@@ -2546,6 +3587,7 @@
         </div>
       </div>
     </main>
+    <footer class="site-footer">&copy; Copyright 2026 <strong>Better.Care.</strong> All Rights Reserved</footer>
   </div>
 </div>
 
@@ -2573,6 +3615,23 @@
     <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px;">
       <button class="btn-secondary" onclick="closeBookingConfirmation()">Cancel</button>
       <button class="btn-teal" id="confirm-booking-btn" onclick="proceedWithBooking()">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+
+<!-- APPOINTMENT CANCELLATION MODAL -->
+<div class="modal-overlay" id="cancellation-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">Cancel Appointment</div>
+      <button class="modal-close" onclick="closeCancellationModal()">✕</button>
+    </div>
+    <div id="cancellation-content">
+      <!-- Content will be dynamically populated -->
+    </div>
+    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px;">
+      <button class="btn-secondary" onclick="closeCancellationModal()">Keep Appointment</button>
+      <button class="btn-teal" id="confirm-cancel-btn" onclick="proceedWithCancellation()" style="background: var(--danger); border: 1px solid var(--danger);">Cancel Appointment</button>
     </div>
   </div>
 </div>
@@ -2660,6 +3719,15 @@ function setText(id, val) {
 // INIT
 // ════════════════════════════════════
 document.addEventListener('DOMContentLoaded', function() {
+  // Dismiss preloader
+  setTimeout(function() {
+    var preloader = document.getElementById('preloader');
+    if (preloader) {
+      preloader.classList.add('hidden');
+      setTimeout(function() { preloader.remove(); }, 500);
+    }
+  }, 1400);
+
   var d = document.getElementById('book-date');
   if (d) d.min = new Date().toISOString().split('T')[0];
 
@@ -2678,6 +3746,9 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   document.getElementById('booking-confirmation-modal').addEventListener('click', function(e) {
     if (e.target === this) closeBookingConfirmation();
+  });
+  document.getElementById('cancellation-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeCancellationModal();
   });
 });
 
@@ -2898,6 +3969,8 @@ function initApp(email) {
   loadDashboard();
   loadPractitioners();
   loadDashboardPractitioners();
+  loadAppointments();
+  loadMedicalRecords();
 }
 
 // ════════════════════════════════════
@@ -2919,15 +3992,55 @@ function renderProfile(p) {
 // ════════════════════════════════════
 // NAVIGATION
 // ════════════════════════════════════
+// ════════════════════════════════════
+// MOBILE MENU
+// ════════════════════════════════════
+function toggleMobileMenu() {
+  var menu = document.getElementById('mobile-menu');
+  var btn = document.querySelector('.mobile-menu-btn');
+  menu.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+function closeMobileMenu() {
+  var menu = document.getElementById('mobile-menu');
+  var btn = document.querySelector('.mobile-menu-btn');
+  menu.classList.remove('open');
+  btn.classList.remove('open');
+}
+
+function mobileNav(page) {
+  closeMobileMenu();
+  // Update mobile nav active states
+  document.querySelectorAll('.mobile-nav-item').forEach(function(n) { n.classList.remove('active'); });
+  var mob = document.getElementById('mob-' + page);
+  if (mob) mob.classList.add('active');
+  navigate(page);
+}
+
 function navigate(page) {
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  document.querySelectorAll('.topbar-nav-item').forEach(function(n) { n.classList.remove('active'); });
   document.getElementById('page-' + page).classList.add('active');
   var nav = document.getElementById('nav-' + page);
   if (nav) nav.classList.add('active');
+  // Sync mobile menu active state
+  document.querySelectorAll('.mobile-nav-item').forEach(function(n) { n.classList.remove('active'); });
+  var mob = document.getElementById('mob-' + page);
+  if (mob) mob.classList.add('active');
+  closeMobileMenu();
+  // Transparent topbar on dashboard, solid on other pages
+  var topbar = document.querySelector('.topbar');
+  if (page === 'dashboard') {
+    topbar.classList.remove('topbar-solid');
+  } else {
+    topbar.classList.add('topbar-solid');
+  }
   if (page === 'dashboard') loadDashboard();
   if (page === 'appointments') loadAppointments();
   if (page === 'records') loadMedicalRecords();
+  // Scroll to top on page change
+  document.querySelector('.main').scrollTo(0, 0);
 }
 
 // ════════════════════════════════════
@@ -2937,7 +4050,15 @@ function loadDashboard() {
   if (!currentPatient) return;
   apiGet('healthcare_pro.healthcare_management.api.get_appointments.get_appointments', { patient: currentPatient.name })
     .then(function(appts) {
-      allAppointments = appts || [];
+      // Filter out cancelled appointments and appointments whose dates have passed
+      var today = new Date();
+      today.setHours(0, 0, 0, 0); // Set to start of today for date comparison
+      allAppointments = (appts || []).filter(function(a) {
+        if (a.status === 'Cancelled') return false;
+        var appointmentDate = new Date(a.date);
+        appointmentDate.setHours(0, 0, 0, 0);
+        return appointmentDate >= today; // Only show today and future appointments
+      });
       var upcoming = allAppointments.filter(function(a) { return a.status === 'Scheduled' || a.status === 'Open'; });
       var waitlisted = allAppointments.filter(function(a) { return a.status === 'Waiting'; });
       setText('d-upcoming', upcoming.length);
@@ -2996,6 +4117,46 @@ function loadPractitioners() {
   });
 }
 
+function onPracChange() {
+  var pracId = document.getElementById('book-prac').value;
+  var availDiv = document.getElementById('prac-availability');
+  var dateHint = document.getElementById('date-hint');
+
+  if (!pracId) {
+    availDiv.innerHTML = '';
+    dateHint.textContent = '';
+    loadSlots();
+    return;
+  }
+
+  // Get unique available days for this practitioner
+  var dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  var days = [];
+  schedule.forEach(function(s) {
+    if (s.practitioner_id === pracId && days.indexOf(s.day) === -1) {
+      days.push(s.day);
+    }
+  });
+  days.sort(function(a, b) { return dayOrder.indexOf(a) - dayOrder.indexOf(b); });
+
+  if (days.length === 0) {
+    availDiv.innerHTML = '<span style="font-size:12px;color:var(--neutral-500);">No schedule found for this practitioner.</span>';
+    dateHint.textContent = '';
+  } else {
+    var todayName = new Date().toLocaleString('en', { weekday: 'long' });
+    var html = '<div class="avail-days"><span class="avail-days-label">Available:</span>';
+    days.forEach(function(d) {
+      var isToday = d === todayName;
+      html += '<span class="avail-day' + (isToday ? ' today' : '') + '">' + d.slice(0, 3) + (isToday ? ' (Today)' : '') + '</span>';
+    });
+    html += '</div>';
+    availDiv.innerHTML = html;
+    dateHint.textContent = 'Pick a date on: ' + days.map(function(d) { return d.slice(0, 3); }).join(', ');
+  }
+
+  loadSlots();
+}
+
 function loadSlots() {
   var pracId = document.getElementById('book-prac').value;
   var date = document.getElementById('book-date').value;
@@ -3028,6 +4189,7 @@ function selectSlot(el) {
 
 // Enhanced booking with conflict checking and confirmation
 var pendingBookingData = null;
+var pendingCancellationData = null;
 
 function submitBook() {
   var pracId = document.getElementById('book-prac').value;
@@ -3173,10 +4335,20 @@ function proceedWithBooking() {
         setText('book-wl-msg', result.message);
         document.getElementById('book-wl').style.display = 'flex';
         showToast('Added to waitlist');
+
+        // Auto-hide waitlist message after 4 seconds
+        setTimeout(function() {
+          document.getElementById('book-wl').style.display = 'none';
+        }, 4000);
       } else if (result.status === 'scheduled') {
         setText('book-ok-msg', result.message);
         document.getElementById('book-ok').style.display = 'flex';
         showToast('Appointment booked successfully');
+
+        // Auto-hide success message after 4 seconds
+        setTimeout(function() {
+          document.getElementById('book-ok').style.display = 'none';
+        }, 4000);
       } else if (result.status === 'error') {
         showToast(result.message);
       }
@@ -3198,6 +4370,7 @@ function proceedWithBooking() {
 function resetBook() {
   selectedTime = null;
   pendingBookingData = null;
+  pendingCancellationData = null;
   document.querySelectorAll('.time-slot').forEach(function(s) { s.classList.remove('selected'); });
   document.getElementById('book-ok').style.display = 'none';
   document.getElementById('book-wl').style.display = 'none';
@@ -3205,6 +4378,7 @@ function resetBook() {
   document.getElementById('book-prac').value = '';
   document.getElementById('slots-container').innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a practitioner and date first.</div>';
   closeBookingConfirmation(); // Close any open confirmation modal
+  closeCancellationModal(); // Close any open cancellation modal
 }
 
 // ════════════════════════════════════
@@ -3216,7 +4390,15 @@ function loadAppointments() {
   var params = currentPatient ? { patient: currentPatient.name } : {};
   apiGet('healthcare_pro.healthcare_management.api.get_appointments.get_appointments', params)
     .then(function(appts) {
-      allAppointments = appts || [];
+      // Filter out cancelled appointments and appointments whose dates have passed
+      var today = new Date();
+      today.setHours(0, 0, 0, 0); // Set to start of today for date comparison
+      allAppointments = (appts || []).filter(function(a) {
+        if (a.status === 'Cancelled') return false;
+        var appointmentDate = new Date(a.date);
+        appointmentDate.setHours(0, 0, 0, 0);
+        return appointmentDate >= today; // Only show today and future appointments
+      });
       if (allAppointments.length === 0) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No appointments found.</td></tr>'; return; }
       tbody.innerHTML = allAppointments.map(function(a) {
         var sc = (a.status || '').toLowerCase();
@@ -3236,11 +4418,162 @@ function loadAppointments() {
     }).catch(function(e) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="color:var(--danger);">Failed: '+e.message+'</td></tr>'; });
 }
 
-function cancelAppt(name) {
-  if (!confirm('Cancel appointment ' + name + '?')) return;
-  apiPost('healthcare_pro.healthcare_management.doctype.patient_appointment.patient_appointment.cancel_appointment', { appointment: name })
-    .then(function() { showToast('Appointment cancelled'); loadAppointments(); loadDashboard(); })
-    .catch(function(e) { showToast('Could not cancel: ' + e.message); });
+function cancelAppt(appointmentId) {
+  console.log('cancelAppt called with ID:', appointmentId);
+  console.log('allAppointments:', allAppointments);
+
+  // Find the appointment details
+  var appointment = allAppointments.find(function(a) { return a.name === appointmentId; });
+
+  if (!appointment) {
+    console.error('Appointment not found for ID:', appointmentId);
+    showToast('Appointment not found. Please refresh the page and try again.');
+    return;
+  }
+
+  console.log('Found appointment:', appointment);
+
+  // Store cancellation data
+  pendingCancellationData = {
+    appointment: appointment,
+    appointmentId: appointmentId
+  };
+
+  console.log('Stored pendingCancellationData:', pendingCancellationData);
+
+  showCancellationModal(appointment);
+}
+
+function showCancellationModal(appointment) {
+  var content = document.getElementById('cancellation-content');
+
+  // Format appointment details
+  var appointmentDate = new Date(appointment.date).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  var html = '';
+
+  // Warning section
+  html += '<div class="cancellation-warning">';
+  html += '  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+  html += '    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>';
+  html += '    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
+  html += '  </svg>';
+  html += '  <div class="cancellation-warning-content">';
+  html += '    <div class="cancellation-title">Are you sure you want to cancel this appointment?</div>';
+  html += '    <div class="cancellation-message">This action cannot be undone. Please confirm you want to cancel your appointment.</div>';
+  html += '  </div>';
+  html += '</div>';
+
+  // Appointment details
+  html += '<div class="booking-info">';
+  html += '  <h4 style="margin: 0 0 12px; color: var(--neutral-950); font-size: 16px;">Appointment to Cancel</h4>';
+  html += '  <div class="booking-detail">';
+  html += '    <span class="booking-label">Appointment ID:</span>';
+  html += '    <span class="booking-value">' + appointment.name + '</span>';
+  html += '  </div>';
+  html += '  <div class="booking-detail">';
+  html += '    <span class="booking-label">Practitioner:</span>';
+  html += '    <span class="booking-value">' + (appointment.practitioner || 'N/A') + '</span>';
+  html += '  </div>';
+  html += '  <div class="booking-detail">';
+  html += '    <span class="booking-label">Date:</span>';
+  html += '    <span class="booking-value">' + appointmentDate + '</span>';
+  html += '  </div>';
+  html += '  <div class="booking-detail">';
+  html += '    <span class="booking-label">Time:</span>';
+  html += '    <span class="booking-value">' + (appointment.time || 'N/A') + '</span>';
+  html += '  </div>';
+  html += '</div>';
+
+  // Consequences info
+  html += '<div class="cancellation-consequences">';
+  html += '  <strong>What happens when you cancel:</strong>';
+  html += '  <ul>';
+  html += '    <li>Your appointment slot will be made available to other patients</li>';
+  html += '    <li>If there\'s a waitlist, the next patient will be automatically notified</li>';
+  html += '    <li>You can book a new appointment anytime from the portal</li>';
+  html += '    <li>You will receive a cancellation confirmation email</li>';
+  html += '  </ul>';
+  html += '</div>';
+
+  content.innerHTML = html;
+
+  // Also store appointment ID as data attribute on the confirm button as backup
+  var confirmBtn = document.getElementById('confirm-cancel-btn');
+  confirmBtn.setAttribute('data-appointment-id', appointment.name);
+
+  document.getElementById('cancellation-modal').classList.add('open');
+}
+
+function closeCancellationModal() {
+  document.getElementById('cancellation-modal').classList.remove('open');
+  // Don't clear pendingCancellationData here in case the modal is closed accidentally
+  // It will be cleared after successful cancellation
+}
+
+function proceedWithCancellation() {
+  console.log('proceedWithCancellation called');
+  console.log('pendingCancellationData:', pendingCancellationData);
+
+  var btn = document.getElementById('confirm-cancel-btn');
+  var appointmentId;
+
+  // Try to get appointment ID from pending data first
+  if (pendingCancellationData && pendingCancellationData.appointmentId) {
+    appointmentId = pendingCancellationData.appointmentId;
+    console.log('Using appointmentId from pendingCancellationData:', appointmentId);
+  }
+  // Fallback to data attribute on button
+  else if (btn.getAttribute('data-appointment-id')) {
+    appointmentId = btn.getAttribute('data-appointment-id');
+    console.log('Using appointmentId from data attribute:', appointmentId);
+  }
+  // No appointment ID found
+  else {
+    console.error('No appointment ID found in either pendingCancellationData or data attribute');
+    showToast('Error: No appointment selected for cancellation');
+    return;
+  }
+
+  btn.textContent = 'Cancelling...';
+  btn.disabled = true;
+
+  console.log('Proceeding with cancellation for appointment ID:', appointmentId);
+
+  apiPost('healthcare_pro.healthcare_management.doctype.patient_appointment.patient_appointment.cancel_appointment', {
+    appointment: appointmentId
+  })
+    .then(function() {
+      console.log('Cancellation successful');
+
+      // Clear the pending data
+      pendingCancellationData = null;
+
+      closeCancellationModal();
+      showToast('Appointment cancelled successfully');
+
+      // Remove from local array to update UI immediately
+      allAppointments = allAppointments.filter(function(a) {
+        return a.name !== appointmentId;
+      });
+
+      // Refresh displays
+      loadAppointments();
+      loadDashboard();
+    })
+    .catch(function(e) {
+      console.error('Cancellation failed:', e);
+      showToast('Failed to cancel appointment: ' + e.message);
+    })
+    .finally(function() {
+      btn.textContent = 'Cancel Appointment';
+      btn.disabled = false;
+    });
 }
 
 // ════════════════════════════════════
@@ -3406,7 +4739,6 @@ function loadDashboardPractitioners() {
 
 function renderPractitionerCards(practitioners, container) {
   container.innerHTML = practitioners.slice(0, 6).map(function(p) {
-    // Safely get practitioner data with fallbacks
     var practitionerName = p.name || p.practitioner_name || 'N/A';
     var practitionerId = p.id || p.name || p.practitioner_id;
     var initials = practitionerName.split(' ').slice(0, 2).map(function(n) {
@@ -3416,16 +4748,25 @@ function renderPractitionerCards(practitioners, container) {
     var rating = p.rating || '4.5';
     var specialization = p.specialization || p.department || 'General Practice';
     var availability = p.today_hours || 'Call for availability';
-    var isAvailable = p.is_available_today !== false; // Default to true if undefined
+    var isAvailable = p.is_available_today !== false;
 
     return '<div class="practitioner-card" onclick="bookWithPractitioner(\'' + practitionerId + '\')">' +
-      '<div class="practitioner-header">' +
-        '<div class="practitioner-avatar">' + initials + '</div>' +
+      '<div class="practitioner-banner">' +
+        '<div class="practitioner-banner-dots">' +
+          '<span></span><span></span><span></span>' +
+          '<span></span><span></span><span></span>' +
+          '<span></span><span></span><span></span>' +
+        '</div>' +
+        '<div class="practitioner-header">' +
+          '<div class="practitioner-avatar">' + initials + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="practitioner-body">' +
         '<div class="practitioner-info">' +
           '<div class="practitioner-name">' +
             practitionerName +
-            '<span class="practitioner-rating">★ ' + rating + '</span>' +
           '</div>' +
+          '<span class="practitioner-rating">★ ' + rating + '</span>' +
           '<div class="practitioner-specialty">' +
             '<svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
               '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>' +
@@ -3433,16 +4774,16 @@ function renderPractitionerCards(practitioners, container) {
             specialization +
           '</div>' +
         '</div>' +
-      '</div>' +
-      '<div class="practitioner-footer">' +
-        '<div class="practitioner-availability"' + (isAvailable ? '' : ' style="color: var(--neutral-400);"') + '>' +
-          '<svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-            '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>' +
-          '</svg>' +
-          availability +
+        '<div class="practitioner-footer">' +
+          '<div class="practitioner-availability"' + (isAvailable ? '' : ' style="color: var(--neutral-400);"') + '>' +
+            '<svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+              '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>' +
+            '</svg>' +
+            availability +
+          '</div>' +
+          '<button class="practitioner-book-btn"' + (!isAvailable ? ' style="background: var(--neutral-400); cursor: not-allowed; box-shadow: none;" disabled' : '') +
+          ' onclick="event.stopPropagation(); bookWithPractitioner(\'' + practitionerId + '\')">Book Now</button>' +
         '</div>' +
-        '<button class="practitioner-book-btn"' + (!isAvailable ? ' style="background: var(--neutral-400); cursor: not-allowed;" disabled' : '') +
-        ' onclick="event.stopPropagation(); bookWithPractitioner(\'' + practitionerId + '\')">Book</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -3505,6 +4846,21 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.key === 'Enter') searchPractitioners();
     });
   }
+
+  // Scroll fade-in animations (triggers on both scroll up and down)
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      } else {
+        entry.target.classList.remove('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right, .fade-in-stagger').forEach(function(el) {
+    observer.observe(el);
+  });
 });
 </script>
 </body>

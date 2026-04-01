@@ -46,7 +46,7 @@ def check_booking_conflicts():
         return conflicts
 
     # Check if practitioner slot is already taken
-    practitioner_conflict = frappe.db.exists(
+    practitioner_conflict = frappe.db.exists( 
         "Patient Appointment",
         {
             "practitioner": practitioner,
@@ -170,6 +170,7 @@ def confirm_booking():
     })
 
     appointment.insert(ignore_permissions=True)
+    appointment.submit()  # This triggers on_submit() which sends notifications
 
     return {
         "status": "scheduled",

@@ -11,13 +11,14 @@ def get_practitioner_schedule(practitioner_id=None):
     practitioners = frappe.get_all(
         "Healthcare Practitioner",
         filters=filters,
-        fields=["name", "practitioner_name"]
+        fields=["name", "practitioner_name"],
+        ignore_permissions=True
     )
 
     result = []
 
     for practitioner in practitioners:
-        doc = frappe.get_doc("Healthcare Practitioner", practitioner.name)
+        doc = frappe.get_doc("Healthcare Practitioner", practitioner.name, ignore_permissions=True)
 
         for slot in getattr(doc, "table_locw", []):
             result.append({

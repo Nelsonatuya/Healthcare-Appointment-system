@@ -62,6 +62,7 @@ def book_appointment():
     })
 
     appointment.insert(ignore_permissions=True)
+    appointment.submit()  # This triggers on_submit() which sends notifications
 
     return {
         "status": "scheduled",
@@ -88,3 +89,45 @@ def get_appointments(patient=None, practitioner=None, date=None, time=None, stat
 		filters=filters
 	)
 	return appointments
+
+# Debug function to check practitioner filtering
+@frappe.whitelist()
+def debug_practitioner_appointments():
+    """Debug function to check practitioner and appointment data"""
+
+    # Get current logged-in user
+    current_user = frappe.session.user
+
+    # Get practitioner record for current user
+    practitioner = frappe.db.get_value(
+        "Healthcare Practitioner",
+        {"email": current_user},
+        ["name", "practitioner_name", "email"],
+        as_dict=True
+    )
+
+    # Get all appointments
+    all_appointments = frappe.get_all(
+        "Patient Appointment",
+        fields=["name", "patient", "practitioner", "date", "time", "status"],
+        order_by="date desc"
+    )
+
+    # Get appointments for this practitioner
+    filtered_appointments = []
+    if practitioner:
+        filtered_appointments = frappe.get_all(
+            "Patient Appointment",
+            fields=["name", "patient", "practitioner", "date", "time", "status"],
+            filters={"practitioner": practitioner.name},
+            order_by="date desc"
+        )
+
+    return {
+        "current_user": current_user,
+        "practitioner_record": practitioner,
+        "total_appointments": len(all_appointments),
+        "filtered_appointments": len(filtered_appointments),
+        "all_appointments_sample": all_appointments[:5],  # First 5 for debugging
+        "filtered_appointments_sample": filtered_appointments[:5]
+    }

@@ -28,6 +28,8 @@ class PatientAppointment(Document):
     def on_submit(self):
         self.check_practitioner_leave()
         create_calendar_event(self)
+        self.send_appointment_confirmation()
+        self.notify_practitioner()
 
     def on_update(self):
         if self.has_value_changed("status") and self.status == "Cancelled":
@@ -295,6 +297,7 @@ class PatientAppointment(Document):
             temp_doc.validate_double_booking()
 
             temp_doc.insert(ignore_permissions=True)
+            temp_doc.submit()  # This triggers on_submit() which sends notifications
 
             wait_doc.status = "Converted"
             wait_doc.save(ignore_permissions=True)
@@ -331,11 +334,346 @@ class PatientAppointment(Document):
                 """,
             )
 
+    # ==========================
+    # APPOINTMENT CONFIRMATION
+    # ==========================
+
+    def send_appointment_confirmation(self):
+        """Send email confirmation when appointment is booked"""
+
+        try:
+            # Get patient details
+            patient_doc = frappe.get_doc("Healthcare Patient", self.patient)
+
+            # Get practitioner name
+            practitioner_name = frappe.db.get_value(
+                "Healthcare Practitioner",
+                self.practitioner,
+                "practitioner_name"
+            ) or self.practitioner
+
+            if patient_doc.email:
+                # Format time for display
+                import datetime
+                if self.time:
+                    time_obj = datetime.datetime.strptime(str(self.time), "%H:%M:%S").time()
+                    formatted_time = time_obj.strftime("%I:%M %p")
+                else:
+                    formatted_time = "Time TBD"
+
+                # Format date for display
+                if self.date:
+                    date_obj = datetime.datetime.strptime(str(self.date), "%Y-%m-%d").date()
+                    formatted_date = date_obj.strftime("%B %d, %Y")
+                else:
+                    formatted_date = str(self.date)
+
+                frappe.sendmail(
+                    recipients=[patient_doc.email],
+                    subject="Appointment Confirmed - Better Care",
+                    message=f"""
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8fafc;">
+                        <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h1 style="color: #0f172a; margin: 0; font-size: 24px;">✅ Appointment Confirmed</h1>
+                                <p style="color: #64748b; margin: 5px 0 0 0;">Your healthcare appointment has been scheduled</p>
+                            </div>
+
+                            <div style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                                <h3 style="color: #0369a1; margin: 0 0 15px 0; font-size: 16px;">Appointment Details</h3>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #64748b; font-weight: 500; width: 30%;">Appointment ID:</td>
+                                        <td style="padding: 8px 0; color: #0f172a; font-weight: 600;">{self.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #64748b; font-weight: 500;">Date:</td>
+                                        <td style="padding: 8px 0; color: #0f172a; font-weight: 600;">{formatted_date}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #64748b; font-weight: 500;">Time:</td>
+                                        <td style="padding: 8px 0; color: #0f172a; font-weight: 600;">{formatted_time}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #64748b; font-weight: 500;">Practitioner:</td>
+                                        <td style="padding: 8px 0; color: #0f172a; font-weight: 600;">{practitioner_name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #64748b; font-weight: 500;">Status:</td>
+                                        <td style="padding: 8px 0;"><span style="background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Scheduled</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div style="background: #f8fafc; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                                <h4 style="color: #0f172a; margin: 0 0 10px 0; font-size: 14px;">📋 What to bring:</h4>
+                                <ul style="color: #64748b; font-size: 14px; margin: 0; padding-left: 20px;">
+                                    <li>Government-issued ID</li>
+                                    <li>Insurance card</li>
+                                    <li>Any relevant medical records</li>
+                                    <li>List of current medications if currently on any</li>
+                                </ul>
+                            </div>
+
+                            <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 16px; margin-bottom: 25px;">
+                                <p style="color: #92400e; margin: 0; font-size: 14px; font-weight: 500;">
+                                    ⏰ Please arrive 15 minutes early for check-in and paperwork.
+                                </p>
+                            </div>
+
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <p style="color: #64748b; font-size: 14px; margin-bottom: 15px;">
+                                    Need to make changes to your appointment?
+                                </p>
+                                <a href="{frappe.utils.get_url()}/healthcare_portal?appointment={self.name}"
+                                   style="background: #0f172a; color: white; padding: 12px 24px; text-decoration: none;
+                                          border-radius: 8px; font-weight: 600; display: inline-block;">
+                                    Manage Appointment
+                                </a>
+                            </div>
+
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 25px 0;">
+
+                            <div style="text-align: center;">
+                                <p style="color: #64748b; font-size: 12px; margin: 0;">
+                                    This is an automated message from Better Care Healthcare Portal.<br>
+                                    Please do not reply to this email.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    """,
+                )
+
+                frappe.logger().info(f"Appointment confirmation sent to {patient_doc.email} for appointment {self.name}")
+
+        except Exception as e:
+            # Don't fail the appointment creation if email fails
+            frappe.logger().error(f"Failed to send appointment confirmation for {self.name}: {str(e)}")
+            pass
+
+    # ==========================
+    # PRACTITIONER NOTIFICATION
+    # ==========================
+
+    def notify_practitioner(self):
+        """Notify practitioner of new appointment booking"""
+
+        try:
+            # Get practitioner details
+            practitioner_doc = frappe.get_doc("Healthcare Practitioner", self.practitioner)
+
+            # Get patient name
+            patient_name = frappe.db.get_value(
+                "Healthcare Patient",
+                self.patient,
+                "full_name"
+            ) or self.patient
+
+            if practitioner_doc.email:
+                # Format time and date for display
+                import datetime
+                if self.time:
+                    time_obj = datetime.datetime.strptime(str(self.time), "%H:%M:%S").time()
+                    formatted_time = time_obj.strftime("%I:%M %p")
+                else:
+                    formatted_time = "Time TBD"
+
+                if self.date:
+                    date_obj = datetime.datetime.strptime(str(self.date), "%Y-%m-%d").date()
+                    formatted_date = date_obj.strftime("%B %d, %Y")
+                else:
+                    formatted_date = str(self.date)
+
+                frappe.sendmail(
+                    recipients=[practitioner_doc.email],
+                    subject="New Appointment Booked - Better Care",
+                    message=f"""
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8fafc;">
+                        <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+
+                            <div style="text-align: center; margin-bottom: 25px;">
+                                <h1 style="color: #0f172a; margin: 0; font-size: 22px;">📅 New Appointment Booked</h1>
+                                <p style="color: #64748b; margin: 5px 0 0 0;">A patient has scheduled an appointment with you</p>
+                            </div>
+
+                            <div style="background: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                                <h3 style="color: #166534; margin: 0 0 15px 0; font-size: 16px;">Appointment Details</h3>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="padding: 6px 0; color: #64748b; font-weight: 500; width: 30%;">Patient:</td>
+                                        <td style="padding: 6px 0; color: #0f172a; font-weight: 600;">{patient_name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px 0; color: #64748b; font-weight: 500;">Date:</td>
+                                        <td style="padding: 6px 0; color: #0f172a; font-weight: 600;">{formatted_date}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px 0; color: #64748b; font-weight: 500;">Time:</td>
+                                        <td style="padding: 6px 0; color: #0f172a; font-weight: 600;">{formatted_time}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px 0; color: #64748b; font-weight: 500;">Appointment ID:</td>
+                                        <td style="padding: 6px 0; color: #0f172a; font-weight: 600;">{self.name}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <a href="{frappe.utils.get_url()}/practitioner-portal"
+                                   style="background: #0f172a; color: white; padding: 10px 20px; text-decoration: none;
+                                          border-radius: 8px; font-weight: 600; display: inline-block; margin-right: 10px;">
+                                    View in Portal
+                                </a>
+                                <a href="{frappe.utils.get_url()}/app/patient-appointment/{self.name}"
+                                   style="background: #06b6d4; color: white; padding: 10px 20px; text-decoration: none;
+                                          border-radius: 8px; font-weight: 600; display: inline-block;">
+                                    Manage Appointment
+                                </a>
+                            </div>
+
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+
+                            <div style="text-align: center;">
+                                <p style="color: #64748b; font-size: 12px; margin: 0;">
+                                    Better Care Healthcare Management System<br>
+                                    This is an automated notification.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    """,
+                )
+
+                frappe.logger().info(f"Practitioner notification sent to {practitioner_doc.email} for appointment {self.name}")
+
+        except Exception as e:
+            # Don't fail the appointment creation if email fails
+            frappe.logger().error(f"Failed to send practitioner notification for {self.name}: {str(e)}")
+            pass
+
+
+    # ==========================
+    # CANCELLATION NOTIFICATION
+    # ==========================
+
+    def send_cancellation_notification(self):
+        """Send email notification when appointment is cancelled"""
+
+        try:
+            # Get patient details
+            patient_doc = frappe.get_doc("Healthcare Patient", self.patient)
+
+            # Get practitioner name
+            practitioner_name = frappe.db.get_value(
+                "Healthcare Practitioner",
+                self.practitioner,
+                "practitioner_name"
+            ) or self.practitioner
+
+            if patient_doc.email:
+                # Format time and date for display
+                import datetime
+                if self.time:
+                    time_obj = datetime.datetime.strptime(str(self.time), "%H:%M:%S").time()
+                    formatted_time = time_obj.strftime("%I:%M %p")
+                else:
+                    formatted_time = "Time TBD"
+
+                if self.date:
+                    date_obj = datetime.datetime.strptime(str(self.date), "%Y-%m-%d").date()
+                    formatted_date = date_obj.strftime("%B %d, %Y")
+                else:
+                    formatted_date = str(self.date)
+
+                frappe.sendmail(
+                    recipients=[patient_doc.email],
+                    subject="Appointment Cancelled - Better Care",
+                    message=f"""
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8fafc;">
+                        <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+
+                            <div style="text-align: center; margin-bottom: 25px;">
+                                <h1 style="color: #dc2626; margin: 0; font-size: 24px;">❌ Appointment Cancelled</h1>
+                                <p style="color: #64748b; margin: 5px 0 0 0;">Your appointment has been successfully cancelled</p>
+                            </div>
+
+                            <div style="background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                                <h3 style="color: #991b1b; margin: 0 0 15px 0; font-size: 16px;">Cancelled Appointment</h3>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #64748b; font-weight: 500; width: 30%;">Appointment ID:</td>
+                                        <td style="padding: 8px 0; color: #0f172a; font-weight: 600;">{self.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #64748b; font-weight: 500;">Date:</td>
+                                        <td style="padding: 8px 0; color: #0f172a; font-weight: 600;">{formatted_date}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #64748b; font-weight: 500;">Time:</td>
+                                        <td style="padding: 8px 0; color: #0f172a; font-weight: 600;">{formatted_time}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #64748b; font-weight: 500;">Practitioner:</td>
+                                        <td style="padding: 8px 0; color: #0f172a; font-weight: 600;">{practitioner_name}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                                <h4 style="color: #0369a1; margin: 0 0 10px 0; font-size: 14px;">📋 What happens next:</h4>
+                                <ul style="color: #475569; font-size: 14px; margin: 0; padding-left: 20px;">
+                                    <li>Your appointment slot is now available for other patients</li>
+                                    <li>If there was a waitlist, the next patient has been notified</li>
+                                    <li>No charges apply for this cancellation</li>
+                                    <li>You can book a new appointment anytime through the portal</li>
+                                </ul>
+                            </div>
+
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <p style="color: #64748b; font-size: 14px; margin-bottom: 15px;">
+                                    Need to book a new appointment?
+                                </p>
+                                <a href="{frappe.utils.get_url()}/healthcare_portal"
+                                   style="background: #0f172a; color: white; padding: 12px 24px; text-decoration: none;
+                                          border-radius: 8px; font-weight: 600; display: inline-block;">
+                                    Book New Appointment
+                                </a>
+                            </div>
+
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 25px 0;">
+
+                            <div style="text-align: center;">
+                                <p style="color: #64748b; font-size: 12px; margin: 0;">
+                                    This is an automated message from Better Care Healthcare Portal.<br>
+                                    If you have questions, please contact our office directly.<br>
+                                    © 2026 Better.Care. All rights reserved. 
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    """,
+                )
+
+                frappe.logger().info(f"Cancellation notification sent to {patient_doc.email} for appointment {self.name}")
+
+        except Exception as e:
+            # Don't fail the cancellation if email fails
+            frappe.logger().error(f"Failed to send cancellation notification for {self.name}: {str(e)}")
+            pass
+
 
 @frappe.whitelist()
 def cancel_appointment(appointment):
     doc = frappe.get_doc("Patient Appointment", appointment)
+
+    # Update status (now allowed after submission due to allow_on_submit)
     doc.status = "Cancelled"
     doc.save(ignore_permissions=True)
+
+    # Send cancellation notification
+    doc.send_cancellation_notification()
+
     frappe.db.commit()
     return True

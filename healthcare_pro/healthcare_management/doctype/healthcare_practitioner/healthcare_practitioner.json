@@ -52,7 +52,8 @@
    "fieldname": "table_locw",
    "fieldtype": "Table",
    "label": "Working Time ",
-   "options": "Schedule Slot"
+   "options": "Schedule Slot",
+   "reqd": 1
   },
   {
    "fieldname": "working_time_column",
@@ -72,7 +73,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-09 14:57:09.331729",
+ "modified": "2026-04-07 11:28:17.826816",
  "modified_by": "Administrator",
  "module": "Healthcare Management",
  "name": "Healthcare Practitioner",

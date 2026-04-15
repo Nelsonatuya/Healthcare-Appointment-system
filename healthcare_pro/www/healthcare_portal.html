@@ -12,6 +12,7 @@
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="{{ frappe.session.csrf_token }}">
 <title>Healthcare Portal — Better Care</title>
 <!-- Preloader -->
 <style>
@@ -162,7 +163,7 @@
   .login-left {
     flex: 1;
     background:
-      linear-gradient(135deg, rgba(2, 62, 138, 0.75) 0%, rgba(3, 4, 94, 0.7) 100%),
+      linear-gradient(135deg, rgba(28, 111, 220, 0.75) 0%, rgba(3, 4, 94, 0.7) 100%),
       url('https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=1200&q=80') center/cover;
     display: flex;
     flex-direction: column;
@@ -3687,7 +3688,9 @@ var currentRegStep = 1;
 function getCsrf() {
   if (typeof frappe !== 'undefined' && frappe.csrf_token) return frappe.csrf_token;
   var m = document.cookie.match(/X-Frappe-CSRF-Token=([^;]+)/);
-  return m ? m[1] : '';
+  if (m) return m[1];
+  var meta = document.querySelector('meta[name="csrf-token"]');
+  return meta ? meta.getAttribute('content') : '';
 }
 function apiPost(method, body) {
   return fetch('/api/method/' + method, {
@@ -3877,10 +3880,9 @@ function submitRegistration() {
   btn.textContent = 'Creating account…';
   btn.disabled = true;
 
-  // Guest endpoint — no CSRF token available before login, so call fetch directly
   fetch('/api/method/healthcare_pro.healthcare_management.api.register_patient.register_new_patient', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrf() },
     body: JSON.stringify({
       full_name: fullName,
       date_of_birth: dob,
@@ -4336,19 +4338,23 @@ function proceedWithBooking() {
         document.getElementById('book-wl').style.display = 'flex';
         showToast('Added to waitlist');
 
-        // Auto-hide waitlist message after 4 seconds
+        // Redirect to home after 2 seconds
         setTimeout(function() {
           document.getElementById('book-wl').style.display = 'none';
-        }, 4000);
+          resetBook();
+          navigate('dashboard');
+        }, 2000);
       } else if (result.status === 'scheduled') {
         setText('book-ok-msg', result.message);
         document.getElementById('book-ok').style.display = 'flex';
         showToast('Appointment booked successfully');
 
-        // Auto-hide success message after 4 seconds
+        // Redirect to home after 2 seconds
         setTimeout(function() {
           document.getElementById('book-ok').style.display = 'none';
-        }, 4000);
+          resetBook();
+          navigate('dashboard');
+        }, 2000);
       } else if (result.status === 'error') {
         showToast(result.message);
       }

@@ -413,7 +413,6 @@
 
   .reg-section.active {
     display: block;
-    animation: fadeIn 0.3s ease;
   }
 
   .reg-success {
@@ -928,54 +927,6 @@
     flex: 1;
   }
 
-  /* ═══════════════════════════════════════════════════════════════
-     SIDEBAR
-     ═══════════════════════════════════════════════════════════════ */
-  .sidebar {
-    display: none; /* Navigation moved to topbar */
-  }
-
-  .nav-label {
-    font-size: 11px;
-    font-weight: var(--font-weight-bold);
-    color: var(--neutral-500);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 20px 16px 10px;
-  }
-
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 12px 16px;
-    border-radius: var(--radius-lg);
-    cursor: pointer;
-    font-size: 14px;
-    color: var(--neutral-600);
-    font-weight: var(--font-weight-medium);
-    transition: all 0.25s ease;
-    border: none;
-    background: none;
-    width: 100%;
-    text-align: left;
-    position: relative;
-  }
-
-  .nav-item:hover {
-    background: var(--primary-pale);
-    color: var(--primary);
-  }
-
-  .nav-item.active {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    color: var(--neutral-50);
-    font-weight: var(--font-weight-semibold);
-    box-shadow: 0 4px 12px rgba(2, 62, 138, 0.25);
-  }
-
-  .nav-item.active .nav-icon { color: var(--neutral-50); }
-
   .nav-icon {
     width: 20px;
     height: 20px;
@@ -991,16 +942,6 @@
     padding: 2px 10px;
     border-radius: 9999px;
     line-height: 1.4;
-  }
-
-  .nav-item.active .nav-badge {
-    background: rgba(255, 255, 255, 0.25);
-  }
-
-  .sidebar-footer {
-    margin-top: auto;
-    padding-top: 16px;
-    border-top: 1px solid var(--neutral-200);
   }
 
   /* ═══════════════════════════════════════════════════════════════
@@ -1053,30 +994,6 @@
   .fade-in.visible {
     opacity: 1;
     transform: translateY(0);
-  }
-
-  .fade-in-left {
-    opacity: 0;
-    transform: translateX(-30px);
-    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .fade-in-left.visible {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  .fade-in-right {
-    opacity: 0;
-    transform: translateX(30px);
-    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .fade-in-right.visible {
-    opacity: 1;
-    transform: translateX(0);
   }
 
   /* Stagger children */
@@ -1654,13 +1571,6 @@
   /* ═══════════════════════════════════════════════════════════════
      DASHBOARD
      ═══════════════════════════════════════════════════════════════ */
-  .dash-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-bottom: 36px;
-  }
-
   .stat-card {
     background: var(--neutral-50);
     border: 1px solid var(--neutral-200);
@@ -1671,11 +1581,6 @@
     gap: 20px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .stat-card:hover {
-    box-shadow: 0 8px 30px rgba(2, 62, 138, 0.1);
-    transform: translateY(-4px);
   }
 
   .stat-icon {
@@ -1718,88 +1623,6 @@
     font-weight: var(--font-weight-medium);
   }
 
-  .dash-two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-
-  /* Quick Actions */
-  .quick-actions {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 36px;
-  }
-
-  .quick-action-card {
-    flex: 1;
-    background: var(--neutral-50);
-    border: 1px solid var(--neutral-200);
-    border-radius: 20px;
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 14px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-  }
-
-  .quick-action-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 35px rgba(2, 62, 138, 0.12);
-    border-color: var(--accent-light);
-  }
-
-  .quick-action-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--primary-pale) 0%, #d0e8f0 100%);
-    color: var(--primary);
-    flex-shrink: 0;
-    transition: all 0.3s ease;
-  }
-
-  .quick-action-card:hover .quick-action-icon {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-    color: var(--neutral-50);
-    transform: scale(1.1);
-  }
-
-  .quick-action-icon svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .quick-action-card:nth-child(2) .quick-action-icon {
-    background: linear-gradient(135deg, var(--accent-pale) 0%, #8dd6e8 100%);
-    color: var(--accent-dark);
-  }
-
-  .quick-action-content {
-    flex: 1;
-    text-align: center;
-  }
-
-  .quick-action-label {
-    font-size: 15px;
-    font-weight: var(--font-weight-semibold);
-    color: var(--neutral-950);
-    margin-bottom: 4px;
-  }
-
-  .quick-action-desc {
-    font-size: 13px;
-    color: var(--neutral-600);
-    line-height: 1.5;
-  }
-
   .upcoming-item {
     display: flex;
     align-items: center;
@@ -1820,8 +1643,7 @@
     border-color: var(--accent-light);
   }
 
-  .upcoming-item:first-child { padding: 16px; }
-  .upcoming-item:last-child { border-bottom: none; padding-bottom: 16px; margin-bottom: 0; }
+  .upcoming-item:last-child { margin-bottom: 0; }
 
   .appt-date-box {
     width: 60px;
@@ -3272,15 +3094,6 @@
   </div>
 
   <div class="app-body">
-    <!-- Sidebar hidden, kept for JS compatibility -->
-    <nav class="sidebar">
-      <button class="nav-item active" onclick="navigate('dashboard')" id="nav-dashboard-sb"></button>
-      <button class="nav-item" onclick="navigate('book')" id="nav-book-sb"></button>
-      <button class="nav-item" onclick="navigate('appointments')" id="nav-appointments-sb"></button>
-      <button class="nav-item" onclick="navigate('records')" id="nav-records-sb"></button>
-      <button class="nav-item" onclick="navigate('profile')" id="nav-profile-sb"></button>
-    </nav>
-
     <main class="main">
       <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
@@ -3510,7 +3323,7 @@
           <div class="form-group">
             <label>Available Time Slots</label>
             <div class="time-slots" id="slots-container">
-              <div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a practitioner and date first.</div>
+              <div style="grid-column:1/-1;color:var(--neutral-600);font-size:13px;">Select a practitioner and date first.</div>
             </div>
           </div>
           <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:16px;">
@@ -3645,8 +3458,8 @@
       <button class="modal-close" onclick="closeReschedule()">✕</button>
     </div>
     <div style="margin-bottom:16px;">
-      <div style="font-size:13px;color:var(--slate);background:var(--off-white);border-radius:10px;padding:12px 16px;">
-        Rescheduling: <span id="rs-appt-id" style="font-weight:600;color:var(--teal);"></span>
+      <div style="font-size:13px;color:var(--neutral-600);background:var(--neutral-100);border-radius:10px;padding:12px 16px;">
+        Rescheduling: <span id="rs-appt-id" style="font-weight:600;color:var(--accent);"></span>
       </div>
     </div>
     <div class="form-group">
@@ -3656,7 +3469,7 @@
     <div class="form-group">
       <label>New Time Slot</label>
       <div class="time-slots" id="rs-slots">
-        <div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a date to see available slots.</div>
+        <div style="grid-column:1/-1;color:var(--neutral-600);font-size:13px;">Select a date to see available slots.</div>
       </div>
     </div>
     <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;">
@@ -4077,7 +3890,7 @@ function loadDashboard() {
           var sClass = (a.status || '').toLowerCase();
           return '<div class="upcoming-item">' +
             '<div class="appt-date-box"><div class="month">' + month + '</div><div class="day">' + day + '</div></div>' +
-            '<div class="appt-info"><div class="doctor">' + (a.practitioner || '—') + '</div><div class="appt-time">' + (a.time || '') + '</div></div>' +
+            '<div class="appt-info"><div class="doctor">' + pracDisplay(a) + '</div><div class="appt-time">' + (a.time || '') + '</div></div>' +
             '<span class="badge ' + sClass + '">' + a.status + '</span></div>';
         }).join('');
       }
@@ -4164,10 +3977,10 @@ function loadSlots() {
   var date = document.getElementById('book-date').value;
   var container = document.getElementById('slots-container');
   selectedTime = null;
-  if (!pracId || !date) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a practitioner and date first.</div>'; return; }
+  if (!pracId || !date) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--neutral-600);font-size:13px;">Select a practitioner and date first.</div>'; return; }
   var dayName = new Date(date + 'T00:00:00').toLocaleString('en', { weekday: 'long' });
   var daySlots = schedule.filter(function(s) { return s.practitioner_id === pracId && s.day === dayName; });
-  if (daySlots.length === 0) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">No available slots on ' + dayName + '. Try another day.</div>'; return; }
+  if (daySlots.length === 0) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--neutral-600);font-size:13px;">No available slots on ' + dayName + '. Try another day.</div>'; return; }
   var times = [];
   daySlots.forEach(function(slot) {
     var fp = slot.from_time.split(':').map(Number);
@@ -4382,7 +4195,7 @@ function resetBook() {
   document.getElementById('book-wl').style.display = 'none';
   document.getElementById('book-date').value = '';
   document.getElementById('book-prac').value = '';
-  document.getElementById('slots-container').innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a practitioner and date first.</div>';
+  document.getElementById('slots-container').innerHTML = '<div style="grid-column:1/-1;color:var(--neutral-600);font-size:13px;">Select a practitioner and date first.</div>';
   closeBookingConfirmation(); // Close any open confirmation modal
   closeCancellationModal(); // Close any open cancellation modal
 }
@@ -4411,8 +4224,8 @@ function loadAppointments() {
         var canCancel = a.status === 'Scheduled' || a.status === 'Open';
         var pracId = (a.practitioner || '');
         var isDone = a.status === 'Completed';
-        return '<tr><td style="font-weight:600;color:var(--teal);">' + a.name + '</td>' +
-          '<td>' + (a.date || '—') + '</td><td>' + (a.time || '—') + '</td><td>' + (a.practitioner || '—') + '</td>' +
+        return '<tr><td style="font-weight:600;color:var(--accent);">' + a.name + '</td>' +
+          '<td>' + (a.date || '—') + '</td><td>' + (a.time || '—') + '</td><td>' + pracDisplay(a) + '</td>' +
           '<td><span class="badge ' + sc + '">' + (a.status || '—') + '</span></td>' +
           '<td style="display:flex;gap:8px;align-items:center;">' +
           (canCancel ? '<button class="tbl-action red" onclick="cancelAppt(\''+a.name+'\')">Cancel</button>' : '') +
@@ -4425,27 +4238,17 @@ function loadAppointments() {
 }
 
 function cancelAppt(appointmentId) {
-  console.log('cancelAppt called with ID:', appointmentId);
-  console.log('allAppointments:', allAppointments);
-
-  // Find the appointment details
   var appointment = allAppointments.find(function(a) { return a.name === appointmentId; });
 
   if (!appointment) {
-    console.error('Appointment not found for ID:', appointmentId);
     showToast('Appointment not found. Please refresh the page and try again.');
     return;
   }
 
-  console.log('Found appointment:', appointment);
-
-  // Store cancellation data
   pendingCancellationData = {
     appointment: appointment,
     appointmentId: appointmentId
   };
-
-  console.log('Stored pendingCancellationData:', pendingCancellationData);
 
   showCancellationModal(appointment);
 }
@@ -4484,7 +4287,7 @@ function showCancellationModal(appointment) {
   html += '  </div>';
   html += '  <div class="booking-detail">';
   html += '    <span class="booking-label">Practitioner:</span>';
-  html += '    <span class="booking-value">' + (appointment.practitioner || 'N/A') + '</span>';
+  html += '    <span class="booking-value">' + pracDisplay(appointment) + '</span>';
   html += '  </div>';
   html += '  <div class="booking-detail">';
   html += '    <span class="booking-label">Date:</span>';
@@ -4523,25 +4326,14 @@ function closeCancellationModal() {
 }
 
 function proceedWithCancellation() {
-  console.log('proceedWithCancellation called');
-  console.log('pendingCancellationData:', pendingCancellationData);
-
   var btn = document.getElementById('confirm-cancel-btn');
   var appointmentId;
 
-  // Try to get appointment ID from pending data first
   if (pendingCancellationData && pendingCancellationData.appointmentId) {
     appointmentId = pendingCancellationData.appointmentId;
-    console.log('Using appointmentId from pendingCancellationData:', appointmentId);
-  }
-  // Fallback to data attribute on button
-  else if (btn.getAttribute('data-appointment-id')) {
+  } else if (btn.getAttribute('data-appointment-id')) {
     appointmentId = btn.getAttribute('data-appointment-id');
-    console.log('Using appointmentId from data attribute:', appointmentId);
-  }
-  // No appointment ID found
-  else {
-    console.error('No appointment ID found in either pendingCancellationData or data attribute');
+  } else {
     showToast('Error: No appointment selected for cancellation');
     return;
   }
@@ -4549,17 +4341,11 @@ function proceedWithCancellation() {
   btn.textContent = 'Cancelling...';
   btn.disabled = true;
 
-  console.log('Proceeding with cancellation for appointment ID:', appointmentId);
-
   apiPost('healthcare_pro.healthcare_management.doctype.patient_appointment.patient_appointment.cancel_appointment', {
     appointment: appointmentId
   })
     .then(function() {
-      console.log('Cancellation successful');
-
-      // Clear the pending data
       pendingCancellationData = null;
-
       closeCancellationModal();
       showToast('Appointment cancelled successfully');
 
@@ -4573,7 +4359,6 @@ function proceedWithCancellation() {
       loadDashboard();
     })
     .catch(function(e) {
-      console.error('Cancellation failed:', e);
       showToast('Failed to cancel appointment: ' + e.message);
     })
     .finally(function() {
@@ -4593,8 +4378,8 @@ function loadMedicalRecords() {
       allRecords = recs || []; setText('d-records', allRecords.length);
       if (allRecords.length === 0) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No medical records found.</td></tr>'; return; }
       tbody.innerHTML = allRecords.map(function(r) {
-        return '<tr><td style="font-weight:600;color:var(--teal);">' + r.name + '</td>' +
-          '<td>' + (r.date||'—') + '</td><td>' + (r.practitioner||'—') + '</td>' +
+        return '<tr><td style="font-weight:600;color:var(--accent);">' + r.name + '</td>' +
+          '<td>' + (r.date||'—') + '</td><td>' + pracDisplay(r) + '</td>' +
           '<td>' + (r.diagnosis||'—') + '</td><td>' + (r.appointment||'—') + '</td>' +
           '<td><button class="tbl-action" onclick="openRecord(\''+r.name+'\')">View</button></td></tr>';
       }).join('');
@@ -4608,20 +4393,20 @@ function openRecord(recName) {
       var rec = full || r;
       if (!rec) { showToast('Could not load record'); return; }
       document.getElementById('modal-body').innerHTML =
-        '<div class="rec-field"><label>Record ID</label><div class="val" style="color:var(--teal);font-weight:600;">' + rec.name + '</div></div>' +
+        '<div class="rec-field"><label>Record ID</label><div class="val" style="color:var(--accent);font-weight:600;">' + rec.name + '</div></div>' +
         '<div class="rec-field"><label>Date</label><div class="val">' + (rec.date||'—') + '</div></div>' +
-        '<div class="rec-field"><label>Practitioner</label><div class="val">' + (rec.practitioner||'—') + '</div></div>' +
+        '<div class="rec-field"><label>Practitioner</label><div class="val">' + (rec.practitioner_name || rec.practitioner||'—') + '</div></div>' +
         '<div class="rec-field"><label>Linked Appointment</label><div class="val">' + (rec.appointment||'—') + '</div></div>' +
-        '<div style="height:1px;background:var(--border);margin:16px 0;"></div>' +
+        '<div style="height:1px;background:var(--neutral-200);margin:16px 0;"></div>' +
         '<div class="rec-field"><label>Diagnosis</label><div class="val" style="font-weight:600;">' + (rec.diagnosis||'—') + '</div></div>' +
         '<div class="rec-field"><label>Symptoms</label><div class="val">' + (rec.symptoms||'—') + '</div></div>';
       document.getElementById('rec-modal').classList.add('open');
     }).catch(function() {
       if (r) {
         document.getElementById('modal-body').innerHTML =
-          '<div class="rec-field"><label>Record ID</label><div class="val" style="color:var(--teal);font-weight:600;">' + r.name + '</div></div>' +
+          '<div class="rec-field"><label>Record ID</label><div class="val" style="color:var(--accent);font-weight:600;">' + r.name + '</div></div>' +
           '<div class="rec-field"><label>Date</label><div class="val">' + (r.date||'—') + '</div></div>' +
-          '<div class="rec-field"><label>Practitioner</label><div class="val">' + (r.practitioner||'—') + '</div></div>' +
+          '<div class="rec-field"><label>Practitioner</label><div class="val">' + pracDisplay(r) + '</div></div>' +
           '<div class="rec-field"><label>Linked Appointment</label><div class="val">' + (r.appointment||'—') + '</div></div>' +
           '<div class="rec-field"><label>Diagnosis</label><div class="val">' + (r.diagnosis||'—') + '</div></div>';
         document.getElementById('rec-modal').classList.add('open');
@@ -4646,7 +4431,7 @@ function openReschedule(apptName, practitionerId) {
   var rs = document.getElementById('rs-date');
   rs.min = new Date().toISOString().split('T')[0]; rs.value = '';
   setText('rs-appt-id', apptName);
-  document.getElementById('rs-slots').innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a date to see available slots.</div>';
+  document.getElementById('rs-slots').innerHTML = '<div style="grid-column:1/-1;color:var(--neutral-600);font-size:13px;">Select a date to see available slots.</div>';
   document.getElementById('reschedule-modal').classList.add('open');
 }
 
@@ -4659,10 +4444,10 @@ function loadRescheduleSlots() {
   var date = document.getElementById('rs-date').value;
   var container = document.getElementById('rs-slots');
   rsSelectedTime = null;
-  if (!date || !rescheduleAppt) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">Select a date to see available slots.</div>'; return; }
+  if (!date || !rescheduleAppt) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--neutral-600);font-size:13px;">Select a date to see available slots.</div>'; return; }
   var dayName = new Date(date + 'T00:00:00').toLocaleString('en', { weekday: 'long' });
   var daySlots = schedule.filter(function(s) { return s.practitioner_id === rescheduleAppt.practitioner_id && s.day === dayName; });
-  if (daySlots.length === 0) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--slate);font-size:13px;">No available slots on ' + dayName + '.</div>'; return; }
+  if (daySlots.length === 0) { container.innerHTML = '<div style="grid-column:1/-1;color:var(--neutral-600);font-size:13px;">No available slots on ' + dayName + '.</div>'; return; }
   var times = [];
   daySlots.forEach(function(slot) {
     var fp = slot.from_time.split(':').map(Number); var tp = slot.to_time.split(':').map(Number);
@@ -4705,6 +4490,12 @@ function confirmReschedule() {
 }
 
 // ════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════
+function pracDisplay(obj) {
+  return obj.practitioner_name || obj.practitioner || '—';
+}
+
 // TOAST
 // ════════════════════════════════════
 function showToast(msg) {
@@ -4864,7 +4655,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
-  document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right, .fade-in-stagger').forEach(function(el) {
+  document.querySelectorAll('.fade-in, .fade-in-stagger').forEach(function(el) {
     observer.observe(el);
   });
 });

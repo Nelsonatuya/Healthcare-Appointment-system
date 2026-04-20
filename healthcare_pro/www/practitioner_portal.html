@@ -737,7 +737,7 @@
   /* MODAL */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,22,40,0.6); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
   .modal-overlay.open { display: flex; }
-  .modal { background: white; border-radius: 14px; padding: 28px; width: 460px; max-width: 90vw; max-height: 85vh; overflow-y: auto; animation: mIn 0.2s ease; }
+  .modal { background: white; border-radius: 14px; padding: 28px; width: 520px; max-width: 90vw; max-height: 85vh; overflow-y: auto; animation: mIn 0.2s ease; }
   @keyframes mIn { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
   .modal-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
   .modal-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--navy); }
@@ -745,6 +745,37 @@
   .m-field { margin-bottom: 14px; }
   .m-field label { font-size: 10px; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px; }
   .m-field .val { font-size: 13px; color: var(--navy); line-height: 1.6; }
+
+  /* MEDICAL RECORDS IN MODAL */
+  .records-section { margin-top: 16px; }
+  .records-section-title { font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .records-loading { font-size: 12px; color: var(--slate); padding: 8px 0; }
+
+  .record-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 8px;
+    background: var(--off-white);
+    transition: border-color 0.15s;
+  }
+  .record-card:hover { border-color: var(--teal); }
+  .record-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .record-id { font-size: 11px; font-weight: 600; color: var(--teal); }
+  .record-date { font-size: 11px; color: var(--slate); }
+  .record-row { display: flex; gap: 6px; margin-bottom: 4px; font-size: 12px; }
+  .record-label { color: var(--slate); width: 80px; flex-shrink: 0; font-weight: 500; }
+  .record-val { color: var(--navy); line-height: 1.5; }
+  .record-val a { color: var(--teal); text-decoration: none; font-weight: 500; }
+  .record-val a:hover { text-decoration: underline; }
+  .no-records { font-size: 12px; color: var(--slate); padding: 10px 0; }
+  .record-toggle {
+    background: none; border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 12px; font-family: 'DM Sans', sans-serif; font-size: 12px;
+    font-weight: 500; color: var(--teal); cursor: pointer; transition: all 0.15s;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .record-toggle:hover { background: var(--teal-pale); border-color: var(--teal); }
 
   /* TOAST */
   .toast { position: fixed; bottom: 22px; right: 22px; background: var(--navy); color: white; padding: 12px 18px; border-radius: 10px; font-size: 13px; font-weight: 500; z-index: 300; transform: translateY(70px); opacity: 0; transition: all 0.3s; box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
@@ -1290,7 +1321,7 @@ function renderTodayList(appts) {
       return '<div class="today-appt" onclick="openApptModal(\'' + a.name + '\')">' +
         '<div class="time-pill">' + timeDisplay + '</div>' +
         '<div class="appt-patient">' +
-          '<div class="pname">' + (a.patient || '—') + '</div>' +
+          '<div class="pname">' + patientDisplay(a) + '</div>' +
           '<div class="pid">' + a.name + '</div>' +
         '</div>' +
         '<span class="badge ' + sc + '">' + (a.status || '—') + '</span>' +
@@ -1340,7 +1371,7 @@ function renderApptTable() {
     var sc = (a.status || '').toLowerCase();
     return '<tr>' +
       '<td style="font-weight:600;color:var(--teal);">' + a.name + '</td>' +
-      '<td>' + (a.patient || '—') + '</td>' +
+      '<td>' + patientDisplay(a) + '</td>' +
       '<td>' + (a.date || '—') + '</td>' +
       '<td>' + formatTime(a.time) + '</td>' +
       '<td><span class="badge ' + sc + '">' + (a.status || '—') + '</span></td>' +
@@ -1440,7 +1471,7 @@ function renderMonthView() {
     dayAppts.slice(0, maxShow).forEach(function(a) {
       var sc = (a.status || '').toLowerCase();
       var t = formatTime(a.time);
-      apptChips += '<div class="cell-appt-chip ' + sc + '" onclick="event.stopPropagation();openApptModal(\'' + a.name + '\')" title="' + (a.patient || '') + '">' + t + ' · ' + (a.patient || a.name) + '</div>';
+      apptChips += '<div class="cell-appt-chip ' + sc + '" onclick="event.stopPropagation();openApptModal(\'' + a.name + '\')" title="' + patientDisplay(a) + '">' + t + ' · ' + patientDisplay(a) + '</div>';
     });
 
     if (dayAppts.length > maxShow) {
@@ -1551,7 +1582,7 @@ function renderWeekView() {
 
       html += '<div class="week-appt-block ' + sc + '" style="top:' + topOffset + 'px;height:52px;" onclick="openApptModal(\'' + a.name + '\')">' +
         '<div class="week-appt-time">' + timeDisplay + '</div>' +
-        '<div class="week-appt-name">' + (a.patient || a.name) + '</div>' +
+        '<div class="week-appt-name">' + patientDisplay(a) + '</div>' +
       '</div>';
     });
 
@@ -1574,13 +1605,108 @@ function openApptModal(apptName) {
   var sc = (a.status || '').toLowerCase();
   document.getElementById('modal-body').innerHTML =
     '<div class="m-field"><label>Appointment ID</label><div class="val" style="color:var(--teal);font-weight:600;">' + a.name + '</div></div>' +
-    '<div class="m-field"><label>Patient</label><div class="val">' + (a.patient || '—') + '</div></div>' +
+    '<div class="m-field"><label>Patient</label><div class="val">' + patientDisplay(a) + (a.patient_name && a.patient ? ' <span style="color:var(--slate);font-weight:400;font-size:12px;">(' + a.patient + ')</span>' : '') + '</div></div>' +
     '<div class="m-field"><label>Date</label><div class="val">' + (a.date || '—') + '</div></div>' +
     '<div class="m-field"><label>Time</label><div class="val">' + formatTime(a.time) + '</div></div>' +
     '<div style="height:1px;background:var(--border);margin:14px 0;"></div>' +
-    '<div class="m-field"><label>Status</label><div class="val"><span class="badge ' + sc + '">' + (a.status || '—') + '</span></div></div>';
+    '<div class="m-field"><label>Status</label><div class="val"><span class="badge ' + sc + '">' + (a.status || '—') + '</span></div></div>' +
+    '<div style="height:1px;background:var(--border);margin:14px 0;"></div>' +
+    '<div class="records-section">' +
+      '<div class="records-section-title">Medical Records</div>' +
+      '<div id="modal-records"><div class="records-loading"><span class="spinner"></span> Loading medical records…</div></div>' +
+    '</div>';
 
   document.getElementById('appt-modal').classList.add('open');
+
+  // Fetch medical records for this patient
+  if (a.patient) {
+    loadPatientRecords(a.patient, a.name);
+  } else {
+    document.getElementById('modal-records').innerHTML = '<div class="no-records">No patient linked to this appointment.</div>';
+  }
+}
+
+function loadPatientRecords(patient, appointmentName) {
+  apiGet('healthcare_pro.healthcare_management.api.create_medical_record.get_patient_medical_records',
+    { patient: patient }
+  ).then(function(records) {
+    var container = document.getElementById('modal-records');
+    if (!records || records.length === 0) {
+      container.innerHTML = '<div class="no-records">No medical records found for this patient.</div>';
+      return;
+    }
+
+    // Separate records: ones linked to this appointment first, then others
+    var apptRecords = records.filter(function(r) { return r.appointment === appointmentName; });
+    var otherRecords = records.filter(function(r) { return r.appointment !== appointmentName; });
+
+    var html = '';
+
+    if (apptRecords.length > 0) {
+      html += '<div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:6px;">This Appointment</div>';
+      html += apptRecords.map(renderRecordCard).join('');
+    }
+
+    if (otherRecords.length > 0) {
+      var label = apptRecords.length > 0 ? 'Other Records' : 'Patient History';
+      html += '<div style="font-size:11px;font-weight:600;color:var(--navy);margin:10px 0 6px;">' + label + ' (' + otherRecords.length + ')</div>';
+      // Show first 3 by default, rest in a collapsible section
+      var showInitially = otherRecords.slice(0, 3);
+      var hidden = otherRecords.slice(3);
+
+      html += showInitially.map(renderRecordCard).join('');
+
+      if (hidden.length > 0) {
+        html += '<div id="extra-records" style="display:none;">' + hidden.map(renderRecordCard).join('') + '</div>';
+        html += '<button class="record-toggle" onclick="toggleExtraRecords(this)">Show ' + hidden.length + ' more</button>';
+      }
+    }
+
+    container.innerHTML = html;
+  }).catch(function(e) {
+    var container = document.getElementById('modal-records');
+    container.innerHTML = '<div class="no-records" style="color:var(--danger);">Failed to load records: ' + e.message + '</div>';
+  });
+}
+
+function renderRecordCard(r) {
+  var diagText = r.diagnosis || '—';
+  // Strip HTML tags from diagnosis (it's a Text Editor field)
+  var diagClean = diagText.replace(/<[^>]*>/g, '').substring(0, 150);
+  if (diagText.replace(/<[^>]*>/g, '').length > 150) diagClean += '…';
+
+  var html = '<div class="record-card">' +
+    '<div class="record-header">' +
+      '<span class="record-id">' + r.name + '</span>' +
+      '<span class="record-date">' + (r.date || '—') + '</span>' +
+    '</div>';
+
+  if (r.symptoms) {
+    html += '<div class="record-row"><span class="record-label">Symptoms</span><span class="record-val">' + r.symptoms + '</span></div>';
+  }
+  if (diagClean && diagClean !== '—') {
+    html += '<div class="record-row"><span class="record-label">Diagnosis</span><span class="record-val">' + diagClean + '</span></div>';
+  }
+  if (r.practitioner) {
+    html += '<div class="record-row"><span class="record-label">Practitioner</span><span class="record-val">' + r.practitioner + '</span></div>';
+  }
+  if (r.lab_results) {
+    html += '<div class="record-row"><span class="record-label">Lab Results</span><span class="record-val"><a href="' + r.lab_results + '" target="_blank">View Attachment</a></span></div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function toggleExtraRecords(btn) {
+  var extra = document.getElementById('extra-records');
+  if (extra.style.display === 'none') {
+    extra.style.display = 'block';
+    btn.textContent = 'Show less';
+  } else {
+    extra.style.display = 'none';
+    btn.textContent = btn.textContent.replace('Show less', 'Show more');
+  }
 }
 
 function closeModal() {
@@ -1594,6 +1720,10 @@ function closePopover() {
 // ════════════════════════════════════════
 // HELPERS
 // ════════════════════════════════════════
+function patientDisplay(a) {
+  return a.patient_name || a.patient || '—';
+}
+
 function formatTime(timeStr) {
   if (!timeStr) return '—';
   var parts = timeStr.split(':').map(Number);

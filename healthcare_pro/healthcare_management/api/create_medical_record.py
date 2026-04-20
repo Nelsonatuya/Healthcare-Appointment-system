@@ -46,8 +46,38 @@ def get_medical_records():
     )
     if not patient:
         return []
-    return frappe.get_all(
+    records = frappe.get_all(
         "Medical Record",
         filters={"patient": patient},
         fields=["name", "date", "practitioner", "diagnosis", "appointment", "symptoms"]
+    )
+
+    practitioner_ids = list({r.practitioner for r in records if r.practitioner})
+    practitioner_names = {}
+    for pid in practitioner_ids:
+        pname = frappe.db.get_value("Healthcare Practitioner", pid, "practitioner_name")
+        if pname:
+            practitioner_names[pid] = pname
+
+    for r in records:
+        r["practitioner_name"] = practitioner_names.get(r.practitioner, "")
+
+    return records
+
+@frappe.whitelist()
+def get_patient_medical_records(patient):
+    """Get medical records for a patient. Only accessible by practitioners."""
+    practitioner = frappe.db.get_value(
+        "Healthcare Practitioner",
+        {"email": frappe.session.user},
+        "name"
+    )
+    if not practitioner:
+        frappe.throw("Only practitioners can access patient medical records.", frappe.PermissionError)
+
+    return frappe.get_all(
+        "Medical Record",
+        filters={"patient": patient},
+        fields=["name", "date", "practitioner", "diagnosis", "appointment", "symptoms", "lab_results"],
+        order_by="date desc"
     )

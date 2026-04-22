@@ -51,14 +51,22 @@ class IntegrationTestPatientAppointment(IntegrationTestCase):
 		}).insert(ignore_permissions=True)
 
 	def _ensure_practitioner(self):
+		all_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+		schedule = [{"day": d, "from_time": "09:00:00", "to_time": "17:00:00"} for d in all_days]
+
 		name = frappe.db.get_value("Healthcare Practitioner", {"practitioner_name": "Dr. Test Practitioner"})
 		if name:
-			return frappe.get_doc("Healthcare Practitioner", name)
+			doc = frappe.get_doc("Healthcare Practitioner", name)
+			if not doc.table_locw:
+				doc.set("table_locw", schedule)
+				doc.save(ignore_permissions=True)
+			return doc
 		return frappe.get_doc({
 			"doctype": "Healthcare Practitioner",
 			"practitioner_name": "Dr. Test Practitioner",
 			"department": "cardiothorastic",
 			"specialization": "cardiology",
+			"table_locw": schedule,
 		}).insert(ignore_permissions=True)
 
 	def _book(self, date="2099-12-01", time="10:00:00"):

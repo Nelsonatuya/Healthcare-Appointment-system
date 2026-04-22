@@ -16,7 +16,6 @@ def get_context(context):
 
 
     context.on_submit = on_submit
-    # Button href is upgraded with ?patient=<name> by client script after save.
     context.success_message = (
         "<div class=\"alert alert-success\">You have successfully booked an appointment. Do you wish to book another?</div>"
     )

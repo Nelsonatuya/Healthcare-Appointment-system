@@ -1269,7 +1269,7 @@ function loadDashboard() {
     { practitioner: currentPractitioner.name }
   ).then(function(appts) {
     console.log('Dashboard appointments received:', appts ? appts.length : 0, appts);
-    allAppointments = appts || [];
+    allAppointments = filterUpcoming(appts || []);
 
     var todayStr = new Date().toISOString().split('T')[0];
 
@@ -1348,7 +1348,7 @@ function loadAppointments() {
     { practitioner: currentPractitioner ? currentPractitioner.name : '' }
   ).then(function(appts) {
     console.log('All appointments received:', appts ? appts.length : 0, appts);
-    allAppointments = appts || [];
+    allAppointments = filterUpcoming(appts || []);
     renderApptTable();
   }).catch(function(e) {
     tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="color:var(--danger);">Failed: ' + e.message + '</td></tr>';
@@ -1722,6 +1722,17 @@ function closePopover() {
 // ════════════════════════════════════════
 function patientDisplay(a) {
   return a.patient_name || a.patient || '—';
+}
+
+function filterUpcoming(appts) {
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return appts.filter(function(a) {
+    if (a.status === 'Cancelled') return false;
+    var d = new Date(a.date);
+    d.setHours(0, 0, 0, 0);
+    return d >= today;
+  });
 }
 
 function formatTime(timeStr) {

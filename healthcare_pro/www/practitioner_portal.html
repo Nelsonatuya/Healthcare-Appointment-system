@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>better.care — Practitioner Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy: #0a1628;
@@ -326,19 +326,53 @@
   .nav-section { font-size: 10px; font-weight: 600; color: var(--slate-light); text-transform: uppercase; letter-spacing: 1.5px; padding: 10px 10px 5px; }
 
   .nav-item {
-    display: flex; align-items: center; gap: 9px;
-    padding: 9px 10px;
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
     border-radius: 9px;
     cursor: pointer;
     font-size: 13px;
     color: var(--slate);
     transition: all 0.15s;
     border: none; background: none; width: 100%; text-align: left;
+    position: relative;
   }
 
   .nav-item:hover { background: var(--off-white); color: var(--navy); }
-  .nav-item.active { background: var(--teal-pale); color: var(--teal); font-weight: 600; }
-  .nav-icon { font-size: 16px; width: 22px; text-align: center; }
+  .nav-item:hover .nav-icon svg { stroke: var(--navy); }
+
+  .nav-item.active {
+    background: var(--teal-pale);
+    color: var(--teal);
+    font-weight: 600;
+  }
+
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 6px; bottom: 6px;
+    width: 3px;
+    background: var(--teal);
+    border-radius: 0 3px 3px 0;
+  }
+
+  .nav-item.active .nav-icon svg { stroke: var(--teal); }
+
+  .nav-icon {
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .nav-icon svg {
+    width: 18px; height: 18px;
+    stroke: var(--slate);
+    stroke-width: 1.8;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.15s;
+  }
+
   .nav-badge { margin-left: auto; background: var(--teal); color: white; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 20px; }
   .sidebar-footer { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--border); }
 
@@ -571,6 +605,21 @@
 
   .cell-more:hover { color: var(--teal); }
 
+  .month-cell.blocked { background: #fef2f2; }
+  .month-cell.blocked .cell-day { color: var(--danger); }
+
+  .cell-blocked-chip {
+    background: var(--danger);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   /* WEEKLY CALENDAR */
   .week-cal { background: var(--white); border: 1px solid var(--border); border-radius: 13px; overflow: hidden; }
 
@@ -677,6 +726,178 @@
   .week-appt-time { font-size: 9px; opacity: 0.8; }
   .week-appt-name { font-size: 10px; font-weight: 600; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+  .week-day-col.blocked { background: #fef2f2; }
+  .week-header-day.blocked .week-day-name { color: var(--danger); }
+
+  .week-blocked-banner {
+    position: absolute;
+    top: 4px; left: 2px; right: 2px;
+    background: var(--danger);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 6px;
+    border-radius: 6px;
+    text-align: center;
+    z-index: 3;
+    border-left: 3px solid #991b1b;
+  }
+
+  /* DAY VIEW */
+  .day-cal { background: var(--white); border: 1px solid var(--border); border-radius: 13px; overflow: hidden; }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 2px solid var(--border);
+    background: var(--off-white);
+  }
+
+  .day-header-info { display: flex; align-items: center; gap: 14px; }
+
+  .day-header-date {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--navy);
+  }
+
+  .day-header-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .day-header-badge.today-badge { background: var(--teal-pale); color: var(--teal); }
+  .day-header-badge.blocked-badge { background: #fee2e2; color: var(--danger); }
+
+  .day-summary {
+    display: flex; gap: 16px; align-items: center;
+    font-size: 12px; color: var(--slate);
+  }
+
+  .day-summary-item { display: flex; align-items: center; gap: 5px; }
+  .day-summary-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .day-summary-dot.booked { background: var(--teal); }
+  .day-summary-dot.free { background: #d1fae5; border: 1.5px solid var(--success); }
+  .day-summary-dot.off-hours { background: var(--border); }
+
+  .day-body {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    max-height: 620px;
+    overflow-y: auto;
+  }
+
+  .day-time-col { display: flex; flex-direction: column; }
+
+  .day-time-slot {
+    height: 60px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    padding: 4px 10px 0;
+    font-size: 11px;
+    color: var(--slate-light);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .day-slots-col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .day-hour-cell {
+    height: 60px;
+    border-bottom: 1px solid #f1f5f9;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .day-hour-cell.working-hour { background: #fafffe; }
+  .day-hour-cell.off-hour { background: var(--off-white); }
+
+  .day-appt-block {
+    position: absolute;
+    left: 4px; right: 4px;
+    background: var(--teal);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+    z-index: 2;
+    border-left: 4px solid var(--teal-dark);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  .day-appt-block:hover { background: var(--teal-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.14); }
+  .day-appt-block.completed { background: #6ee7b7; color: #065f46; border-left-color: #059669; }
+  .day-appt-block.cancelled { background: #fca5a5; color: #7f1d1d; border-left-color: #dc2626; }
+  .day-appt-block.waiting { background: #fcd34d; color: #78350f; border-left-color: #d97706; }
+
+  .day-appt-time { font-size: 11px; opacity: 0.85; }
+  .day-appt-name { font-size: 13px; font-weight: 600; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .day-appt-id { font-size: 10px; opacity: 0.7; margin-top: 1px; }
+
+  .day-slot-marker {
+    position: absolute;
+    left: 4px; right: 4px;
+    border: 1.5px dashed #d1fae5;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--success);
+    background: rgba(209, 250, 229, 0.15);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .day-blocked-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(254,226,226,0.3);
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .day-blocked-label {
+    background: var(--danger);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(220,38,38,0.25);
+  }
+
+  .day-now-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: var(--danger);
+    z-index: 5;
+  }
+
+  .day-now-line::before {
+    content: '';
+    position: absolute;
+    left: -4px; top: -3px;
+    width: 8px; height: 8px;
+    background: var(--danger);
+    border-radius: 50%;
+  }
+
   /* APPOINTMENT DETAIL POPOVER */
   .appt-popover {
     position: fixed;
@@ -781,6 +1002,98 @@
   .toast { position: fixed; bottom: 22px; right: 22px; background: var(--navy); color: white; padding: 12px 18px; border-radius: 10px; font-size: 13px; font-weight: 500; z-index: 300; transform: translateY(70px); opacity: 0; transition: all 0.3s; box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
   .toast.show { transform: translateY(0); opacity: 1; }
 
+  /* ══ BLOCK DAY ══ */
+  .block-day-form { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .block-day-form .form-group { margin-bottom: 0; }
+  .block-day-form input[type="date"],
+  .block-day-form input[type="text"] {
+    padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--navy);
+    background: var(--white); outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .block-day-form input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
+
+  .btn-check-day {
+    padding: 10px 20px; background: var(--navy); color: white; border: none;
+    border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px;
+    font-weight: 600; cursor: pointer; transition: background 0.2s; white-space: nowrap;
+  }
+  .btn-check-day:hover { background: var(--navy-mid); }
+  .btn-check-day:disabled { background: var(--slate-light); cursor: not-allowed; }
+
+  .conflict-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+  .conflict-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; border: 1px solid var(--border); border-radius: 11px;
+    background: var(--white); transition: border-color 0.15s;
+  }
+  .conflict-card:hover { border-color: var(--warning); }
+  .conflict-card .appt-patient { flex: 1; }
+
+  .btn-reschedule {
+    padding: 7px 14px; background: var(--warning); color: white; border: none;
+    border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 12px;
+    font-weight: 600; cursor: pointer; transition: background 0.2s; white-space: nowrap;
+  }
+  .btn-reschedule:hover { background: #b45309; }
+  .btn-reschedule:disabled { background: var(--slate-light); cursor: not-allowed; }
+
+  .btn-block-day {
+    padding: 12px 24px; background: var(--danger); color: white; border: none;
+    border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px;
+    font-weight: 600; cursor: pointer; transition: background 0.2s;
+  }
+  .btn-block-day:hover { background: #b91c1c; }
+  .btn-block-day:disabled { background: var(--slate-light); cursor: not-allowed; }
+
+  .block-status-msg {
+    padding: 14px 18px; border-radius: 10px; font-size: 13px; font-weight: 500;
+    margin-bottom: 16px; display: none;
+  }
+  .block-status-msg.info { display: block; background: #dbeafe; border: 1px solid #93c5fd; color: #1d4ed8; }
+  .block-status-msg.success { display: block; background: #d1fae5; border: 1px solid #6ee7b7; color: #065f46; }
+  .block-status-msg.warn { display: block; background: #fef3c7; border: 1px solid #fcd34d; color: #92400e; }
+  .block-status-msg.error { display: block; background: #fee2e2; border: 1px solid #fca5a5; color: var(--danger); }
+
+  .blocked-day-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; border: 1px solid var(--border); border-radius: 11px;
+    background: var(--white); transition: border-color 0.15s;
+  }
+  .blocked-day-card:hover { border-color: var(--danger); }
+  .blocked-day-icon {
+    width: 40px; height: 40px; border-radius: 11px;
+    background: #fee2e2; display: flex; align-items: center;
+    justify-content: center; font-size: 18px; flex-shrink: 0;
+  }
+  .blocked-day-info { flex: 1; }
+  .blocked-day-date { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .blocked-day-reason { font-size: 11px; color: var(--slate); margin-top: 2px; }
+
+  .reschedule-confirm-body { padding: 8px 0; }
+  .reschedule-confirm-body .m-field { margin-bottom: 12px; }
+  .reschedule-confirm-body textarea {
+    width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--navy);
+    background: var(--off-white); resize: vertical; min-height: 70px; outline: none;
+  }
+  .reschedule-confirm-body textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+  .btn-modal-cancel {
+    padding: 10px 20px; background: var(--off-white); color: var(--slate); border: 1.5px solid var(--border);
+    border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-modal-cancel:hover { background: var(--white); border-color: var(--slate); }
+  .btn-modal-confirm {
+    padding: 10px 20px; background: var(--warning); color: white; border: none;
+    border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .btn-modal-confirm:hover { background: #b45309; }
+  .btn-modal-confirm:disabled { background: var(--slate-light); cursor: not-allowed; }
+
   @media (max-width: 900px) { .login-left { display: none; } .login-right { width: 100%; } .dash-grid { grid-template-columns: 1fr 1fr; } .p-grid { grid-template-columns: 1fr; } }
   @media (max-width: 640px) { .sidebar { display: none; } .dash-grid { grid-template-columns: 1fr 1fr; } }
 </style>
@@ -840,13 +1153,32 @@
   <div class="app-body">
     <nav class="sidebar">
       <div class="nav-section">Main</div>
-      <button class="nav-item active" onclick="navigate('dashboard')" id="nav-dashboard"><span class="nav-icon">🏠</span>Dashboard</button>
-      <button class="nav-item" onclick="navigate('calendar')" id="nav-calendar"><span class="nav-icon">📆</span>My Calendar<span class="nav-badge" id="cal-badge">0</span></button>
-      <button class="nav-item" onclick="navigate('appointments')" id="nav-appointments"><span class="nav-icon">🗓️</span>All Appointments</button>
+      <button class="nav-item active" onclick="navigate('dashboard')" id="nav-dashboard">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="4" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="11" width="7" height="10" rx="1.5"/></svg></span>
+        Dashboard
+      </button>
+      <button class="nav-item" onclick="navigate('calendar')" id="nav-calendar">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+        My Calendar<span class="nav-badge" id="cal-badge">0</span>
+      </button>
+      <button class="nav-item" onclick="navigate('appointments')" id="nav-appointments">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+        All Appointments
+      </button>
+      <button class="nav-item" onclick="navigate('blockday')" id="nav-blockday">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span>
+        Block Day
+      </button>
       <div class="nav-section">Account</div>
-      <button class="nav-item" onclick="navigate('profile')" id="nav-profile"><span class="nav-icon">👤</span>My Profile</button>
+      <button class="nav-item" onclick="navigate('profile')" id="nav-profile">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+        My Profile
+      </button>
       <div class="sidebar-footer">
-        <button class="nav-item" onclick="doLogout()"><span class="nav-icon">🚪</span>Sign Out</button>
+        <button class="nav-item" onclick="doLogout()">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+          Sign Out
+        </button>
       </div>
     </nav>
 
@@ -905,6 +1237,7 @@
           <div class="view-toggle">
             <button class="view-btn active" id="btn-month" onclick="switchView('month')">Month</button>
             <button class="view-btn" id="btn-week" onclick="switchView('week')">Week</button>
+            <button class="view-btn" id="btn-day" onclick="switchView('day')">Day</button>
           </div>
         </div>
 
@@ -940,6 +1273,20 @@
             <div class="week-body" id="week-body"></div>
           </div>
         </div>
+
+        <!-- DAY VIEW -->
+        <div id="view-day" style="display:none;">
+          <div class="day-cal">
+            <div class="day-header">
+              <div class="day-header-info">
+                <div class="day-header-date" id="day-title">—</div>
+                <div id="day-badges"></div>
+              </div>
+              <div class="day-summary" id="day-summary"></div>
+            </div>
+            <div class="day-body" id="day-body"></div>
+          </div>
+        </div>
       </div>
 
       <!-- ── ALL APPOINTMENTS ── -->
@@ -956,6 +1303,55 @@
             <thead><tr><th>ID</th><th>Patient</th><th>Date</th><th>Time</th><th>Status</th><th></th></tr></thead>
             <tbody id="appt-tbody"><tr class="empty-row"><td colspan="6"><span class="spinner"></span>Loading…</td></tr></tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- ── BLOCK DAY ── -->
+      <div class="page" id="page-blockday">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>Block a Day</h2>
+            <p>Mark a working day as unavailable — existing appointments will need rescheduling</p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 18px;">
+          <div class="card-title">Select Date to Block</div>
+          <div class="block-day-form">
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="block-date" min="">
+            </div>
+            <div class="form-group">
+              <label>Reason (optional)</label>
+              <input type="text" id="block-reason" placeholder="e.g. Personal leave, Conference…" style="width:260px;">
+            </div>
+            <button class="btn-check-day" id="btn-check-day" onclick="checkDayForBlock()">Check Day</button>
+          </div>
+        </div>
+
+        <div class="block-status-msg" id="block-status"></div>
+
+        <div id="block-conflicts" style="display:none;">
+          <div class="card">
+            <div class="card-title" id="conflict-title">Appointments on this day</div>
+            <div class="conflict-list" id="conflict-list"></div>
+          </div>
+        </div>
+
+        <div id="block-confirm-area" style="display:none; margin-top: 18px;">
+          <div class="card" style="border-color: var(--danger); background: #fef2f2;">
+            <div class="card-title" style="color: var(--danger);">Confirm Day Block</div>
+            <p style="font-size: 13px; color: var(--slate); margin-bottom: 14px;">
+              All appointments have been rescheduled and patients notified. This will prevent any new bookings on this date.
+            </p>
+            <button class="btn-block-day" id="btn-block-day" onclick="confirmBlockDay()">Block This Day</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+          <div class="card-title">Blocked Days</div>
+          <div id="blocked-days-list"><div style="color:var(--slate);font-size:13px;"><span class="spinner"></span>Loading…</div></div>
         </div>
       </div>
 
@@ -1007,6 +1403,30 @@
   </div>
 </div>
 
+<!-- RESCHEDULE CONFIRM MODAL -->
+<div class="modal-overlay" id="reschedule-modal">
+  <div class="modal" style="width:440px;">
+    <div class="modal-hdr">
+      <div class="modal-title">Reschedule Appointment</div>
+      <button class="modal-close" onclick="closeRescheduleModal()">✕</button>
+    </div>
+    <div class="reschedule-confirm-body">
+      <div class="m-field"><label>Appointment</label><div class="val" id="resc-appt-id">—</div></div>
+      <div class="m-field"><label>Patient</label><div class="val" id="resc-patient">—</div></div>
+      <div class="m-field"><label>Date &amp; Time</label><div class="val" id="resc-datetime">—</div></div>
+      <div style="height:1px;background:var(--border);margin:14px 0;"></div>
+      <div class="m-field">
+        <label>Reason for patient (included in email)</label>
+        <textarea id="resc-reason" placeholder="e.g. Practitioner unavailable due to a scheduling conflict…"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="closeRescheduleModal()">Cancel</button>
+        <button class="btn-modal-confirm" id="btn-resc-confirm" onclick="confirmReschedule()">Reschedule &amp; Notify Patient</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- POPOVER -->
 <div class="appt-popover" id="appt-popover">
   <div class="popover-header">
@@ -1025,6 +1445,7 @@
 var currentPractitioner = null;  // Healthcare Practitioner doc
 var allAppointments = [];        // from get_appointments(practitioner=...)
 var practSchedule = [];          // from get_practitioner_schedule(practitioner_id=...)
+var blockedDays = [];            // from get_blocked_days(practitioner=...)
 var calView = 'month';           // 'month' or 'week'
 var calDate = new Date();        // currently viewed date
 var toastTimer = null;
@@ -1084,6 +1505,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('appt-modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
+  });
+
+  document.getElementById('reschedule-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeRescheduleModal();
   });
 
   document.addEventListener('click', function(e) {
@@ -1181,8 +1606,9 @@ function initApp() {
       setText('p-avatar', initials);
       renderProfile(currentPractitioner);
 
-      // Load schedule and appointments
+      // Load schedule, blocked days, and appointments
       loadPractSchedule();
+      loadBlockedDays();
       loadDashboard();
     })
     .catch(function(e) {
@@ -1204,6 +1630,7 @@ function navigate(page) {
   if (page === 'dashboard') loadDashboard();
   if (page === 'calendar') renderCalendar();
   if (page === 'appointments') loadAppointments();
+  if (page === 'blockday') initBlockDayPage();
 }
 
 // ════════════════════════════════════════
@@ -1222,6 +1649,32 @@ function loadPractSchedule() {
   }).catch(function(e) {
     console.warn('Schedule load failed:', e.message);
   });
+}
+
+function loadBlockedDays() {
+  if (!currentPractitioner) return;
+
+  apiGet('healthcare_pro.healthcare_management.api.block_day.get_blocked_days',
+    { practitioner: currentPractitioner.name }
+  ).then(function(data) {
+    blockedDays = data || [];
+  }).catch(function(e) {
+    console.warn('Blocked days load failed:', e.message);
+    blockedDays = [];
+  });
+}
+
+function isDateBlocked(dateStr) {
+  return blockedDays.some(function(b) {
+    return dateStr >= b.from_date && dateStr <= b.to_date;
+  });
+}
+
+function getBlockReason(dateStr) {
+  var match = blockedDays.find(function(b) {
+    return dateStr >= b.from_date && dateStr <= b.to_date;
+  });
+  return match ? (match.reason || 'Blocked') : '';
 }
 
 function renderScheduleList() {
@@ -1387,16 +1840,20 @@ function switchView(view) {
   calView = view;
   document.getElementById('btn-month').classList.toggle('active', view === 'month');
   document.getElementById('btn-week').classList.toggle('active', view === 'week');
+  document.getElementById('btn-day').classList.toggle('active', view === 'day');
   document.getElementById('view-month').style.display = view === 'month' ? 'block' : 'none';
   document.getElementById('view-week').style.display = view === 'week' ? 'block' : 'none';
+  document.getElementById('view-day').style.display = view === 'day' ? 'block' : 'none';
   renderCalendar();
 }
 
 function calPrev() {
   if (calView === 'month') {
     calDate.setMonth(calDate.getMonth() - 1);
-  } else {
+  } else if (calView === 'week') {
     calDate.setDate(calDate.getDate() - 7);
+  } else {
+    calDate.setDate(calDate.getDate() - 1);
   }
   renderCalendar();
 }
@@ -1404,8 +1861,10 @@ function calPrev() {
 function calNext() {
   if (calView === 'month') {
     calDate.setMonth(calDate.getMonth() + 1);
-  } else {
+  } else if (calView === 'week') {
     calDate.setDate(calDate.getDate() + 7);
+  } else {
+    calDate.setDate(calDate.getDate() + 1);
   }
   renderCalendar();
 }
@@ -1418,8 +1877,10 @@ function calGoToday() {
 function renderCalendar() {
   if (calView === 'month') {
     renderMonthView();
-  } else {
+  } else if (calView === 'week') {
     renderWeekView();
+  } else {
+    renderDayView();
   }
 }
 
@@ -1461,13 +1922,20 @@ function renderMonthView() {
   for (var d = 1; d <= lastDay; d++) {
     var dateStr = year + '-' + pad(month + 1) + '-' + pad(d);
     var isToday = dateStr === todayStr;
+    var blocked = isDateBlocked(dateStr);
     var dayAppts = apptsByDate[dateStr] || [];
 
     // Sort by time
     dayAppts.sort(function(a, b) { return (a.time || '').localeCompare(b.time || ''); });
 
     var apptChips = '';
-    var maxShow = 2;
+
+    if (blocked) {
+      var reason = getBlockReason(dateStr);
+      apptChips += '<div class="cell-blocked-chip" title="' + reason + '">Blocked</div>';
+    }
+
+    var maxShow = blocked ? 1 : 2;
     dayAppts.slice(0, maxShow).forEach(function(a) {
       var sc = (a.status || '').toLowerCase();
       var t = formatTime(a.time);
@@ -1478,7 +1946,11 @@ function renderMonthView() {
       apptChips += '<div class="cell-more" onclick="event.stopPropagation();">+' + (dayAppts.length - maxShow) + ' more</div>';
     }
 
-    cells += '<div class="month-cell' + (isToday ? ' today' : '') + '">' +
+    var cellClass = 'month-cell';
+    if (isToday) cellClass += ' today';
+    if (blocked) cellClass += ' blocked';
+
+    cells += '<div class="' + cellClass + '" onclick="openDayView(\'' + dateStr + '\')">' +
       '<div class="cell-day">' + d + '</div>' +
       '<div class="cell-appts">' + apptChips + '</div>' +
     '</div>';
@@ -1522,11 +1994,8 @@ function renderWeekView() {
     var hdr = document.getElementById('wh-' + i);
     hdr.querySelector('.week-day-name').textContent = dayNames[i];
     hdr.querySelector('.week-day-num').textContent = d.getDate();
-    if (dStr === todayStr) {
-      hdr.classList.add('today');
-    } else {
-      hdr.classList.remove('today');
-    }
+    hdr.classList.toggle('today', dStr === todayStr);
+    hdr.classList.toggle('blocked', isDateBlocked(dStr));
   }
 
   // Build week body — hours 7am to 8pm
@@ -1559,12 +2028,19 @@ function renderWeekView() {
     colDate.setDate(startOfWeek.getDate() + col);
     var colStr = colDate.toISOString().split('T')[0];
     var dayAppts = apptsByDate[colStr] || [];
+    var colBlocked = isDateBlocked(colStr);
 
-    html += '<div class="week-day-col">';
+    html += '<div class="week-day-col' + (colBlocked ? ' blocked' : '') + '">';
 
     // Hour cells (background grid)
     for (var hr = startHour; hr < endHour; hr++) {
       html += '<div class="week-hour-cell"></div>';
+    }
+
+    // Blocked banner
+    if (colBlocked) {
+      var reason = getBlockReason(colStr);
+      html += '<div class="week-blocked-banner" title="' + reason + '">Blocked' + (reason && reason !== 'Blocked' ? ' — ' + reason : '') + '</div>';
     }
 
     // Appointment blocks
@@ -1593,6 +2069,185 @@ function renderWeekView() {
 
   // Scroll to 8am
   body.scrollTop = (8 - startHour) * 56;
+}
+
+// ── DAY VIEW ──
+function openDayView(dateStr) {
+  calDate = new Date(dateStr + 'T12:00:00');
+  switchView('day');
+}
+
+function getWorkingHoursForDate(dateStr) {
+  var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var d = new Date(dateStr + 'T12:00:00');
+  var dayName = dayNames[d.getDay()];
+
+  var slots = practSchedule.filter(function(s) {
+    return s.day === dayName;
+  });
+
+  return slots.map(function(s) {
+    var from = parseTimeToHours(s.from_time);
+    var to = parseTimeToHours(s.to_time);
+    return { from: from, to: to, fromTime: s.from_time, toTime: s.to_time };
+  });
+}
+
+function parseTimeToHours(timeStr) {
+  if (!timeStr) return 0;
+  var parts = timeStr.split(':').map(Number);
+  return parts[0] + (parts[1] || 0) / 60;
+}
+
+function isWorkingHour(hour, workingHours) {
+  return workingHours.some(function(wh) {
+    return hour >= Math.floor(wh.from) && hour < Math.ceil(wh.to);
+  });
+}
+
+function renderDayView() {
+  var year = calDate.getFullYear();
+  var month = calDate.getMonth();
+  var day = calDate.getDate();
+  var dateStr = year + '-' + pad(month + 1) + '-' + pad(day);
+
+  var today = new Date();
+  var todayStr = today.toISOString().split('T')[0];
+  var isToday = dateStr === todayStr;
+  var blocked = isDateBlocked(dateStr);
+
+  var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var d = new Date(dateStr + 'T12:00:00');
+
+  setText('cal-title', dayNames[d.getDay()] + ', ' + monthNames[month] + ' ' + day + ', ' + year);
+
+  // Header
+  var titleEl = document.getElementById('day-title');
+  titleEl.textContent = dayNames[d.getDay()] + ', ' + monthNames[month] + ' ' + day;
+
+  var badgesHtml = '';
+  if (isToday) badgesHtml += '<span class="day-header-badge today-badge">Today</span> ';
+  if (blocked) badgesHtml += '<span class="day-header-badge blocked-badge">Blocked — ' + (getBlockReason(dateStr) || 'Unavailable') + '</span>';
+  document.getElementById('day-badges').innerHTML = badgesHtml;
+
+  // Get working hours for this day of week
+  var workingHours = getWorkingHoursForDate(dateStr);
+
+  // Get appointments for this day
+  var dayAppts = allAppointments.filter(function(a) { return a.date === dateStr; });
+  dayAppts.sort(function(a, b) { return (a.time || '').localeCompare(b.time || ''); });
+
+  // Summary
+  var summaryEl = document.getElementById('day-summary');
+  if (workingHours.length > 0) {
+    var scheduleStr = workingHours.map(function(wh) {
+      return formatTime(wh.fromTime) + ' – ' + formatTime(wh.toTime);
+    }).join(', ');
+    summaryEl.innerHTML =
+      '<div class="day-summary-item"><div class="day-summary-dot booked"></div>' + dayAppts.length + ' appointment(s)</div>' +
+      '<div class="day-summary-item"><div class="day-summary-dot free"></div>Working: ' + scheduleStr + '</div>';
+  } else {
+    summaryEl.innerHTML =
+      '<div class="day-summary-item"><div class="day-summary-dot booked"></div>' + dayAppts.length + ' appointment(s)</div>' +
+      '<div class="day-summary-item"><div class="day-summary-dot off-hours"></div>No working hours scheduled</div>';
+  }
+
+  // Determine hour range to show
+  var startHour = 7;
+  var endHour = 20;
+  if (workingHours.length > 0) {
+    var earliest = Math.floor(Math.min.apply(null, workingHours.map(function(wh) { return wh.from; })));
+    var latest = Math.ceil(Math.max.apply(null, workingHours.map(function(wh) { return wh.to; })));
+    startHour = Math.min(startHour, earliest - 1);
+    endHour = Math.max(endHour, latest + 1);
+  }
+
+  var body = document.getElementById('day-body');
+  var html = '';
+
+  // Time column
+  html += '<div class="day-time-col">';
+  for (var h = startHour; h < endHour; h++) {
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    var dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+    html += '<div class="day-time-slot">' + dh + ':00 ' + ampm + '</div>';
+  }
+  html += '</div>';
+
+  // Slots column
+  html += '<div class="day-slots-col">';
+
+  // Hour cells with working/off-hours styling
+  for (var hr = startHour; hr < endHour; hr++) {
+    var isWorking = isWorkingHour(hr, workingHours);
+    html += '<div class="day-hour-cell ' + (isWorking ? 'working-hour' : 'off-hour') + '"></div>';
+  }
+
+  // Free slot markers within working hours
+  if (workingHours.length > 0 && !blocked) {
+    var bookedTimes = {};
+    dayAppts.forEach(function(a) {
+      if (a.time) bookedTimes[a.time.substring(0, 5)] = true;
+    });
+
+    workingHours.forEach(function(wh) {
+      var slotStart = Math.ceil(wh.from * 2) / 2;
+      var slotEnd = Math.floor(wh.to * 2) / 2;
+      for (var t = slotStart; t < slotEnd; t += 0.5) {
+        var slotH = Math.floor(t);
+        var slotM = (t % 1) * 60;
+        var slotKey = pad(slotH) + ':' + pad(slotM);
+        if (!bookedTimes[slotKey] && slotH >= startHour && slotH < endHour) {
+          var top = ((slotH - startHour) * 60) + (slotM / 60 * 60);
+          html += '<div class="day-slot-marker" style="top:' + top + 'px;height:28px;">' + formatTime(slotKey + ':00') + ' — Available</div>';
+        }
+      }
+    });
+  }
+
+  // Appointment blocks
+  dayAppts.forEach(function(a) {
+    if (!a.time) return;
+    var parts = a.time.split(':').map(Number);
+    var apptHour = parts[0];
+    var apptMin = parts[1] || 0;
+
+    if (apptHour < startHour || apptHour >= endHour) return;
+
+    var topOffset = ((apptHour - startHour) * 60) + (apptMin / 60 * 60);
+    var sc = (a.status || '').toLowerCase();
+    var timeDisplay = formatTime(a.time);
+
+    html += '<div class="day-appt-block ' + sc + '" style="top:' + topOffset + 'px;height:56px;" onclick="openApptModal(\'' + a.name + '\')">' +
+      '<div class="day-appt-time">' + timeDisplay + '</div>' +
+      '<div class="day-appt-name">' + patientDisplay(a) + '</div>' +
+      '<div class="day-appt-id">' + a.name + '</div>' +
+    '</div>';
+  });
+
+  // Current time line
+  if (isToday) {
+    var now = new Date();
+    var nowH = now.getHours();
+    var nowM = now.getMinutes();
+    if (nowH >= startHour && nowH < endHour) {
+      var nowTop = ((nowH - startHour) * 60) + (nowM / 60 * 60);
+      html += '<div class="day-now-line" style="top:' + nowTop + 'px;"></div>';
+    }
+  }
+
+  // Blocked overlay
+  if (blocked) {
+    html += '<div class="day-blocked-overlay"><div class="day-blocked-label">Day Blocked</div></div>';
+  }
+
+  html += '</div>';
+  body.innerHTML = html;
+
+  // Scroll to first working hour or 8am
+  var scrollTarget = workingHours.length > 0 ? Math.floor(workingHours[0].from) : 8;
+  body.scrollTop = Math.max(0, (scrollTarget - startHour) * 60 - 30);
 }
 
 // ════════════════════════════════════════
@@ -1755,6 +2410,226 @@ function showToast(msg) {
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(function() { t.classList.remove('show'); }, 3500);
+}
+
+// ════════════════════════════════════════
+// BLOCK DAY
+// ════════════════════════════════════════
+var blockDayAppts = [];       // appointments on the day being blocked
+var blockDateStr = '';         // selected date
+var rescApptPending = null;    // appointment being rescheduled in modal
+
+function initBlockDayPage() {
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('block-date').setAttribute('min', today);
+  resetBlockUI();
+  renderBlockedDaysList();
+}
+
+function renderBlockedDaysList() {
+  var container = document.getElementById('blocked-days-list');
+
+  if (!currentPractitioner) {
+    container.innerHTML = '<p style="color:var(--slate);font-size:13px;">Not logged in.</p>';
+    return;
+  }
+
+  container.innerHTML = '<div style="color:var(--slate);font-size:13px;"><span class="spinner"></span>Loading…</div>';
+
+  apiGet('healthcare_pro.healthcare_management.api.block_day.get_blocked_days', {
+    practitioner: currentPractitioner.name
+  }).then(function(days) {
+    blockedDays = days || [];
+
+    var todayStr = new Date().toISOString().split('T')[0];
+    var upcoming = blockedDays.filter(function(b) { return b.to_date >= todayStr; });
+
+    if (upcoming.length === 0) {
+      container.innerHTML = '<p style="color:var(--slate);font-size:13px;padding:8px 0;">No upcoming blocked days.</p>';
+      return;
+    }
+
+    container.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px;">' +
+      upcoming.map(function(b) {
+        var dateDisplay = b.from_date;
+        if (b.from_date !== b.to_date) {
+          dateDisplay = b.from_date + ' to ' + b.to_date;
+        }
+        return '<div class="blocked-day-card">' +
+          '<div class="blocked-day-icon">🚫</div>' +
+          '<div class="blocked-day-info">' +
+            '<div class="blocked-day-date">' + dateDisplay + '</div>' +
+            '<div class="blocked-day-reason">' + (b.reason || 'No reason specified') + '</div>' +
+          '</div>' +
+          '<span class="badge cancelled">' + b.name + '</span>' +
+        '</div>';
+      }).join('') +
+    '</div>';
+  }).catch(function(e) {
+    container.innerHTML = '<p style="color:var(--danger);font-size:13px;">Failed to load: ' + e.message + '</p>';
+  });
+}
+
+function resetBlockUI() {
+  setBlockStatus('', '');
+  document.getElementById('block-conflicts').style.display = 'none';
+  document.getElementById('block-confirm-area').style.display = 'none';
+  blockDayAppts = [];
+}
+
+function setBlockStatus(msg, type) {
+  var el = document.getElementById('block-status');
+  el.className = 'block-status-msg';
+  if (msg && type) {
+    el.textContent = msg;
+    el.classList.add(type);
+  }
+}
+
+function checkDayForBlock() {
+  if (!currentPractitioner) { showToast('Not logged in'); return; }
+
+  var dateVal = document.getElementById('block-date').value;
+  if (!dateVal) { setBlockStatus('Please select a date.', 'warn'); return; }
+
+  var today = new Date().toISOString().split('T')[0];
+  if (dateVal < today) { setBlockStatus('Cannot block a date in the past.', 'error'); return; }
+
+  blockDateStr = dateVal;
+  resetBlockUI();
+
+  var btn = document.getElementById('btn-check-day');
+  btn.textContent = 'Checking…';
+  btn.disabled = true;
+
+  apiGet('healthcare_pro.healthcare_management.api.block_day.get_day_appointments', {
+    practitioner: currentPractitioner.name,
+    date: dateVal
+  }).then(function(appts) {
+    blockDayAppts = appts || [];
+
+    if (blockDayAppts.length === 0) {
+      setBlockStatus('No appointments on this date. You can block it immediately.', 'success');
+      document.getElementById('block-confirm-area').style.display = 'block';
+    } else {
+      setBlockStatus(
+        blockDayAppts.length + ' appointment(s) found on ' + dateVal +
+        '. You must reschedule each one before blocking this day.',
+        'warn'
+      );
+      renderConflictList();
+      document.getElementById('block-conflicts').style.display = 'block';
+    }
+  }).catch(function(e) {
+    setBlockStatus('Error: ' + e.message, 'error');
+  }).finally(function() {
+    btn.textContent = 'Check Day';
+    btn.disabled = false;
+  });
+}
+
+function renderConflictList() {
+  var container = document.getElementById('conflict-list');
+  var remaining = blockDayAppts.filter(function(a) { return a.status !== 'Cancelled'; });
+
+  document.getElementById('conflict-title').textContent =
+    remaining.length + ' Appointment(s) to Reschedule';
+
+  if (remaining.length === 0) {
+    container.innerHTML = '<p style="color:var(--success);font-size:13px;padding:8px 0;">All appointments rescheduled.</p>';
+    document.getElementById('block-confirm-area').style.display = 'block';
+    setBlockStatus('All appointments rescheduled. You can now block this day.', 'success');
+    return;
+  }
+
+  container.innerHTML = remaining.map(function(a) {
+    return '<div class="conflict-card">' +
+      '<div class="time-pill">' + formatTime(a.time) + '</div>' +
+      '<div class="appt-patient">' +
+        '<div class="pname">' + (a.patient_name || a.patient || '—') + '</div>' +
+        '<div class="pid">' + a.name + '</div>' +
+      '</div>' +
+      '<span class="badge ' + (a.status || '').toLowerCase() + '">' + (a.status || '—') + '</span>' +
+      '<button class="btn-reschedule" onclick="openRescheduleModal(\'' + a.name + '\')">Reschedule</button>' +
+    '</div>';
+  }).join('');
+}
+
+function openRescheduleModal(apptName) {
+  var a = blockDayAppts.find(function(x) { return x.name === apptName; });
+  if (!a) return;
+
+  rescApptPending = a;
+  setText('resc-appt-id', a.name);
+  setText('resc-patient', a.patient_name || a.patient);
+  setText('resc-datetime', a.date + ' at ' + formatTime(a.time));
+  document.getElementById('resc-reason').value =
+    document.getElementById('block-reason').value || '';
+
+  document.getElementById('reschedule-modal').classList.add('open');
+}
+
+function closeRescheduleModal() {
+  document.getElementById('reschedule-modal').classList.remove('open');
+  rescApptPending = null;
+}
+
+function confirmReschedule() {
+  if (!rescApptPending) return;
+
+  var btn = document.getElementById('btn-resc-confirm');
+  var reason = document.getElementById('resc-reason').value.trim();
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  apiPost('healthcare_pro.healthcare_management.api.block_day.reschedule_and_notify', {
+    appointment_name: rescApptPending.name,
+    reason: reason
+  }).then(function() {
+    var appt = blockDayAppts.find(function(x) { return x.name === rescApptPending.name; });
+    if (appt) appt.status = 'Cancelled';
+
+    closeRescheduleModal();
+    renderConflictList();
+    showToast('Appointment rescheduled — patient notified via email.');
+
+    // Refresh main appointment list so dashboard stays in sync
+    allAppointments = [];
+  }).catch(function(e) {
+    showToast('Error: ' + e.message);
+  }).finally(function() {
+    btn.textContent = 'Reschedule & Notify Patient';
+    btn.disabled = false;
+  });
+}
+
+function confirmBlockDay() {
+  if (!currentPractitioner || !blockDateStr) return;
+
+  var btn = document.getElementById('btn-block-day');
+  var reason = document.getElementById('block-reason').value.trim();
+  btn.textContent = 'Blocking…';
+  btn.disabled = true;
+
+  apiPost('healthcare_pro.healthcare_management.api.block_day.block_day', {
+    practitioner: currentPractitioner.name,
+    date: blockDateStr,
+    reason: reason
+  }).then(function() {
+    setBlockStatus('Day blocked successfully. No appointments can be booked on ' + blockDateStr + '.', 'success');
+    document.getElementById('block-confirm-area').style.display = 'none';
+    document.getElementById('block-conflicts').style.display = 'none';
+    showToast('Day blocked: ' + blockDateStr);
+
+    allAppointments = [];
+    loadBlockedDays();
+    renderBlockedDaysList();
+  }).catch(function(e) {
+    setBlockStatus('Failed to block day: ' + e.message, 'error');
+  }).finally(function() {
+    btn.textContent = 'Block This Day';
+    btn.disabled = false;
+  });
 }
 </script>
 </body>
